@@ -1522,7 +1522,7 @@ send.addEventListener("click", async () => {
   /* 勝手な改行は追加しない */
   const file = getNode(currentFileId);
 const insertAt = Math.min(
-  file?.insertPosition ?? body.length
+  file?.insertPosition ?? body.length,
   body.length
 );
 
