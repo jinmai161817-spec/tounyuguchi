@@ -38,6 +38,22 @@
       color: #777;
     }
 
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .backup-button {
+      background: white;
+      color: #444;
+      padding: 10px 14px;
+      border-radius: 999px;
+      box-shadow: 0 1px 5px rgba(0,0,0,.08);
+      white-space: nowrap;
+    }
+
     .card {
       background: white;
       border-radius: 20px;
@@ -133,12 +149,20 @@
 <body>
   <main class="app">
     <header>
-      <h1>投入口</h1>
-      <div class="meta">
-        <span id="totalCount">0</span>字
-        ・ 今回 +<span id="sessionCount">0</span>字
+      <div class="header-row">
+        <div>
+          <h1>投入口</h1>
+          <div class="meta">
+            <span id="totalCount">0</span>字
+            ・ 今回 +<span id="sessionCount">0</span>字
+          </div>
+          <div id="saveStatus">保存準備中…</div>
+        </div>
+
+        <button id="backup" class="backup-button">
+          TXTバックアップ
+        </button>
       </div>
-      <div id="saveStatus">保存準備中…</div>
     </header>
 
     <section class="card">
@@ -171,6 +195,7 @@
     const draft = document.getElementById("draft");
     const send = document.getElementById("send");
     const undo = document.getElementById("undo");
+    const backup = document.getElementById("backup");
 
     const preview = document.getElementById("preview");
     const totalCount = document.getElementById("totalCount");
@@ -268,7 +293,6 @@
       update();
 
       saveStatus.textContent = "下書き 保存中…";
-
       clearTimeout(draftSaveTimer);
 
       draftSaveTimer = setTimeout(() => {
@@ -334,6 +358,67 @@
       }
 
       draft.focus();
+    });
+
+    backup.addEventListener("click", async () => {
+      const now = new Date();
+
+      const stamp =
+        now.getFullYear() +
+        "-" +
+        String(now.getMonth() + 1).padStart(2, "0") +
+        "-" +
+        String(now.getDate()).padStart(2, "0") +
+        "_" +
+        String(now.getHours()).padStart(2, "0") +
+        "-" +
+        String(now.getMinutes()).padStart(2, "0");
+
+      const filename = `投入口_${stamp}.txt`;
+
+      const text =
+        body +
+        (draft.value
+          ? `\n\n--- 未送信の下書き ---\n\n${draft.value}`
+          : "");
+
+      const file = new File(
+        [text],
+        filename,
+        { type: "text/plain;charset=utf-8" }
+      );
+
+      try {
+        if (
+          navigator.share &&
+          navigator.canShare &&
+          navigator.canShare({ files: [file] })
+        ) {
+          await navigator.share({
+            files: [file],
+            title: "投入口バックアップ"
+          });
+
+          flash("バックアップを共有しました");
+        } else {
+          const url = URL.createObjectURL(file);
+          const a = document.createElement("a");
+
+          a.href = url;
+          a.download = filename;
+          a.click();
+
+          setTimeout(() => {
+            URL.revokeObjectURL(url);
+          }, 1000);
+
+          flash("TXTを作成しました");
+        }
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          flash("バックアップに失敗しました");
+        }
+      }
     });
 
     async function start() {
