@@ -335,6 +335,9 @@ body.keyboard-open .full-head { margin-bottom:5px; }
         <div id="saveStatus" class="small">保存準備中…</div>
       </div>
       <button id="backup" class="pill">TXT</button>
+      <button id="exportAll" class="pill">全データ</button>
+      <button id="importAll" class="pill">読込</button>
+      <input id="importAllFile" type="file" accept="application/json,.json" hidden>
     </div>
 
     <section class="storage">
@@ -1173,7 +1176,91 @@ $("backup").onclick = async () => {
     if (error.name !== "AbortError") flash("バックアップに失敗しました");
   }
 };
+async function exportAllData() {
+  await saveCurrentFile();
 
+  const exportData = {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    nodes: nodes,
+    currentFileId: currentFileId,
+    writingDirection: writingDirection,
+    fontMode: fontMode
+  };
+
+  const text = JSON.stringify(exportData, null, 2);
+  const file = new File(
+    [text],
+    `投入口_全データ_${Date.now()}.json`,
+    { type: "application/json;charset=utf-8" }
+  );
+
+  try {
+    if (navigator.share && navigator.canShare && navigator.canShare({ files:[file] })) {
+      await navigator.share({
+        files:[file],
+        title:"投入口 全データバックアップ"
+      });
+    } else {
+      const url = URL.createObjectURL(file);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = file.name;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+    flash("全データを書き出しました");
+  } catch (error) {
+    if (error.name !== "AbortError") flash("書き出しに失敗しました");
+  }
+}
+  $("exportAll").onclick = exportAllData;
+  async function importAllData(file) {
+  try {
+    const text = await file.text();
+    const data = JSON.parse(text);
+
+    if (!data || data.version !== 1 || !Array.isArray(data.nodes)) {
+      flash("このバックアップは読み込めません");
+      return;
+    }
+
+    nodes = data.nodes;
+    currentFileId = data.currentFileId ?? null;
+    currentFolderId = "root";
+
+    if (data.writingDirection === "vertical" || data.writingDirection === "horizontal") {
+      writingDirection = data.writingDirection;
+    }
+
+    if (data.fontMode === "round" || data.fontMode === "literary") {
+      fontMode = data.fontMode;
+    }
+
+    await setData("nodes_v2", nodes);
+    await setData("writingDirection", writingDirection);
+    await setData("fontMode", fontMode);
+
+    
+    body = "";
+    draft.value = "";
+
+    renderLibrary();
+    flash("全データを読み込みました");
+  } catch (error) {
+    flash("読み込みに失敗しました");
+  }
+}
+  $("importAll").onclick = () => {
+  $("importAllFile").click();
+};
+
+$("importAllFile").onchange = async event => {
+  const file = event.target.files?.[0];
+  if (!file) return;
+  await importAllData(file);
+  event.target.value = "";
+};
 /* ---------- 起動 ---------- */
 async function start() {
   try {
