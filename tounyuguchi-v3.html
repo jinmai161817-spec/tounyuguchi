@@ -1022,14 +1022,30 @@ function textOffsetFromPoint(x, y) {
 function focusVerticalInputAt(position) {
   const pos = clamp(position, 0, body.length);
   setFilePosition(pos, false);
+
   if (verticalInput.value !== body) verticalInput.value = body;
-  try { verticalInput.focus({ preventScroll:true }); } catch { verticalInput.focus(); }
+
+  try {
+    verticalInput.focus({ preventScroll:true });
+  } catch {
+    verticalInput.focus();
+  }
+
   verticalInput.setSelectionRange(pos, pos);
+  renderVerticalView(false);
+
   setTimeout(() => {
     try { verticalInput.setSelectionRange(pos, pos); } catch {}
-    renderVerticalView(true);
-    
-  }, 0);
+
+    const caret = verticalView.querySelector(".vertical-caret");
+    if (caret) {
+      caret.scrollIntoView({
+        behavior: "auto",
+        block: "center",
+        inline: "nearest"
+      });
+    }
+  }, 400);
 }
 verticalView.addEventListener("pointerup", event => {
   if (writingDirection !== "vertical") return;
