@@ -1,613 +1,300 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<title>投入口</title>
-
-<style>
-* { box-sizing: border-box; }
-
-:root {
-  --bg: #f3f0ea;
-  --card: #ffffff;
-  --sub: #e7e2d9;
-  --text: #222;
-  --muted: #777;
-  --blue: #2563eb;
-  --blue2: #5d91e8;
-  --red: #d94b50;
-}
-
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-}
-
-button, input, textarea, select {
-  font: inherit;
-}
-
-button {
-  border: 0;
-  cursor: pointer;
-}
-
-.app {
-  min-height: 100dvh;
-  padding:
-    max(16px, env(safe-area-inset-top))
-    14px
-    max(18px, env(safe-area-inset-bottom));
-}
-
-.top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 10px;
-  margin-bottom: 14px;
-}
-
-h1 {
-  margin: 0;
-  font-size: 26px;
-}
-
-.small {
-  color: var(--muted);
-  font-size: 12px;
-}
-
-.pill {
-  background: white;
-  color: #555;
-  padding: 9px 12px;
-  border-radius: 999px;
-  font-weight: 700;
-  box-shadow: 0 1px 5px rgba(0,0,0,.07);
-}
-
-/* ---------- ファイル画面 ---------- */
-
-#libraryScreen {
-  display: block;
-}
-
-.library-actions {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.library-actions button {
-  flex: 1;
-  background: white;
-  border-radius: 14px;
-  padding: 12px 8px;
-  font-weight: 800;
-}
-
-.breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  overflow-x: auto;
-  white-space: nowrap;
-  padding: 8px 2px 12px;
-  font-size: 13px;
-  color: #666;
-}
-
-.crumb {
-  background: transparent;
-  color: var(--blue);
-  padding: 3px;
-  font-weight: 700;
-}
-
-.file-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: white;
-  border-radius: 15px;
-  padding: 12px;
-  box-shadow: 0 1px 4px rgba(0,0,0,.04);
-}
-
-.item-main {
-  min-width: 0;
-  flex: 1;
-  background: transparent;
-  text-align: left;
-  padding: 0;
-}
-
-.item-name {
-  display: block;
-  font-size: 16px;
-  font-weight: 750;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.item-info {
-  display: block;
-  margin-top: 3px;
-  color: #999;
-  font-size: 11px;
-}
-
-.item-menu {
-  background: transparent;
-  font-size: 22px;
-  color: #777;
-  padding: 7px;
-}
-
-.empty {
-  text-align: center;
-  color: #999;
-  padding: 50px 10px;
-  line-height: 1.8;
-}
-
-/* ---------- 投入口 ---------- */
-
-#editorScreen {
-  display: none;
-}
-
-.editor-head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.back {
-  background: white;
-  border-radius: 999px;
-  padding: 9px 12px;
-  font-weight: 800;
-}
-
-.file-title {
-  flex: 1;
-  min-width: 0;
-}
-
-.file-title strong {
-  display: block;
-  font-size: 20px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.storage {
-  background: var(--sub);
-  border-radius: 18px;
-  padding: 11px 14px 8px;
-  margin-bottom: 14px;
-}
-
-.storage-label {
-  font-size: 12px;
-  font-weight: 800;
-  color: #777;
-  margin-bottom: 6px;
-}
-
-#preview {
-  height: 82px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
-  background: rgba(255,255,255,.38);
-  border-radius: 10px;
-  padding: 7px 9px;
-  font-size: 13px;
-  line-height: 1.45;
-  color: #555;
-  white-space: pre-wrap;
-  scrollbar-width: none;
-}
-
-#preview::-webkit-scrollbar {
-  display: none;
-}
-
-#previewText {
-  white-space: pre-wrap;
-  min-height: 100%;
-}
-
-#fullButton {
-  display: block;
-  margin: 5px 0 0 auto;
-  background: transparent;
-  color: #666;
-  font-size: 12px;
-  padding: 3px;
-}
-
-.bubble {
-  position: relative;
-  background: white;
-  border: 2px solid var(--blue2);
-  border-radius: 22px;
-  padding: 16px;
-  box-shadow: 0 3px 10px rgba(0,0,0,.05);
-}
-
-.bubble::before {
-  content: "";
-  position: absolute;
-  top: -11px;
-  left: 28px;
-  width: 18px;
-  height: 18px;
-  background: white;
-  border-left: 2px solid var(--blue2);
-  border-top: 2px solid var(--blue2);
-  transform: rotate(45deg);
-}
-
-.bubble-title {
-  position: relative;
-  z-index: 1;
-  font-size: 14px;
-  font-weight: 800;
-  color: #507fc9;
-  margin-bottom: 8px;
-}
-
-#draft {
-  position: relative;
-  z-index: 1;
-  display: block;
-  width: 100%;
-  min-height: 260px;
-  resize: none;
-  border: 0;
-  outline: 0;
-  padding: 0;
-  background: transparent;
-  color: #222;
-  font: inherit;
-  font-size: 18px;
-  line-height: 1.55;
-}
-
-#draft::placeholder {
-  color: #aaa;
-}
-
-.send-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-.actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-#undo {
-  display: none;
-  background: transparent;
-  color: var(--red);
-  padding: 10px;
-  font-weight: 700;
-}
-
-#send {
-  background: var(--blue);
-  color: white;
-  padding: 13px 21px;
-  border-radius: 999px;
-  font-size: 16px;
-  font-weight: 800;
-}
-
-#send:disabled {
-  opacity: .3;
-}
-
-#backup {
-  white-space: nowrap;
-}
-
-/* ---------- 本文編集 ---------- */
-
-#fullModal {
-  position: fixed;
-  inset: 0;
-  display: none;
-  z-index: 30;
-  background: var(--bg);
-  padding:
-    max(16px, env(safe-area-inset-top))
-    14px
-    max(16px, env(safe-area-inset-bottom));
-}
-
-.full-inner {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.full-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 7px;
-  margin-bottom: 8px;
-}
-
-.full-title {
-  font-size: 20px;
-  font-weight: 800;
-}
-
-.switcher {
-  display: flex;
-  background: #ddd8cf;
-  border-radius: 999px;
-  padding: 3px;
-}
-
-.switcher button {
-  background: transparent;
-  color: #666;
-  border-radius: 999px;
-  padding: 7px 10px;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.switcher button.active {
-  background: white;
-  color: var(--blue);
-  box-shadow: 0 1px 4px rgba(0,0,0,.08);
-}
-
-.font-row {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 7px;
-  margin-bottom: 7px;
-}
-
-.editor-wrap {
-  flex: 1;
-  min-height: 0;
-  background: white;
-  border-radius: 16px;
-  overflow: hidden;
-}
-
-#fullText {
-  display: block;
-  width: 100%;
-  height: 100%;
-  border: 0;
-  outline: 0;
-  resize: none;
-  background: white;
-  color: #222;
-  padding: 14px;
-  font-size: 16px;
-  line-height: 1.4;
-  -webkit-overflow-scrolling: touch;
-}
-
-#fullText.round {
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Helvetica Neue",
-    sans-serif;
-}
-
-#fullText.literary {
-  font-family:
-    "Hiragino Mincho ProN",
-    "YuMincho",
-    "Yu Mincho",
-    serif;
-}
-
-#fullText.horizontal {
-  writing-mode: horizontal-tb;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-#fullText.vertical {
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  overflow-x: auto;
-  overflow-y: hidden;
-  white-space: pre-wrap;
-  padding: 18px 20px;
-}
-
-/* ---------- ダイアログ ---------- */
-
-.overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  display: none;
-  align-items: flex-end;
-  background: rgba(0,0,0,.25);
-}
-
-.sheet {
-  width: 100%;
-  background: var(--bg);
-  border-radius: 22px 22px 0 0;
-  padding:
-    18px
-    14px
-    max(18px, env(safe-area-inset-bottom));
-  max-height: 78dvh;
-  overflow-y: auto;
-}
-
-.sheet h2 {
-  margin: 0 0 13px;
-  font-size: 20px;
-}
-
-.sheet input,
-.sheet select {
-  width: 100%;
-  border: 1px solid #d5d0c8;
-  border-radius: 12px;
-  background: white;
-  padding: 13px;
-  outline: 0;
-  font-size: 16px;
-}
-
-.sheet-buttons {
-  display: flex;
-  gap: 8px;
-  margin-top: 12px;
-}
-
-.sheet-buttons button {
-  flex: 1;
-  padding: 13px;
-  border-radius: 13px;
-  font-weight: 800;
-}
-
-.primary {
-  background: var(--blue);
-  color: white;
-}
-
-.cancel {
-  background: white;
-  color: #555;
-}
-
-.danger {
-  background: #ffe8e8;
-  color: #b72d32;
-}
-
-.menu-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.menu-list button {
-  width: 100%;
-  text-align: left;
-  background: white;
-  border-radius: 13px;
-  padding: 14px;
-  font-weight: 750;
-}
-
-.menu-list .danger {
-  background: #ffe8e8;
-}
-
-#toast {
-  position: fixed;
-  left: 50%;
-  top: 45%;
-  transform: translate(-50%, -50%);
-  background: rgba(0,0,0,.82);
-  color: white;
-  padding: 12px 20px;
-  border-radius: 999px;
-  font-weight: 800;
-  display: none;
-  z-index: 100;
-  white-space: nowrap;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>投入口</title>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: #f3f0ea;
+      color: #222;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    .app {
+      min-height: 100dvh;
+      padding:
+        max(16px, env(safe-area-inset-top))
+        14px
+        max(18px, env(safe-area-inset-bottom));
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 26px;
+    }
+
+    .meta {
+      margin-top: 4px;
+      font-size: 13px;
+      color: #777;
+    }
+
+    #saveStatus {
+      margin-top: 5px;
+      font-size: 12px;
+      color: #777;
+    }
+
+    button {
+      border: 0;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    #backup {
+      background: white;
+      color: #555;
+      padding: 10px 13px;
+      border-radius: 999px;
+      box-shadow: 0 1px 5px rgba(0,0,0,.07);
+      white-space: nowrap;
+    }
+
+    .storage {
+      background: #e7e2d9;
+      border-radius: 18px;
+      padding: 11px 14px;
+      margin-bottom: 14px;
+    }
+
+    .storage-label {
+      font-size: 12px;
+      font-weight: 800;
+      color: #777;
+      margin-bottom: 5px;
+    }
+
+    #preview {
+      white-space: pre-wrap;
+      font-size: 13px;
+      line-height: 1.35;
+      color: #555;
+      max-height: 56px;
+      overflow: hidden;
+    }
+
+    #fullButton {
+      display: block;
+      margin: 5px 0 0 auto;
+      background: transparent;
+      color: #666;
+      font-size: 12px;
+      padding: 3px;
+    }
+
+    .bubble {
+      position: relative;
+      background: white;
+      border: 2px solid #5d91e8;
+      border-radius: 22px;
+      padding: 16px;
+      box-shadow: 0 3px 10px rgba(0,0,0,.05);
+    }
+
+    .bubble::before {
+      content: "";
+      position: absolute;
+      top: -11px;
+      left: 28px;
+      width: 18px;
+      height: 18px;
+      background: white;
+      border-left: 2px solid #5d91e8;
+      border-top: 2px solid #5d91e8;
+      transform: rotate(45deg);
+    }
+
+    .bubble-title {
+      position: relative;
+      z-index: 1;
+      font-size: 14px;
+      font-weight: 800;
+      color: #507fc9;
+      margin-bottom: 8px;
+    }
+
+    #draft {
+      position: relative;
+      z-index: 1;
+      display: block;
+      width: 100%;
+      min-height: 290px;
+      resize: none;
+      border: 0;
+      outline: 0;
+      padding: 0;
+      background: transparent;
+      color: #222;
+      font: inherit;
+      font-size: 18px;
+      line-height: 1.55;
+    }
+
+    #draft::placeholder {
+      color: #aaa;
+    }
+
+    .send-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    #draftCount {
+      color: #888;
+      font-size: 13px;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #undo {
+      display: none;
+      background: transparent;
+      color: #e5484d;
+      padding: 10px;
+    }
+
+    #send {
+      background: #2563eb;
+      color: white;
+      padding: 13px 21px;
+      border-radius: 999px;
+      font-size: 16px;
+    }
+
+    #send:disabled {
+      opacity: .3;
+    }
+
+    #toast {
+      position: fixed;
+      left: 50%;
+      top: 45%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,.82);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 999px;
+      font-weight: 800;
+      display: none;
+      z-index: 30;
+      white-space: nowrap;
+    }
+
+    #modal {
+      position: fixed;
+      inset: 0;
+      background: #f3f0ea;
+      z-index: 20;
+      display: none;
+      overflow: hidden;
+      padding:
+        max(16px, env(safe-area-inset-top))
+        14px
+        max(16px, env(safe-area-inset-bottom));
+    }
+
+    .modal-inner {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .modal-title {
+      font-size: 21px;
+      font-weight: 800;
+    }
+
+    #fullCount {
+      font-size: 12px;
+      color: #777;
+      margin-left: 6px;
+      font-weight: 400;
+    }
+
+    #closeModal {
+      background: white;
+      border-radius: 999px;
+      padding: 9px 14px;
+      color: #444;
+    }
+
+    #fullSaveStatus {
+      font-size: 12px;
+      color: #777;
+      margin-bottom: 8px;
+    }
+
+    #fullText {
+      flex: 1;
+      width: 100%;
+      min-height: 0;
+      border: 0;
+      outline: 0;
+      resize: none;
+      background: white;
+      color: #222;
+      border-radius: 16px;
+      padding: 14px;
+      font: inherit;
+      font-size: 16px;
+      line-height: 1.4;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+  </style>
 </head>
 
 <body>
-
-<main class="app">
-
-  <section id="libraryScreen">
-    <div class="top">
+  <main class="app">
+    <header>
       <div>
         <h1>投入口</h1>
-        <div class="small">📁 原稿庫</div>
-      </div>
 
-      <button id="trashButton" class="pill">🗑 ゴミ箱</button>
-    </div>
-
-    <div class="library-actions">
-      <button id="newFolder">📁＋ フォルダ</button>
-      <button id="newFile">📄＋ ファイル</button>
-    </div>
-
-    <div id="breadcrumb" class="breadcrumb"></div>
-
-    <div id="fileList" class="file-list"></div>
-  </section>
-
-
-  <section id="editorScreen">
-
-    <div class="editor-head">
-      <button id="backButton" class="back">‹ 原稿庫</button>
-
-      <div class="file-title">
-        <strong id="currentFileName"></strong>
-        <div class="small">
-          📄 <span id="totalCount">0</span>字
+        <div class="meta">
+          📄 本文 <span id="totalCount">0</span>字
           ・ 今回 +<span id="sessionCount">0</span>字
         </div>
-        <div id="saveStatus" class="small">保存準備中…</div>
+
+        <div id="saveStatus">保存準備中…</div>
       </div>
 
-      <button id="backup" class="pill">TXT</button>
-    </div>
+      <button id="backup">TXTバックアップ</button>
+    </header>
 
     <section class="storage">
-      <div class="storage-label">
-        📖 直前　☝️スクロールできます
-      </div>
-
-      <div id="preview">
-        <div id="previewText">まだ本文はありません。</div>
-      </div>
-
+      <div class="storage-label">📖 直前</div>
+      <div id="preview">まだ本文はありません。</div>
       <button id="fullButton">本文を編集 ›</button>
     </section>
 
@@ -620,9 +307,7 @@ h1 {
       ></textarea>
 
       <div class="send-row">
-        <span class="small">
-          <span id="draftCount">0</span>字
-        </span>
+        <span><span id="draftCount">0</span>字</span>
 
         <div class="actions">
           <button id="undo">↩︎ Undo</button>
@@ -630,1215 +315,347 @@ h1 {
         </div>
       </div>
     </section>
+  </main>
 
-  </section>
-</main>
+  <div id="toast"></div>
 
-
-<div id="toast"></div>
-
-
-<section id="fullModal">
-  <div class="full-inner">
-
-    <div class="full-head">
-      <div class="full-title">
-        📄 本文
-        <span id="fullCount" class="small">0字</span>
-      </div>
-
-      <div style="display:flex; gap:6px;">
-        <div class="switcher">
-          <button id="horizontalButton">横</button>
-          <button id="verticalButton">縦</button>
+  <section id="modal">
+    <div class="modal-inner">
+      <div class="modal-head">
+        <div class="modal-title">
+          📄 本文
+          <span id="fullCount">0字</span>
         </div>
 
-        <button id="closeFull" class="pill">閉じる</button>
+        <button id="closeModal">閉じる</button>
       </div>
-    </div>
 
-    <div class="font-row">
-      <span class="small">文字</span>
+      <div id="fullSaveStatus">編集すると自動保存されます</div>
 
-      <div class="switcher">
-        <button id="roundButton">丸文字</button>
-        <button id="literaryButton">文芸</button>
-      </div>
-    </div>
-
-    <div id="fullSaveStatus" class="small"
-         style="margin-bottom:7px;">
-      編集すると自動保存されます
-    </div>
-
-    <div class="editor-wrap">
       <textarea id="fullText"></textarea>
     </div>
-
-  </div>
-</section>
-
-
-<div id="nameOverlay" class="overlay">
-  <div class="sheet">
-    <h2 id="nameTitle">名前</h2>
-
-    <input
-      id="nameInput"
-      type="text"
-      autocomplete="off"
-      placeholder="名前"
-    >
-
-    <div class="sheet-buttons">
-      <button id="nameCancel" class="cancel">キャンセル</button>
-      <button id="nameOK" class="primary">決定</button>
-    </div>
-  </div>
-</div>
-
-
-<div id="menuOverlay" class="overlay">
-  <div class="sheet">
-    <h2 id="menuTitle">操作</h2>
-
-    <div class="menu-list">
-      <button id="renameItem">✏️ 名前を変更</button>
-      <button id="moveItem">📦 移動</button>
-      <button id="trashItem" class="danger">🗑 ゴミ箱へ</button>
-      <button id="menuCancel">キャンセル</button>
-    </div>
-  </div>
-</div>
-
-
-<div id="moveOverlay" class="overlay">
-  <div class="sheet">
-    <h2>移動先</h2>
-
-    <select id="moveSelect"></select>
-
-    <div class="sheet-buttons">
-      <button id="moveCancel" class="cancel">キャンセル</button>
-      <button id="moveOK" class="primary">ここへ移動</button>
-    </div>
-  </div>
-</div>
-
-
-<div id="trashOverlay" class="overlay">
-  <div class="sheet">
-    <h2>🗑 ゴミ箱</h2>
-
-    <div id="trashList" class="file-list"></div>
-
-    <div class="sheet-buttons">
-      <button id="trashClose" class="cancel">閉じる</button>
-    </div>
-  </div>
-</div>
-
-
-<div id="trashMenuOverlay" class="overlay">
-  <div class="sheet">
-    <h2 id="trashMenuTitle">ゴミ箱</h2>
-
-    <div class="menu-list">
-      <button id="restoreItem">↩︎ 元に戻す</button>
-      <button id="deleteForever" class="danger">⚠️ 完全に削除</button>
-      <button id="trashMenuCancel">キャンセル</button>
-    </div>
-  </div>
-</div>
-
-
-<script>
-const $ = id => document.getElementById(id);
-
-const libraryScreen = $("libraryScreen");
-const editorScreen = $("editorScreen");
-
-const fileList = $("fileList");
-const breadcrumb = $("breadcrumb");
-
-const draft = $("draft");
-const send = $("send");
-const undo = $("undo");
-const preview = $("preview");
-const previewText = $("previewText");
-
-const totalCount = $("totalCount");
-const sessionCount = $("sessionCount");
-const draftCount = $("draftCount");
-const saveStatus = $("saveStatus");
-const currentFileName = $("currentFileName");
-
-const fullModal = $("fullModal");
-const fullText = $("fullText");
-const fullCount = $("fullCount");
-const fullSaveStatus = $("fullSaveStatus");
-
-let db = null;
-
-let nodes = [];
-let currentFolderId = "root";
-let currentFileId = null;
-
-let body = "";
-let sessionAdded = 0;
-let lastSend = null;
-
-let draftSaveTimer = null;
-let bodySaveTimer = null;
-
-let writingDirection = "horizontal";
-let fontMode = "round";
-
-let nameMode = null;
-let selectedItemId = null;
-let trashSelectedId = null;
-
-
-/* ---------- 共通 ---------- */
-
-function uid() {
-  return (
-    Date.now().toString(36) +
-    Math.random().toString(36).slice(2, 8)
-  );
-}
-
-function countChars(text) {
-  return [...String(text).replace(/\r?\n/g, "")].length;
-}
-
-function flash(message) {
-  const toast = $("toast");
-
-  toast.textContent = message;
-  toast.style.display = "block";
-
-  setTimeout(() => {
-    toast.style.display = "none";
-  }, 1200);
-}
-
-function getNode(id) {
-  return nodes.find(n => n.id === id);
-}
-
-function childrenOf(parentId) {
-  return nodes.filter(
-    n => n.parentId === parentId && !n.trashed
-  );
-}
-
-function saveNodes() {
-  return setData("nodes_v2", nodes);
-}
-
-
-/* ---------- IndexedDB ---------- */
-
-function openDatabase() {
-  return new Promise((resolve, reject) => {
-    const request =
-      indexedDB.open("tounyuguchiDB", 1);
-
-    request.onupgradeneeded = () => {
-      const database = request.result;
-
-      if (!database.objectStoreNames.contains("data")) {
-        database.createObjectStore("data");
-      }
-    };
-
-    request.onsuccess = () => {
-      db = request.result;
-      resolve();
-    };
-
-    request.onerror = () => reject(request.error);
-  });
-}
-
-function getData(key) {
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction("data", "readonly");
-    const store = tx.objectStore("data");
-    const request = store.get(key);
-
-    request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(request.error);
-  });
-}
-
-function setData(key, value) {
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction("data", "readwrite");
-    const store = tx.objectStore("data");
-
-    store.put(value, key);
-
-    tx.oncomplete = () => resolve();
-    tx.onerror = () => reject(tx.error);
-  });
-}
-
-
-/* ---------- 初回移行 ---------- */
-
-async function loadOrCreateLibrary() {
-  const savedNodes = await getData("nodes_v2");
-
-  if (Array.isArray(savedNodes)) {
-    nodes = savedNodes;
-    return;
-  }
-
-  const oldBody = await getData("body");
-  const oldDraft = await getData("draft");
-
-  const firstFile = {
-    id: uid(),
-    type: "file",
-    name: "これまでの本文",
-    parentId: "root",
-    trashed: false,
-    previousParentId: "root",
-    body:
-      typeof oldBody === "string"
-        ? oldBody
-        : "",
-    draft:
-      typeof oldDraft === "string"
-        ? oldDraft
-        : ""
-  };
-
-  nodes = [firstFile];
-
-  await saveNodes();
-}
-
-
-/* ---------- 原稿庫 ---------- */
-
-function folderPath(folderId) {
-  const result = [];
-
-  let id = folderId;
-
-  while (id && id !== "root") {
-    const node = getNode(id);
-
-    if (!node) break;
-
-    result.unshift(node);
-    id = node.parentId;
-  }
-
-  return result;
-}
-
-function renderBreadcrumb() {
-  breadcrumb.innerHTML = "";
-
-  const rootButton = document.createElement("button");
-  rootButton.className = "crumb";
-  rootButton.textContent = "原稿庫";
-
-  rootButton.onclick = () => {
-    currentFolderId = "root";
-    renderLibrary();
-  };
-
-  breadcrumb.appendChild(rootButton);
-
-  for (const folder of folderPath(currentFolderId)) {
-    const arrow = document.createElement("span");
-    arrow.textContent = "›";
-
-    const button = document.createElement("button");
-    button.className = "crumb";
-    button.textContent = folder.name;
-
-    button.onclick = () => {
-      currentFolderId = folder.id;
-      renderLibrary();
-    };
-
-    breadcrumb.appendChild(arrow);
-    breadcrumb.appendChild(button);
-  }
-}
-
-function renderLibrary() {
-  renderBreadcrumb();
-  fileList.innerHTML = "";
-
-  const items = childrenOf(currentFolderId)
-    .sort((a, b) => {
-      if (a.type !== b.type) {
-        return a.type === "folder" ? -1 : 1;
-      }
-
-      return a.name.localeCompare(
-        b.name,
-        "ja",
-        { numeric: true }
-      );
-    });
-
-  if (!items.length) {
-    fileList.innerHTML =
-      `<div class="empty">
-        ここは空っぽです。<br>
-        📁か📄を作れます。
-      </div>`;
-
-    return;
-  }
-
-  for (const item of items) {
-    const row = document.createElement("div");
-    row.className = "item";
-
-    const main = document.createElement("button");
-    main.className = "item-main";
-
-    const name = document.createElement("span");
-    name.className = "item-name";
-
-    name.textContent =
-      (item.type === "folder" ? "📁 " : "📄 ") +
-      item.name;
-
-    const info = document.createElement("span");
-    info.className = "item-info";
-
-    if (item.type === "folder") {
-      const amount =
-        childrenOf(item.id).length;
-
-      info.textContent = `${amount}項目`;
-    } else {
-      info.textContent =
-        `${countChars(item.body || "")}字`;
+  </section>
+
+  <script>
+    const draft = document.getElementById("draft");
+    const send = document.getElementById("send");
+    const undo = document.getElementById("undo");
+    const backup = document.getElementById("backup");
+
+    const preview = document.getElementById("preview");
+    const totalCount = document.getElementById("totalCount");
+    const sessionCount = document.getElementById("sessionCount");
+    const draftCount = document.getElementById("draftCount");
+    const saveStatus = document.getElementById("saveStatus");
+    const toast = document.getElementById("toast");
+
+    const fullButton = document.getElementById("fullButton");
+    const modal = document.getElementById("modal");
+    const fullText = document.getElementById("fullText");
+    const fullCount = document.getElementById("fullCount");
+    const fullSaveStatus = document.getElementById("fullSaveStatus");
+    const closeModal = document.getElementById("closeModal");
+
+    let body = "";
+    let sessionAdded = 0;
+    let lastSend = null;
+    let db = null;
+    let draftSaveTimer = null;
+    let bodySaveTimer = null;
+
+    function countChars(text) {
+      return [...text.replace(/\r?\n/g, "")].length;
     }
 
-    main.appendChild(name);
-    main.appendChild(info);
+    function tail(text, length = 180) {
+      if (!text) return "まだ本文はありません。";
 
-    main.onclick = () => {
-      if (item.type === "folder") {
-        currentFolderId = item.id;
-        renderLibrary();
-      } else {
-        openFile(item.id);
-      }
-    };
+      const chars = [...text];
 
-    const menu = document.createElement("button");
-    menu.className = "item-menu";
-    menu.textContent = "•••";
-
-    menu.onclick = () => {
-      selectedItemId = item.id;
-      $("menuTitle").textContent = item.name;
-      $("menuOverlay").style.display = "flex";
-    };
-
-    row.appendChild(main);
-    row.appendChild(menu);
-
-    fileList.appendChild(row);
-  }
-}
-
-
-/* ---------- 新規作成 / 名前変更 ---------- */
-
-function openNameDialog(mode, initial = "") {
-  nameMode = mode;
-
-  $("nameTitle").textContent =
-    mode === "folder"
-      ? "新しいフォルダ"
-      : mode === "file"
-      ? "新しいファイル"
-      : "名前を変更";
-
-  $("nameInput").value = initial;
-  $("nameOverlay").style.display = "flex";
-
-  setTimeout(() => {
-    $("nameInput").focus();
-  }, 100);
-}
-
-$("newFolder").onclick = () => {
-  openNameDialog("folder");
-};
-
-$("newFile").onclick = () => {
-  openNameDialog("file");
-};
-
-$("nameCancel").onclick = () => {
-  $("nameOverlay").style.display = "none";
-};
-
-$("nameOK").onclick = async () => {
-  const name = $("nameInput").value.trim();
-
-  if (!name) return;
-
-  if (nameMode === "folder") {
-    nodes.push({
-      id: uid(),
-      type: "folder",
-      name,
-      parentId: currentFolderId,
-      previousParentId: currentFolderId,
-      trashed: false
-    });
-  }
-
-  if (nameMode === "file") {
-    nodes.push({
-      id: uid(),
-      type: "file",
-      name,
-      parentId: currentFolderId,
-      previousParentId: currentFolderId,
-      trashed: false,
-      body: "",
-      draft: ""
-    });
-  }
-
-  if (nameMode === "rename") {
-    const item = getNode(selectedItemId);
-
-    if (item) {
-      item.name = name;
+      return chars.length > length
+        ? "…" + chars.slice(-length).join("")
+        : text;
     }
-  }
 
-  await saveNodes();
+    function update() {
+      totalCount.textContent = countChars(body);
+      sessionCount.textContent = sessionAdded;
+      draftCount.textContent = countChars(draft.value);
+      fullCount.textContent = countChars(body) + "字";
 
-  $("nameOverlay").style.display = "none";
-  $("menuOverlay").style.display = "none";
+      preview.textContent = tail(body);
 
-  renderLibrary();
-};
-
-
-/* ---------- メニュー ---------- */
-
-$("menuCancel").onclick = () => {
-  $("menuOverlay").style.display = "none";
-};
-
-$("renameItem").onclick = () => {
-  const item = getNode(selectedItemId);
-
-  if (!item) return;
-
-  $("menuOverlay").style.display = "none";
-
-  openNameDialog(
-    "rename",
-    item.name
-  );
-};
-
-
-/* ---------- 移動 ---------- */
-
-function isInsideFolder(folderId, possibleAncestorId) {
-  let id = folderId;
-
-  while (id && id !== "root") {
-    if (id === possibleAncestorId) return true;
-
-    const node = getNode(id);
-
-    if (!node) break;
-
-    id = node.parentId;
-  }
-
-  return false;
-}
-
-function folderLabel(folder) {
-  const path = folderPath(folder.id)
-    .map(x => x.name)
-    .join(" / ");
-
-  return "原稿庫 / " + path;
-}
-
-$("moveItem").onclick = () => {
-  const item = getNode(selectedItemId);
-
-  if (!item) return;
-
-  const select = $("moveSelect");
-  select.innerHTML = "";
-
-  const rootOption = document.createElement("option");
-  rootOption.value = "root";
-  rootOption.textContent = "原稿庫";
-  select.appendChild(rootOption);
-
-  const folders = nodes
-    .filter(n =>
-      n.type === "folder" &&
-      !n.trashed &&
-      n.id !== item.id
-    )
-    .filter(n => {
-      if (item.type !== "folder") return true;
-
-      return !isInsideFolder(n.id, item.id);
-    });
-
-  for (const folder of folders) {
-    const option = document.createElement("option");
-
-    option.value = folder.id;
-    option.textContent = folderLabel(folder);
-
-    select.appendChild(option);
-  }
-
-  select.value = item.parentId || "root";
-
-  $("menuOverlay").style.display = "none";
-  $("moveOverlay").style.display = "flex";
-};
-
-$("moveCancel").onclick = () => {
-  $("moveOverlay").style.display = "none";
-};
-
-$("moveOK").onclick = async () => {
-  const item = getNode(selectedItemId);
-
-  if (!item) return;
-
-  item.parentId = $("moveSelect").value;
-
-  await saveNodes();
-
-  $("moveOverlay").style.display = "none";
-
-  renderLibrary();
-  flash("移動しました");
-};
-
-
-/* ---------- ゴミ箱 ---------- */
-
-function trashTree(id) {
-  const item = getNode(id);
-
-  if (!item) return;
-
-  item.trashed = true;
-
-  for (const child of nodes.filter(
-    n => n.parentId === id
-  )) {
-    trashTree(child.id);
-  }
-}
-
-$("trashItem").onclick = async () => {
-  const item = getNode(selectedItemId);
-
-  if (!item) return;
-
-  item.previousParentId =
-    item.parentId || "root";
-
-  trashTree(item.id);
-
-  await saveNodes();
-
-  $("menuOverlay").style.display = "none";
-
-  renderLibrary();
-  flash("ゴミ箱へ移動しました");
-};
-
-$("trashButton").onclick = () => {
-  renderTrash();
-  $("trashOverlay").style.display = "flex";
-};
-
-$("trashClose").onclick = () => {
-  $("trashOverlay").style.display = "none";
-};
-
-function renderTrash() {
-  const list = $("trashList");
-  list.innerHTML = "";
-
-  const trashRoots = nodes.filter(n => {
-    if (!n.trashed) return false;
-
-    const parent = getNode(n.parentId);
-
-    return !parent || !parent.trashed;
-  });
-
-  if (!trashRoots.length) {
-    list.innerHTML =
-      `<div class="empty">
-        ゴミ箱は空です。
-      </div>`;
-
-    return;
-  }
-
-  for (const item of trashRoots) {
-    const row = document.createElement("div");
-    row.className = "item";
-
-    const main = document.createElement("button");
-    main.className = "item-main";
-
-    const name = document.createElement("span");
-    name.className = "item-name";
-
-    name.textContent =
-      (item.type === "folder" ? "📁 " : "📄 ") +
-      item.name;
-
-    main.appendChild(name);
-
-    main.onclick = () => {
-      trashSelectedId = item.id;
-      $("trashMenuTitle").textContent = item.name;
-      $("trashMenuOverlay").style.display = "flex";
-    };
-
-    row.appendChild(main);
-    list.appendChild(row);
-  }
-}
-
-function restoreTree(id) {
-  const item = getNode(id);
-
-  if (!item) return;
-
-  item.trashed = false;
-
-  for (const child of nodes.filter(
-    n => n.parentId === id
-  )) {
-    restoreTree(child.id);
-  }
-}
-
-$("restoreItem").onclick = async () => {
-  const item = getNode(trashSelectedId);
-
-  if (!item) return;
-
-  let destination =
-    item.previousParentId || "root";
-
-  const parent = getNode(destination);
-
-  if (
-    destination !== "root" &&
-    (!parent || parent.trashed)
-  ) {
-    destination = "root";
-  }
-
-  item.parentId = destination;
-
-  restoreTree(item.id);
-
-  await saveNodes();
-
-  $("trashMenuOverlay").style.display = "none";
-
-  renderTrash();
-  renderLibrary();
-
-  flash("元に戻しました");
-};
-
-function collectTreeIds(id, result = []) {
-  result.push(id);
-
-  for (const child of nodes.filter(
-    n => n.parentId === id
-  )) {
-    collectTreeIds(child.id, result);
-  }
-
-  return result;
-}
-
-$("deleteForever").onclick = async () => {
-  const item = getNode(trashSelectedId);
-
-  if (!item) return;
-
-  const ok = confirm(
-    `「${item.name}」を完全に削除しますか？\nこの操作は戻せません。`
-  );
-
-  if (!ok) return;
-
-  const ids =
-    new Set(collectTreeIds(item.id));
-
-  nodes = nodes.filter(
-    n => !ids.has(n.id)
-  );
-
-  await saveNodes();
-
-  $("trashMenuOverlay").style.display = "none";
-
-  renderTrash();
-  renderLibrary();
-
-  flash("完全に削除しました");
-};
-
-$("trashMenuCancel").onclick = () => {
-  $("trashMenuOverlay").style.display = "none";
-};
-
-
-/* ---------- ファイルを開く ---------- */
-
-async function openFile(id) {
-  const file = getNode(id);
-
-  if (!file || file.type !== "file") return;
-
-  currentFileId = id;
-
-  body = file.body || "";
-  draft.value = file.draft || "";
-
-  sessionAdded = 0;
-  lastSend = null;
-
-  currentFileName.textContent = file.name;
-
-  updateEditor();
-
-  libraryScreen.style.display = "none";
-  editorScreen.style.display = "block";
-}
-
-$("backButton").onclick = async () => {
-  await saveCurrentFile();
-
-  editorScreen.style.display = "none";
-  libraryScreen.style.display = "block";
-
-  currentFileId = null;
-
-  renderLibrary();
-};
-
-
-/* ---------- 投入口 ---------- */
-
-function scrollPreviewToEnd() {
-  requestAnimationFrame(() => {
-    preview.scrollTop = preview.scrollHeight;
-  });
-}
-
-function updateEditor(keepPreviewPosition = false) {
-  totalCount.textContent = countChars(body);
-  sessionCount.textContent = sessionAdded;
-  draftCount.textContent = countChars(draft.value);
-  fullCount.textContent = countChars(body) + "字";
-
-  previewText.textContent =
-    body || "まだ本文はありません。";
-
-  send.disabled = !draft.value.trim();
-
-  undo.style.display =
-    lastSend ? "block" : "none";
-
-  if (!keepPreviewPosition) {
-    scrollPreviewToEnd();
-  }
-}
-
-async function saveCurrentFile() {
-  const file = getNode(currentFileId);
-
-  if (!file) return;
-
-  file.body = body;
-  file.draft = draft.value;
-
-  await saveNodes();
-}
-
-draft.addEventListener("input", () => {
-  updateEditor(true);
-
-  saveStatus.textContent = "保存中…";
-
-  clearTimeout(draftSaveTimer);
-
-  draftSaveTimer = setTimeout(async () => {
-    try {
-      await saveCurrentFile();
-      saveStatus.textContent = "下書き 保存済み";
-    } catch {
-      saveStatus.textContent = "保存エラー";
+      send.disabled = !draft.value.trim();
+      undo.style.display = lastSend ? "block" : "none";
     }
-  }, 300);
-});
 
-send.addEventListener("click", async () => {
-  if (!draft.value.trim()) return;
-
-  const text = draft.value;
-  const previousBody = body;
-  const added = countChars(text);
-
-  /* 勝手な改行は追加しない */
-  body += text;
-
-  lastSend = {
-    previousBody,
-    text
-  };
-
-  sessionAdded += added;
-  draft.value = "";
-
-  updateEditor();
-
-  try {
-    await saveCurrentFile();
-
-    saveStatus.textContent = "保存済み";
-    flash(`パチッ +${added}字`);
-  } catch {
-    saveStatus.textContent = "保存エラー";
-    flash("保存に失敗しました");
-  }
-
-  draft.focus();
-});
-
-undo.addEventListener("click", async () => {
-  if (!lastSend) return;
-
-  body = lastSend.previousBody;
-  draft.value = lastSend.text;
-
-  sessionAdded = Math.max(
-    0,
-    sessionAdded - countChars(lastSend.text)
-  );
-
-  lastSend = null;
-
-  updateEditor();
-
-  try {
-    await saveCurrentFile();
-
-    saveStatus.textContent = "Undo 保存済み";
-    flash("送信を取り消しました");
-  } catch {
-    saveStatus.textContent = "保存エラー";
-  }
-
-  draft.focus();
-});
-
-
-/* ---------- 本文編集 ---------- */
-
-function applyDirection() {
-  const vertical =
-    writingDirection === "vertical";
-
-  fullText.classList.toggle(
-    "vertical",
-    vertical
-  );
-
-  fullText.classList.toggle(
-    "horizontal",
-    !vertical
-  );
-
-  $("verticalButton").classList.toggle(
-    "active",
-    vertical
-  );
-
-  $("horizontalButton").classList.toggle(
-    "active",
-    !vertical
-  );
-}
-
-function applyFont() {
-  const literary =
-    fontMode === "literary";
-
-  fullText.classList.toggle(
-    "literary",
-    literary
-  );
-
-  fullText.classList.toggle(
-    "round",
-    !literary
-  );
-
-  $("literaryButton").classList.toggle(
-    "active",
-    literary
-  );
-
-  $("roundButton").classList.toggle(
-    "active",
-    !literary
-  );
-}
-
-$("fullButton").onclick = () => {
-  fullText.value = body;
-  fullCount.textContent =
-    countChars(body) + "字";
-
-  fullSaveStatus.textContent =
-    "編集すると自動保存されます";
-
-  applyDirection();
-  applyFont();
-
-  fullModal.style.display = "block";
-};
-
-$("horizontalButton").onclick = async () => {
-  writingDirection = "horizontal";
-  applyDirection();
-
-  await setData(
-    "writingDirection",
-    writingDirection
-  );
-};
-
-$("verticalButton").onclick = async () => {
-  writingDirection = "vertical";
-  applyDirection();
-
-  await setData(
-    "writingDirection",
-    writingDirection
-  );
-};
-
-$("roundButton").onclick = async () => {
-  fontMode = "round";
-  applyFont();
-
-  await setData("fontMode", fontMode);
-};
-
-$("literaryButton").onclick = async () => {
-  fontMode = "literary";
-  applyFont();
-
-  await setData("fontMode", fontMode);
-};
-
-fullText.addEventListener("input", () => {
-  body = fullText.value;
-  lastSend = null;
-
-  updateEditor();
-
-  fullSaveStatus.textContent = "保存中…";
-  saveStatus.textContent = "保存中…";
-
-  clearTimeout(bodySaveTimer);
-
-  bodySaveTimer = setTimeout(async () => {
-    try {
-      await saveCurrentFile();
-
-      fullSaveStatus.textContent = "保存済み";
-      saveStatus.textContent = "保存済み";
-    } catch {
-      fullSaveStatus.textContent = "保存エラー";
-      saveStatus.textContent = "保存エラー";
-    }
-  }, 300);
-});
-
-$("closeFull").onclick = async () => {
-  clearTimeout(bodySaveTimer);
-
-  body = fullText.value;
-
-  try {
-    await saveCurrentFile();
-
-    fullSaveStatus.textContent = "保存済み";
-    saveStatus.textContent = "保存済み";
-  } catch {
-    saveStatus.textContent = "保存エラー";
-  }
-
-  updateEditor();
-  fullModal.style.display = "none";
-};
-
-
-/* ---------- TXT ---------- */
-
-$("backup").onclick = async () => {
-  const fileNode = getNode(currentFileId);
-
-  if (!fileNode) return;
-
-  const now = new Date();
-
-  const stamp =
-    now.getFullYear() +
-    "-" +
-    String(now.getMonth() + 1).padStart(2, "0") +
-    "-" +
-    String(now.getDate()).padStart(2, "0") +
-    "_" +
-    String(now.getHours()).padStart(2, "0") +
-    "-" +
-    String(now.getMinutes()).padStart(2, "0");
-
-  const safeName =
-    fileNode.name.replace(/[\\/:*?"<>|]/g, "_");
-
-  const filename =
-    `${safeName}_${stamp}.txt`;
-
-  const text =
-    body +
-    (
-      draft.value
-        ? `\n\n--- 未送信の下書き ---\n\n${draft.value}`
-        : ""
-    );
-
-  const file = new File(
-    [text],
-    filename,
-    { type: "text/plain;charset=utf-8" }
-  );
-
-  try {
-    if (
-      navigator.share &&
-      navigator.canShare &&
-      navigator.canShare({ files: [file] })
-    ) {
-      await navigator.share({
-        files: [file],
-        title: "投入口バックアップ"
-      });
-
-      flash("TXTを共有しました");
-    } else {
-      const url = URL.createObjectURL(file);
-      const a = document.createElement("a");
-
-      a.href = url;
-      a.download = filename;
-      a.click();
+    function flash(message) {
+      toast.textContent = message;
+      toast.style.display = "block";
 
       setTimeout(() => {
-        URL.revokeObjectURL(url);
-      }, 1000);
-
-      flash("TXTを作成しました");
-    }
-  } catch (error) {
-    if (error.name !== "AbortError") {
-      flash("バックアップに失敗しました");
-    }
-  }
-};
-
-
-/* ---------- 起動 ---------- */
-
-async function start() {
-  try {
-    await openDatabase();
-
-    await loadOrCreateLibrary();
-
-    const savedDirection =
-      await getData("writingDirection");
-
-    const savedFont =
-      await getData("fontMode");
-
-    if (
-      savedDirection === "vertical" ||
-      savedDirection === "horizontal"
-    ) {
-      writingDirection = savedDirection;
+        toast.style.display = "none";
+      }, 1200);
     }
 
-    if (
-      savedFont === "round" ||
-      savedFont === "literary"
-    ) {
-      fontMode = savedFont;
+    function openDatabase() {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open("tounyuguchiDB", 1);
+
+        request.onupgradeneeded = () => {
+          const database = request.result;
+
+          if (!database.objectStoreNames.contains("data")) {
+            database.createObjectStore("data");
+          }
+        };
+
+        request.onsuccess = () => {
+          db = request.result;
+          resolve();
+        };
+
+        request.onerror = () => reject(request.error);
+      });
     }
 
-    if (navigator.storage?.persist) {
+    function getData(key) {
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction("data", "readonly");
+        const store = tx.objectStore("data");
+        const request = store.get(key);
+
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    function setData(key, value) {
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction("data", "readwrite");
+        const store = tx.objectStore("data");
+
+        store.put(value, key);
+
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject(tx.error);
+      });
+    }
+
+    async function saveDraft() {
+      await setData("draft", draft.value);
+      saveStatus.textContent = "下書き 保存済み";
+    }
+
+    draft.addEventListener("input", () => {
+      update();
+
+      saveStatus.textContent = "保存中…";
+      clearTimeout(draftSaveTimer);
+
+      draftSaveTimer = setTimeout(() => {
+        saveDraft().catch(() => {
+          saveStatus.textContent = "保存エラー";
+        });
+      }, 300);
+    });
+
+    send.addEventListener("click", async () => {
+      if (!draft.value.trim()) return;
+
+      const text = draft.value;
+      const previousBody = body;
+      const separator = body ? "\n\n" : "";
+      const added = countChars(text);
+
+      body += separator + text;
+
+      lastSend = {
+        previousBody,
+        text
+      };
+
+      sessionAdded += added;
+      draft.value = "";
+
+      update();
+
       try {
-        await navigator.storage.persist();
-      } catch {}
+        await setData("body", body);
+        await setData("draft", "");
+        saveStatus.textContent = "保存済み";
+        flash(`パチッ +${added}字`);
+      } catch {
+        saveStatus.textContent = "保存エラー";
+        flash("保存に失敗しました");
+      }
+
+      draft.focus();
+    });
+
+    undo.addEventListener("click", async () => {
+      if (!lastSend) return;
+
+      body = lastSend.previousBody;
+      draft.value = lastSend.text;
+
+      sessionAdded = Math.max(
+        0,
+        sessionAdded - countChars(lastSend.text)
+      );
+
+      lastSend = null;
+      update();
+
+      try {
+        await setData("body", body);
+        await setData("draft", draft.value);
+        saveStatus.textContent = "Undo 保存済み";
+        flash("送信を取り消しました");
+      } catch {
+        saveStatus.textContent = "保存エラー";
+      }
+
+      draft.focus();
+    });
+
+    fullButton.addEventListener("click", () => {
+      fullText.value = body;
+      fullCount.textContent = countChars(body) + "字";
+      fullSaveStatus.textContent = "編集すると自動保存されます";
+      modal.style.display = "block";
+    });
+
+    fullText.addEventListener("input", () => {
+      body = fullText.value;
+      lastSend = null;
+
+      update();
+
+      fullSaveStatus.textContent = "保存中…";
+      saveStatus.textContent = "保存中…";
+
+      clearTimeout(bodySaveTimer);
+
+      bodySaveTimer = setTimeout(async () => {
+        try {
+          await setData("body", body);
+          fullSaveStatus.textContent = "保存済み";
+          saveStatus.textContent = "保存済み";
+        } catch {
+          fullSaveStatus.textContent = "保存エラー";
+          saveStatus.textContent = "保存エラー";
+        }
+      }, 300);
+    });
+
+    closeModal.addEventListener("click", async () => {
+      clearTimeout(bodySaveTimer);
+
+      try {
+        body = fullText.value;
+        await setData("body", body);
+        fullSaveStatus.textContent = "保存済み";
+        saveStatus.textContent = "保存済み";
+      } catch {
+        saveStatus.textContent = "保存エラー";
+      }
+
+      update();
+      modal.style.display = "none";
+    });
+
+    backup.addEventListener("click", async () => {
+      const now = new Date();
+
+      const stamp =
+        now.getFullYear() +
+        "-" +
+        String(now.getMonth() + 1).padStart(2, "0") +
+        "-" +
+        String(now.getDate()).padStart(2, "0") +
+        "_" +
+        String(now.getHours()).padStart(2, "0") +
+        "-" +
+        String(now.getMinutes()).padStart(2, "0");
+
+      const filename = `投入口_${stamp}.txt`;
+
+      const text =
+        body +
+        (draft.value
+          ? `\n\n--- 未送信の下書き ---\n\n${draft.value}`
+          : "");
+
+      const file = new File(
+        [text],
+        filename,
+        { type: "text/plain;charset=utf-8" }
+      );
+
+      try {
+        if (
+          navigator.share &&
+          navigator.canShare &&
+          navigator.canShare({ files: [file] })
+        ) {
+          await navigator.share({
+            files: [file],
+            title: "投入口バックアップ"
+          });
+
+          flash("バックアップを共有しました");
+        } else {
+          const url = URL.createObjectURL(file);
+          const a = document.createElement("a");
+
+          a.href = url;
+          a.download = filename;
+          a.click();
+
+          setTimeout(() => {
+            URL.revokeObjectURL(url);
+          }, 1000);
+
+          flash("TXTを作成しました");
+        }
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          flash("バックアップに失敗しました");
+        }
+      }
+    });
+
+    async function start() {
+      try {
+        await openDatabase();
+
+        const savedBody = await getData("body");
+        const savedDraft = await getData("draft");
+
+        if (typeof savedBody === "string") {
+          body = savedBody;
+        }
+
+        if (typeof savedDraft === "string") {
+          draft.value = savedDraft;
+        }
+
+        if (navigator.storage?.persist) {
+          try {
+            await navigator.storage.persist();
+          } catch {}
+        }
+
+        saveStatus.textContent = "保存機能 ON";
+        update();
+      } catch {
+        saveStatus.textContent = "保存機能を開始できませんでした";
+        update();
+      }
     }
 
-    applyDirection();
-    applyFont();
-
-    renderLibrary();
-
-  } catch (error) {
-    document.body.innerHTML =
-      `<div style="padding:30px;font-family:sans-serif">
-        保存機能を開始できませんでした。
-      </div>`;
-  }
-}
-
-start();
-</script>
-
+    start();
+  </script>
 </body>
 </html>
