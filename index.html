@@ -22,10 +22,16 @@
       padding:
         max(16px, env(safe-area-inset-top))
         14px
-        max(16px, env(safe-area-inset-bottom));
+        max(18px, env(safe-area-inset-bottom));
     }
 
-    header { margin-bottom: 12px; }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
 
     h1 {
       margin: 0;
@@ -38,66 +44,10 @@
       color: #777;
     }
 
-    .header-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 12px;
-    }
-
-    .backup-button {
-      background: white;
-      color: #444;
-      padding: 10px 14px;
-      border-radius: 999px;
-      box-shadow: 0 1px 5px rgba(0,0,0,.08);
-      white-space: nowrap;
-    }
-
-    .card {
-      background: white;
-      border-radius: 20px;
-      padding: 16px;
-      margin-bottom: 12px;
-    }
-
-    .card-title {
-      font-weight: 700;
-      margin-bottom: 12px;
-    }
-
-    #preview {
-      white-space: pre-wrap;
-      line-height: 1.7;
-      color: #444;
-      max-height: 220px;
-      overflow-y: auto;
-    }
-
-    textarea {
-      width: 100%;
-      min-height: 260px;
-      resize: none;
-      border: 0;
-      outline: 0;
-      font: inherit;
-      font-size: 18px;
-      line-height: 1.6;
-      background: transparent;
-    }
-
-    .bottom {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-top: 12px;
-    }
-
-    .buttons {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+    #saveStatus {
+      margin-top: 5px;
+      font-size: 12px;
+      color: #777;
     }
 
     button {
@@ -107,27 +57,135 @@
       cursor: pointer;
     }
 
+    #backup {
+      background: white;
+      color: #555;
+      padding: 10px 13px;
+      border-radius: 999px;
+      box-shadow: 0 1px 5px rgba(0,0,0,.07);
+      white-space: nowrap;
+    }
+
+    .storage {
+      background: #e7e2d9;
+      border-radius: 18px;
+      padding: 13px 15px;
+      margin-bottom: 14px;
+    }
+
+    .storage-label {
+      font-size: 12px;
+      font-weight: 800;
+      color: #777;
+      margin-bottom: 7px;
+    }
+
+    #preview {
+      white-space: pre-wrap;
+      font-size: 14px;
+      line-height: 1.55;
+      color: #555;
+      max-height: 82px;
+      overflow: hidden;
+    }
+
+    #fullButton {
+      display: block;
+      margin: 8px 0 0 auto;
+      background: transparent;
+      color: #666;
+      font-size: 12px;
+      padding: 3px;
+    }
+
+    .bubble {
+      position: relative;
+      background: white;
+      border: 2px solid #5d91e8;
+      border-radius: 22px;
+      padding: 16px;
+      box-shadow: 0 3px 10px rgba(0,0,0,.05);
+    }
+
+    .bubble::before {
+      content: "";
+      position: absolute;
+      top: -11px;
+      left: 28px;
+      width: 18px;
+      height: 18px;
+      background: white;
+      border-left: 2px solid #5d91e8;
+      border-top: 2px solid #5d91e8;
+      transform: rotate(45deg);
+    }
+
+    .bubble-title {
+      position: relative;
+      z-index: 1;
+      font-size: 14px;
+      font-weight: 800;
+      color: #507fc9;
+      margin-bottom: 8px;
+    }
+
+    textarea {
+      position: relative;
+      z-index: 1;
+      display: block;
+      width: 100%;
+      min-height: 290px;
+      resize: none;
+      border: 0;
+      outline: 0;
+      padding: 0;
+      background: transparent;
+      color: #222;
+      font: inherit;
+      font-size: 18px;
+      line-height: 1.7;
+    }
+
+    textarea::placeholder {
+      color: #aaa;
+    }
+
+    .send-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    #draftCount {
+      color: #888;
+      font-size: 13px;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
     #undo {
+      display: none;
       background: transparent;
       color: #e5484d;
-      padding: 12px;
-      display: none;
+      padding: 10px;
     }
 
     #send {
       background: #2563eb;
       color: white;
-      padding: 14px 22px;
+      padding: 13px 21px;
       border-radius: 999px;
       font-size: 16px;
     }
 
-    #send:disabled { opacity: .35; }
-
-    #saveStatus {
-      margin-top: 8px;
-      font-size: 12px;
-      color: #777;
+    #send:disabled {
+      opacity: .3;
     }
 
     #toast {
@@ -135,13 +193,53 @@
       left: 50%;
       top: 45%;
       transform: translate(-50%, -50%);
-      background: rgba(0,0,0,.8);
+      background: rgba(0,0,0,.82);
       color: white;
       padding: 12px 20px;
       border-radius: 999px;
       font-weight: 800;
       display: none;
-      z-index: 10;
+      z-index: 30;
+      white-space: nowrap;
+    }
+
+    #modal {
+      position: fixed;
+      inset: 0;
+      background: #f3f0ea;
+      z-index: 20;
+      display: none;
+      overflow-y: auto;
+      padding:
+        max(18px, env(safe-area-inset-top))
+        18px
+        max(30px, env(safe-area-inset-bottom));
+    }
+
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-title {
+      font-size: 21px;
+      font-weight: 800;
+    }
+
+    #closeModal {
+      background: white;
+      border-radius: 999px;
+      padding: 9px 14px;
+      color: #444;
+    }
+
+    #fullText {
+      white-space: pre-wrap;
+      line-height: 1.8;
+      font-size: 16px;
+      padding-bottom: 50px;
     }
   </style>
 </head>
@@ -149,39 +247,38 @@
 <body>
   <main class="app">
     <header>
-      <div class="header-row">
-        <div>
-          <h1>投入口</h1>
-          <div class="meta">
-            <span id="totalCount">0</span>字
-            ・ 今回 +<span id="sessionCount">0</span>字
-          </div>
-          <div id="saveStatus">保存準備中…</div>
+      <div>
+        <h1>投入口</h1>
+
+        <div class="meta">
+          📄 本文 <span id="totalCount">0</span>字
+          ・ 今回 +<span id="sessionCount">0</span>字
         </div>
 
-        <button id="backup" class="backup-button">
-          TXTバックアップ
-        </button>
+        <div id="saveStatus">保存準備中…</div>
       </div>
+
+      <button id="backup">TXTバックアップ</button>
     </header>
 
-    <section class="card">
-      <div class="card-title">📖 直前の本文</div>
+    <section class="storage">
+      <div class="storage-label">📖 直前</div>
       <div id="preview">まだ本文はありません。</div>
+      <button id="fullButton">本文を見る ›</button>
     </section>
 
-    <section class="card">
+    <section class="bubble">
+      <div class="bubble-title">💬 次を書く。</div>
+
       <textarea
         id="draft"
-        placeholder="💬 次を書く。"
+        placeholder="ここに続きを投げ込む。"
       ></textarea>
 
-      <div class="bottom">
-        <span class="meta">
-          <span id="draftCount">0</span>字
-        </span>
+      <div class="send-row">
+        <span><span id="draftCount">0</span>字</span>
 
-        <div class="buttons">
+        <div class="actions">
           <button id="undo">↩︎ Undo</button>
           <button id="send" disabled>送信 ➤</button>
         </div>
@@ -190,6 +287,15 @@
   </main>
 
   <div id="toast"></div>
+
+  <section id="modal">
+    <div class="modal-head">
+      <div class="modal-title">📄 本文</div>
+      <button id="closeModal">閉じる</button>
+    </div>
+
+    <div id="fullText"></div>
+  </section>
 
   <script>
     const draft = document.getElementById("draft");
@@ -204,6 +310,11 @@
     const saveStatus = document.getElementById("saveStatus");
     const toast = document.getElementById("toast");
 
+    const fullButton = document.getElementById("fullButton");
+    const modal = document.getElementById("modal");
+    const fullText = document.getElementById("fullText");
+    const closeModal = document.getElementById("closeModal");
+
     let body = "";
     let sessionAdded = 0;
     let lastSend = null;
@@ -214,13 +325,23 @@
       return [...text.replace(/\r?\n/g, "")].length;
     }
 
+    function tail(text, length = 180) {
+      if (!text) return "まだ本文はありません。";
+
+      const chars = [...text];
+
+      return chars.length > length
+        ? "…" + chars.slice(-length).join("")
+        : text;
+    }
+
     function update() {
       totalCount.textContent = countChars(body);
       sessionCount.textContent = sessionAdded;
       draftCount.textContent = countChars(draft.value);
 
-      preview.textContent =
-        body || "まだ本文はありません。";
+      preview.textContent = tail(body);
+      fullText.textContent = body || "まだ本文はありません。";
 
       send.disabled = !draft.value.trim();
       undo.style.display = lastSend ? "block" : "none";
@@ -281,7 +402,7 @@
 
     async function saveBody() {
       await setData("body", body);
-      saveStatus.textContent = "本文 保存済み";
+      saveStatus.textContent = "保存済み";
     }
 
     async function saveDraft() {
@@ -292,7 +413,7 @@
     draft.addEventListener("input", () => {
       update();
 
-      saveStatus.textContent = "下書き 保存中…";
+      saveStatus.textContent = "保存中…";
       clearTimeout(draftSaveTimer);
 
       draftSaveTimer = setTimeout(() => {
@@ -323,8 +444,9 @@
       update();
 
       try {
-        await saveBody();
+        await setData("body", body);
         await setData("draft", "");
+        saveStatus.textContent = "保存済み";
         flash(`パチッ +${added}字`);
       } catch {
         saveStatus.textContent = "保存エラー";
@@ -358,6 +480,15 @@
       }
 
       draft.focus();
+    });
+
+    fullButton.addEventListener("click", () => {
+      fullText.textContent = body || "まだ本文はありません。";
+      modal.style.display = "block";
+    });
+
+    closeModal.addEventListener("click", () => {
+      modal.style.display = "none";
     });
 
     backup.addEventListener("click", async () => {
