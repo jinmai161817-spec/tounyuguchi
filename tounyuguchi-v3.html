@@ -1008,9 +1008,12 @@ function textOffsetFromPoint(x, y) {
   return domPositionToTextOffset(verticalView, container, offset);
 }
 function renderVerticalView(scrollToCaret = false) {
+  const oldScrollLeft = verticalView.scrollLeft;
   const pos = currentInsertPosition();
-  const caret = renderSplitText(verticalView, body, pos, "vertical-caret", "");
-  
+  renderSplitText(verticalView, body, pos, "vertical-caret", "");
+  requestAnimationFrame(() => {
+    verticalView.scrollLeft = oldScrollLeft;
+  });
 }
 function focusVerticalInputAt(position) {
   const pos = clamp(position, 0, body.length);
@@ -1021,7 +1024,7 @@ function focusVerticalInputAt(position) {
   setTimeout(() => {
     try { verticalInput.setSelectionRange(pos, pos); } catch {}
     renderVerticalView(true);
-    verticalView.scrollLeft = verticalView.scrollWidth - verticalView.clientWidth;
+    
   }, 0);
 }
 verticalView.addEventListener("pointerup", event => {
