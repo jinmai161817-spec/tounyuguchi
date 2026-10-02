@@ -1559,6 +1559,7 @@ body =
 if (file) {
   file.cursorStart = insertAt + text.length;
   file.cursorEnd = file.cursorStart;
+  file.insertPosition = file.cursorStart;
 }
 
   lastSend = {
