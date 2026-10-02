@@ -69,7 +69,7 @@
     .storage {
       background: #e7e2d9;
       border-radius: 18px;
-      padding: 13px 15px;
+      padding: 11px 14px;
       margin-bottom: 14px;
     }
 
@@ -77,21 +77,21 @@
       font-size: 12px;
       font-weight: 800;
       color: #777;
-      margin-bottom: 7px;
+      margin-bottom: 5px;
     }
 
     #preview {
       white-space: pre-wrap;
-      font-size: 14px;
-      line-height: 1.55;
+      font-size: 13px;
+      line-height: 1.35;
       color: #555;
-      max-height: 82px;
+      max-height: 56px;
       overflow: hidden;
     }
 
     #fullButton {
       display: block;
-      margin: 8px 0 0 auto;
+      margin: 5px 0 0 auto;
       background: transparent;
       color: #666;
       font-size: 12px;
@@ -129,7 +129,7 @@
       margin-bottom: 8px;
     }
 
-    textarea {
+    #draft {
       position: relative;
       z-index: 1;
       display: block;
@@ -143,10 +143,10 @@
       color: #222;
       font: inherit;
       font-size: 18px;
-      line-height: 1.7;
+      line-height: 1.55;
     }
 
-    textarea::placeholder {
+    #draft::placeholder {
       color: #aaa;
     }
 
@@ -209,23 +209,37 @@
       background: #f3f0ea;
       z-index: 20;
       display: none;
-      overflow-y: auto;
+      overflow: hidden;
       padding:
-        max(18px, env(safe-area-inset-top))
-        18px
-        max(30px, env(safe-area-inset-bottom));
+        max(16px, env(safe-area-inset-top))
+        14px
+        max(16px, env(safe-area-inset-bottom));
+    }
+
+    .modal-inner {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
     }
 
     .modal-head {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      gap: 10px;
+      margin-bottom: 10px;
     }
 
     .modal-title {
       font-size: 21px;
       font-weight: 800;
+    }
+
+    #fullCount {
+      font-size: 12px;
+      color: #777;
+      margin-left: 6px;
+      font-weight: 400;
     }
 
     #closeModal {
@@ -235,11 +249,28 @@
       color: #444;
     }
 
+    #fullSaveStatus {
+      font-size: 12px;
+      color: #777;
+      margin-bottom: 8px;
+    }
+
     #fullText {
-      white-space: pre-wrap;
-      line-height: 1.8;
+      flex: 1;
+      width: 100%;
+      min-height: 0;
+      border: 0;
+      outline: 0;
+      resize: none;
+      background: white;
+      color: #222;
+      border-radius: 16px;
+      padding: 14px;
+      font: inherit;
       font-size: 16px;
-      padding-bottom: 50px;
+      line-height: 1.4;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
   </style>
 </head>
@@ -264,7 +295,7 @@
     <section class="storage">
       <div class="storage-label">📖 直前</div>
       <div id="preview">まだ本文はありません。</div>
-      <button id="fullButton">本文を見る ›</button>
+      <button id="fullButton">本文を編集 ›</button>
     </section>
 
     <section class="bubble">
@@ -289,12 +320,20 @@
   <div id="toast"></div>
 
   <section id="modal">
-    <div class="modal-head">
-      <div class="modal-title">📄 本文</div>
-      <button id="closeModal">閉じる</button>
-    </div>
+    <div class="modal-inner">
+      <div class="modal-head">
+        <div class="modal-title">
+          📄 本文
+          <span id="fullCount">0字</span>
+        </div>
 
-    <div id="fullText"></div>
+        <button id="closeModal">閉じる</button>
+      </div>
+
+      <div id="fullSaveStatus">編集すると自動保存されます</div>
+
+      <textarea id="fullText"></textarea>
+    </div>
   </section>
 
   <script>
@@ -313,6 +352,8 @@
     const fullButton = document.getElementById("fullButton");
     const modal = document.getElementById("modal");
     const fullText = document.getElementById("fullText");
+    const fullCount = document.getElementById("fullCount");
+    const fullSaveStatus = document.getElementById("fullSaveStatus");
     const closeModal = document.getElementById("closeModal");
 
     let body = "";
@@ -320,6 +361,7 @@
     let lastSend = null;
     let db = null;
     let draftSaveTimer = null;
+    let bodySaveTimer = null;
 
     function countChars(text) {
       return [...text.replace(/\r?\n/g, "")].length;
@@ -339,9 +381,9 @@
       totalCount.textContent = countChars(body);
       sessionCount.textContent = sessionAdded;
       draftCount.textContent = countChars(draft.value);
+      fullCount.textContent = countChars(body) + "字";
 
       preview.textContent = tail(body);
-      fullText.textContent = body || "まだ本文はありません。";
 
       send.disabled = !draft.value.trim();
       undo.style.display = lastSend ? "block" : "none";
@@ -398,11 +440,6 @@
         tx.oncomplete = () => resolve();
         tx.onerror = () => reject(tx.error);
       });
-    }
-
-    async function saveBody() {
-      await setData("body", body);
-      saveStatus.textContent = "保存済み";
     }
 
     async function saveDraft() {
@@ -483,11 +520,48 @@
     });
 
     fullButton.addEventListener("click", () => {
-      fullText.textContent = body || "まだ本文はありません。";
+      fullText.value = body;
+      fullCount.textContent = countChars(body) + "字";
+      fullSaveStatus.textContent = "編集すると自動保存されます";
       modal.style.display = "block";
     });
 
-    closeModal.addEventListener("click", () => {
+    fullText.addEventListener("input", () => {
+      body = fullText.value;
+      lastSend = null;
+
+      update();
+
+      fullSaveStatus.textContent = "保存中…";
+      saveStatus.textContent = "保存中…";
+
+      clearTimeout(bodySaveTimer);
+
+      bodySaveTimer = setTimeout(async () => {
+        try {
+          await setData("body", body);
+          fullSaveStatus.textContent = "保存済み";
+          saveStatus.textContent = "保存済み";
+        } catch {
+          fullSaveStatus.textContent = "保存エラー";
+          saveStatus.textContent = "保存エラー";
+        }
+      }, 300);
+    });
+
+    closeModal.addEventListener("click", async () => {
+      clearTimeout(bodySaveTimer);
+
+      try {
+        body = fullText.value;
+        await setData("body", body);
+        fullSaveStatus.textContent = "保存済み";
+        saveStatus.textContent = "保存済み";
+      } catch {
+        saveStatus.textContent = "保存エラー";
+      }
+
+      update();
       modal.style.display = "none";
     });
 
