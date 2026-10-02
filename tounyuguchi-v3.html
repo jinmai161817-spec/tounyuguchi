@@ -1242,9 +1242,12 @@ async function exportAllData() {
     await setData("fontMode", fontMode);
 
     
-    body = "";
-    draft.value = "";
-
+   
+const importedFile = currentFile();
+if (importedFile) {
+  body = importedFile.body ?? "";
+  draft.value = importedFile.draft ?? "";
+}
     renderLibrary();
     flash("全データを読み込みました");
   } catch (error) {
