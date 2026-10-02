@@ -1010,7 +1010,7 @@ function textOffsetFromPoint(x, y) {
 function renderVerticalView(scrollToCaret = false) {
   const pos = currentInsertPosition();
   const caret = renderSplitText(verticalView, body, pos, "vertical-caret", "");
-  if (scrollToCaret) requestAnimationFrame(() => caret.scrollIntoView({ block:"nearest", inline:"center", behavior:"auto" }));
+  
 }
 function focusVerticalInputAt(position) {
   const pos = clamp(position, 0, body.length);
