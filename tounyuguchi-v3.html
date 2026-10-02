@@ -1022,7 +1022,7 @@ function textOffsetFromPoint(x, y) {
   const off = (c.left + c.width / 2) - (v.left + half);
 
   if (force || Math.abs(off) > half * 0.6) {
-    verticalView.scrollBy(-off, 0);
+    caret.scrollIntoView({ block: "nearest", inline: "center" });
   }
 }
 
