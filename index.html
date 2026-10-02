@@ -1638,7 +1638,77 @@ $("fullButton").onclick = () => {
 
   fullModal.style.display = "block";
 };
+/* 編集位置をファイルごとに記憶 */
+function rememberEditorPosition() {
+  const file = getNode(currentFileId);
+  if (!file || file.type !== "file") return;
 
+  file.cursorStart = fullText.selectionStart;
+  file.cursorEnd = fullText.selectionEnd;
+  file.editorScrollTop = fullText.scrollTop;
+  file.editorScrollLeft = fullText.scrollLeft;
+
+  saveNodes().catch(() => {});
+}
+
+/* 本文を開く処理を上書き */
+$("fullButton").onclick = () => {
+  const file = getNode(currentFileId);
+
+  fullText.value = body;
+  fullCount.textContent =
+    countChars(body) + "字";
+
+  fullSaveStatus.textContent =
+    "編集すると自動保存されます";
+
+  applyDirection();
+  applyFont();
+
+  fullModal.style.display = "block";
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      if (!file) return;
+
+      const start = Math.min(
+        file.cursorStart ?? body.length,
+        body.length
+      );
+
+      const end = Math.min(
+        file.cursorEnd ?? start,
+        body.length
+      );
+
+      fullText.setSelectionRange(start, end);
+
+      if (file.editorScrollTop != null) {
+        fullText.scrollTop =
+          file.editorScrollTop;
+      }
+
+      if (file.editorScrollLeft != null) {
+        fullText.scrollLeft =
+          file.editorScrollLeft;
+      }
+    });
+  });
+};
+
+["click", "keyup", "select", "touchend"].forEach(
+  eventName => {
+    fullText.addEventListener(
+      eventName,
+      rememberEditorPosition
+    );
+  }
+);
+
+fullText.addEventListener(
+  "scroll",
+  rememberEditorPosition
+);
 $("horizontalButton").onclick = async () => {
   writingDirection = "horizontal";
   applyDirection();
