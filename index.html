@@ -69,7 +69,7 @@
     .storage {
       background: #e7e2d9;
       border-radius: 18px;
-      padding: 11px 14px;
+      padding: 11px 14px 8px;
       margin-bottom: 14px;
     }
 
@@ -77,25 +77,36 @@
       font-size: 12px;
       font-weight: 800;
       color: #777;
-      margin-bottom: 5px;
+      margin-bottom: 6px;
     }
 
+    /* 本文を覗くスクロール窓 */
     #preview {
-      white-space: pre-wrap;
-      font-size: 13px;
-      line-height: 1.35;
-      color: #555;
+      height: 82px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
 
-      /* 文末側を見せる */
-      max-height: 56px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
+      background: rgba(255,255,255,.38);
+      border-radius: 10px;
+      padding: 7px 9px;
+
+      font-size: 13px;
+      line-height: 1.45;
+      color: #555;
+      white-space: pre-wrap;
+
+      scrollbar-width: none;
+    }
+
+    #preview::-webkit-scrollbar {
+      display: none;
     }
 
     #previewText {
       white-space: pre-wrap;
+      min-height: 100%;
     }
 
     #fullButton {
@@ -323,7 +334,6 @@
       -webkit-overflow-scrolling: touch;
     }
 
-    /* 今までの丸くて可愛い表示 */
     #fullText.round {
       font-family:
         -apple-system,
@@ -332,7 +342,6 @@
         sans-serif;
     }
 
-    /* 小説・文芸っぽい明朝 */
     #fullText.literary {
       font-family:
         "Hiragino Mincho ProN",
@@ -376,7 +385,7 @@
     </header>
 
     <section class="storage">
-      <div class="storage-label">📖 直前</div>
+      <div class="storage-label">📖 直前　☝️スクロールできます</div>
 
       <div id="preview">
         <div id="previewText">まだ本文はありません。</div>
@@ -451,6 +460,7 @@
     const undo = document.getElementById("undo");
     const backup = document.getElementById("backup");
 
+    const preview = document.getElementById("preview");
     const previewText = document.getElementById("previewText");
     const totalCount = document.getElementById("totalCount");
     const sessionCount = document.getElementById("sessionCount");
@@ -462,8 +472,7 @@
     const modal = document.getElementById("modal");
     const fullText = document.getElementById("fullText");
     const fullCount = document.getElementById("fullCount");
-    const fullSaveStatus =
-      document.getElementById("fullSaveStatus");
+    const fullSaveStatus = document.getElementById("fullSaveStatus");
     const closeModal = document.getElementById("closeModal");
 
     const horizontalButton =
@@ -492,20 +501,10 @@
       return [...text.replace(/\r?\n/g, "")].length;
     }
 
-    /*
-      直前表示専用。
-      本文の最後から短めに切り出す。
-      さらに改行を残すので、
-      「いまどこを書いているか」が見えやすい。
-    */
-    function tail(text, length = 90) {
-      if (!text) return "まだ本文はありません。";
-
-      const chars = [...text];
-
-      return chars.length > length
-        ? "…" + chars.slice(-length).join("")
-        : text;
+    function scrollPreviewToEnd() {
+      requestAnimationFrame(() => {
+        preview.scrollTop = preview.scrollHeight;
+      });
     }
 
     function applyDirection() {
@@ -528,16 +527,21 @@
       roundButton.classList.toggle("active", !literary);
     }
 
-    function update() {
+    function update(keepPreviewPosition = false) {
       totalCount.textContent = countChars(body);
       sessionCount.textContent = sessionAdded;
       draftCount.textContent = countChars(draft.value);
       fullCount.textContent = countChars(body) + "字";
 
-      previewText.textContent = tail(body);
+      previewText.textContent =
+        body || "まだ本文はありません。";
 
       send.disabled = !draft.value.trim();
       undo.style.display = lastSend ? "block" : "none";
+
+      if (!keepPreviewPosition) {
+        scrollPreviewToEnd();
+      }
     }
 
     function flash(message) {
@@ -551,8 +555,7 @@
 
     function openDatabase() {
       return new Promise((resolve, reject) => {
-        const request =
-          indexedDB.open("tounyuguchiDB", 1);
+        const request = indexedDB.open("tounyuguchiDB", 1);
 
         request.onupgradeneeded = () => {
           const database = request.result;
@@ -567,37 +570,25 @@
           resolve();
         };
 
-        request.onerror = () =>
-          reject(request.error);
+        request.onerror = () => reject(request.error);
       });
     }
 
     function getData(key) {
       return new Promise((resolve, reject) => {
-        const tx =
-          db.transaction("data", "readonly");
+        const tx = db.transaction("data", "readonly");
+        const store = tx.objectStore("data");
+        const request = store.get(key);
 
-        const store =
-          tx.objectStore("data");
-
-        const request =
-          store.get(key);
-
-        request.onsuccess = () =>
-          resolve(request.result);
-
-        request.onerror = () =>
-          reject(request.error);
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
       });
     }
 
     function setData(key, value) {
       return new Promise((resolve, reject) => {
-        const tx =
-          db.transaction("data", "readwrite");
-
-        const store =
-          tx.objectStore("data");
+        const tx = db.transaction("data", "readwrite");
+        const store = tx.objectStore("data");
 
         store.put(value, key);
 
@@ -612,7 +603,8 @@
     }
 
     draft.addEventListener("input", () => {
-      update();
+      /* 入力中に覗き窓を文末へ勝手に戻さない */
+      update(true);
 
       saveStatus.textContent = "保存中…";
       clearTimeout(draftSaveTimer);
@@ -642,6 +634,7 @@
       sessionAdded += added;
       draft.value = "";
 
+      /* 送信したら新しい文末へ */
       update();
 
       try {
@@ -687,9 +680,7 @@
 
     fullButton.addEventListener("click", () => {
       fullText.value = body;
-
-      fullCount.textContent =
-        countChars(body) + "字";
+      fullCount.textContent = countChars(body) + "字";
 
       fullSaveStatus.textContent =
         "編集すると自動保存されます";
@@ -700,64 +691,47 @@
       modal.style.display = "block";
     });
 
-    horizontalButton.addEventListener(
-      "click",
-      async () => {
-        writingDirection = "horizontal";
-        applyDirection();
+    horizontalButton.addEventListener("click", async () => {
+      writingDirection = "horizontal";
+      applyDirection();
 
-        try {
-          await setData(
-            "writingDirection",
-            writingDirection
-          );
-        } catch {}
-      }
-    );
+      try {
+        await setData("writingDirection", writingDirection);
+      } catch {}
+    });
 
-    verticalButton.addEventListener(
-      "click",
-      async () => {
-        writingDirection = "vertical";
-        applyDirection();
+    verticalButton.addEventListener("click", async () => {
+      writingDirection = "vertical";
+      applyDirection();
 
-        try {
-          await setData(
-            "writingDirection",
-            writingDirection
-          );
-        } catch {}
-      }
-    );
+      try {
+        await setData("writingDirection", writingDirection);
+      } catch {}
+    });
 
-    roundButton.addEventListener(
-      "click",
-      async () => {
-        fontMode = "round";
-        applyFont();
+    roundButton.addEventListener("click", async () => {
+      fontMode = "round";
+      applyFont();
 
-        try {
-          await setData("fontMode", fontMode);
-        } catch {}
-      }
-    );
+      try {
+        await setData("fontMode", fontMode);
+      } catch {}
+    });
 
-    literaryButton.addEventListener(
-      "click",
-      async () => {
-        fontMode = "literary";
-        applyFont();
+    literaryButton.addEventListener("click", async () => {
+      fontMode = "literary";
+      applyFont();
 
-        try {
-          await setData("fontMode", fontMode);
-        } catch {}
-      }
-    );
+      try {
+        await setData("fontMode", fontMode);
+      } catch {}
+    });
 
     fullText.addEventListener("input", () => {
       body = fullText.value;
       lastSend = null;
 
+      /* 本文編集時は覗き窓も更新 */
       update();
 
       fullSaveStatus.textContent = "保存中…";
@@ -765,51 +739,35 @@
 
       clearTimeout(bodySaveTimer);
 
-      bodySaveTimer = setTimeout(
-        async () => {
-          try {
-            await setData("body", body);
-
-            fullSaveStatus.textContent =
-              "保存済み";
-
-            saveStatus.textContent =
-              "保存済み";
-          } catch {
-            fullSaveStatus.textContent =
-              "保存エラー";
-
-            saveStatus.textContent =
-              "保存エラー";
-          }
-        },
-        300
-      );
-    });
-
-    closeModal.addEventListener(
-      "click",
-      async () => {
-        clearTimeout(bodySaveTimer);
-
+      bodySaveTimer = setTimeout(async () => {
         try {
-          body = fullText.value;
           await setData("body", body);
 
-          fullSaveStatus.textContent =
-            "保存済み";
-
-          saveStatus.textContent =
-            "保存済み";
+          fullSaveStatus.textContent = "保存済み";
+          saveStatus.textContent = "保存済み";
         } catch {
-          saveStatus.textContent =
-            "保存エラー";
+          fullSaveStatus.textContent = "保存エラー";
+          saveStatus.textContent = "保存エラー";
         }
+      }, 300);
+    });
 
-        update();
-        modal.style.display = "none";
+    closeModal.addEventListener("click", async () => {
+      clearTimeout(bodySaveTimer);
+
+      try {
+        body = fullText.value;
+        await setData("body", body);
+
+        fullSaveStatus.textContent = "保存済み";
+        saveStatus.textContent = "保存済み";
+      } catch {
+        saveStatus.textContent = "保存エラー";
       }
-    );
+
+      update();
+      modal.style.display = "none";
+    });
 
     backup.addEventListener("click", async () => {
       const now = new Date();
@@ -825,8 +783,7 @@
         "-" +
         String(now.getMinutes()).padStart(2, "0");
 
-      const filename =
-        `投入口_${stamp}.txt`;
+      const filename = `投入口_${stamp}.txt`;
 
       const text =
         body +
@@ -846,9 +803,7 @@
         if (
           navigator.share &&
           navigator.canShare &&
-          navigator.canShare({
-            files: [file]
-          })
+          navigator.canShare({ files: [file] })
         ) {
           await navigator.share({
             files: [file],
@@ -857,11 +812,8 @@
 
           flash("バックアップを共有しました");
         } else {
-          const url =
-            URL.createObjectURL(file);
-
-          const a =
-            document.createElement("a");
+          const url = URL.createObjectURL(file);
+          const a = document.createElement("a");
 
           a.href = url;
           a.download = filename;
@@ -884,15 +836,10 @@
       try {
         await openDatabase();
 
-        const savedBody =
-          await getData("body");
-
-        const savedDraft =
-          await getData("draft");
-
+        const savedBody = await getData("body");
+        const savedDraft = await getData("draft");
         const savedDirection =
           await getData("writingDirection");
-
         const savedFont =
           await getData("fontMode");
 
@@ -928,6 +875,8 @@
         applyFont();
 
         saveStatus.textContent = "保存機能 ON";
+
+        /* 起動時は必ず本文末尾 */
         update();
       } catch {
         saveStatus.textContent =
