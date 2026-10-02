@@ -920,7 +920,9 @@ function applyDirection() {
     const pos = currentInsertPosition();
     verticalInput.setSelectionRange(pos, pos);
     renderVerticalView(true);
-    requestAnimationFrame(() => keepCaretVisible(true));
+    requestAnimationFrame(() => {
+  requestAnimationFrame(() => keepCaretVisible(true));
+});
   } else {
     fullText.value = body;
     requestAnimationFrame(() => {
