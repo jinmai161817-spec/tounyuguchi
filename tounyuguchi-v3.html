@@ -165,7 +165,50 @@ h1 { margin:0; font-size:26px; }
 #undo { display:none; background:transparent; color:var(--red); padding:9px 5px; font-weight:700; }
 #send { background:var(--blue); color:#fff; padding:12px 20px; border-radius:999px; font-size:16px; font-weight:800; }
 #send:disabled { opacity:.3; }
+/* キーボード表示中：上下の窓を一緒に縮める */
+body.keyboard-open #editorScreen.active {
+  grid-template-rows:
+    auto
+    minmax(82px, .75fr)
+    minmax(120px, 1fr);
+  gap: 8px;
+}
 
+body.keyboard-open .storage {
+  padding: 7px 10px 6px;
+}
+
+body.keyboard-open .storage-label {
+  margin-bottom: 3px;
+}
+
+body.keyboard-open #fullButton {
+  margin-top: 2px;
+}
+
+body.keyboard-open .bubble {
+  padding: 10px 12px 8px;
+}
+
+body.keyboard-open .bubble-title {
+  margin-bottom: 3px;
+}
+
+body.keyboard-open #draft {
+  height: 52px;
+}
+
+body.keyboard-open .send-row {
+  margin-top: 3px;
+}
+
+body.keyboard-open #undo {
+  padding: 5px 4px;
+}
+
+body.keyboard-open #send {
+  padding: 9px 16px;
+}
 /* ---------- 本文編集 ---------- */
 #fullModal {
   position:fixed;
