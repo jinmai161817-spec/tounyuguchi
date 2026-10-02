@@ -1012,7 +1012,7 @@ function renderVerticalView(scrollToCaret = false) {
 }
 function focusVerticalInputAt(position) {
   const pos = clamp(position, 0, body.length);
-  setFilePosition(pos, true);
+  setFilePosition(pos, false);
   if (verticalInput.value !== body) verticalInput.value = body;
   try { verticalInput.focus({ preventScroll:true }); } catch { verticalInput.focus(); }
   verticalInput.setSelectionRange(pos, pos);
