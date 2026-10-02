@@ -1006,13 +1006,18 @@ function textOffsetFromPoint(x, y) {
   const element = container.nodeType === Node.ELEMENT_NODE ? container : container.parentElement;
   if (container !== verticalView && !verticalView.contains(element)) return null;
   return domPositionToTextOffset(verticalView, container, offset);
-}function renderVerticalView(scrollToCaret = false) {
-  const oldScrollLeft = verticalView.scrollLeft;
+}
+  function renderVerticalView(scrollToCaret = false) {
   const pos = currentInsertPosition();
-  renderSplitText(verticalView, body, pos, "vertical-caret", "");
-  setTimeout(() => {
-    verticalView.scrollLeft = oldScrollLeft;
-  }, 350);
+  let caret = verticalView.querySelector(".vertical-caret");
+
+  if (!caret || verticalView.childNodes.length !== 3) {
+    caret = renderSplitText(verticalView, body, pos, "vertical-caret", "");
+    return;
+  }
+
+  verticalView.childNodes[0].data = body.slice(0, pos);
+  verticalView.childNodes[2].data = body.slice(pos);
 }
 function focusVerticalInputAt(position) {
   const pos = clamp(position, 0, body.length);
