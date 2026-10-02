@@ -920,6 +920,7 @@ function applyDirection() {
     const pos = currentInsertPosition();
     verticalInput.setSelectionRange(pos, pos);
     renderVerticalView(true);
+    requestAnimationFrame(() => keepCaretVisible(true));
   } else {
     fullText.value = body;
     requestAnimationFrame(() => {
@@ -1007,17 +1008,48 @@ function textOffsetFromPoint(x, y) {
   if (container !== verticalView && !verticalView.contains(element)) return null;
   return domPositionToTextOffset(verticalView, container, offset);
 }
+  function keepCaretVisible(force = false) {
+  if (writingDirection !== "vertical" || !fullModal.classList.contains("active")) return;
+
+  const caret = verticalView.querySelector(".vertical-caret");
+  if (!caret) return;
+
+  const v = verticalView.getBoundingClientRect();
+  const c = caret.getBoundingClientRect();
+  if (!v.width) return;
+
+  const half = v.width / 2;
+  const off = (c.left + c.width / 2) - (v.left + half);
+
+  if (force || Math.abs(off) > half * 0.6) {
+    verticalView.scrollBy(off, 0);
+  }
+}
+
+new ResizeObserver(() => {
+  if (document.activeElement === verticalInput) {
+    keepCaretVisible(true);
+  }
+}).observe(verticalView);
   function renderVerticalView(scrollToCaret = false) {
   const pos = currentInsertPosition();
   let caret = verticalView.querySelector(".vertical-caret");
 
   if (!caret || verticalView.childNodes.length !== 3) {
     caret = renderSplitText(verticalView, body, pos, "vertical-caret", "");
+
+    if (scrollToCaret) {
+      requestAnimationFrame(() => keepCaretVisible(false));
+    }
     return;
   }
 
   verticalView.childNodes[0].data = body.slice(0, pos);
   verticalView.childNodes[2].data = body.slice(pos);
+
+  if (scrollToCaret) {
+    requestAnimationFrame(() => keepCaretVisible(false));
+  }
 }
 function focusVerticalInputAt(position) {
   const pos = clamp(position, 0, body.length);
@@ -1030,22 +1062,10 @@ function focusVerticalInputAt(position) {
   } catch {
     verticalInput.focus();
   }
-
   verticalInput.setSelectionRange(pos, pos);
   renderVerticalView(false);
 
-  setTimeout(() => {
-    try { verticalInput.setSelectionRange(pos, pos); } catch {}
-
-    const caret = verticalView.querySelector(".vertical-caret");
-    if (caret) {
-      caret.scrollIntoView({
-        behavior: "auto",
-        block: "center",
-        inline: "nearest"
-      });
-    }
-  }, 400);
+ 
 }
 verticalView.addEventListener("pointerup", event => {
   if (writingDirection !== "vertical") return;
