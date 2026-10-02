@@ -8,9 +8,7 @@
   <title>投入口</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -20,16 +18,14 @@
     }
 
     .app {
-      min-height: 100vh;
+      min-height: 100dvh;
       padding:
         max(16px, env(safe-area-inset-top))
         14px
         max(16px, env(safe-area-inset-bottom));
     }
 
-    header {
-      margin-bottom: 12px;
-    }
+    header { margin-bottom: 12px; }
 
     h1 {
       margin: 0;
@@ -110,8 +106,12 @@
       font-size: 16px;
     }
 
-    #send:disabled {
-      opacity: .35;
+    #send:disabled { opacity: .35; }
+
+    #saveStatus {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #777;
     }
 
     #toast {
@@ -125,6 +125,7 @@
       border-radius: 999px;
       font-weight: 800;
       display: none;
+      z-index: 10;
     }
   </style>
 </head>
@@ -137,6 +138,7 @@
         <span id="totalCount">0</span>字
         ・ 今回 +<span id="sessionCount">0</span>字
       </div>
+      <div id="saveStatus">保存準備中…</div>
     </header>
 
     <section class="card">
@@ -174,11 +176,14 @@
     const totalCount = document.getElementById("totalCount");
     const sessionCount = document.getElementById("sessionCount");
     const draftCount = document.getElementById("draftCount");
+    const saveStatus = document.getElementById("saveStatus");
     const toast = document.getElementById("toast");
 
     let body = "";
     let sessionAdded = 0;
     let lastSend = null;
+    let db = null;
+    let draftSaveTimer = null;
 
     function countChars(text) {
       return [...text.replace(/\r?\n/g, "")].length;
@@ -193,9 +198,7 @@
         body || "まだ本文はありません。";
 
       send.disabled = !draft.value.trim();
-
-      undo.style.display =
-        lastSend ? "block" : "none";
+      undo.style.display = lastSend ? "block" : "none";
     }
 
     function flash(message) {
@@ -207,20 +210,86 @@
       }, 1200);
     }
 
-    draft.addEventListener("input", update);
+    function openDatabase() {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open("tounyuguchiDB", 1);
 
-    send.addEventListener("click", () => {
+        request.onupgradeneeded = () => {
+          const database = request.result;
+
+          if (!database.objectStoreNames.contains("data")) {
+            database.createObjectStore("data");
+          }
+        };
+
+        request.onsuccess = () => {
+          db = request.result;
+          resolve();
+        };
+
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    function getData(key) {
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction("data", "readonly");
+        const store = tx.objectStore("data");
+        const request = store.get(key);
+
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    function setData(key, value) {
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction("data", "readwrite");
+        const store = tx.objectStore("data");
+
+        store.put(value, key);
+
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject(tx.error);
+      });
+    }
+
+    async function saveBody() {
+      await setData("body", body);
+      saveStatus.textContent = "本文 保存済み";
+    }
+
+    async function saveDraft() {
+      await setData("draft", draft.value);
+      saveStatus.textContent = "下書き 保存済み";
+    }
+
+    draft.addEventListener("input", () => {
+      update();
+
+      saveStatus.textContent = "下書き 保存中…";
+
+      clearTimeout(draftSaveTimer);
+
+      draftSaveTimer = setTimeout(() => {
+        saveDraft().catch(() => {
+          saveStatus.textContent = "保存エラー";
+        });
+      }, 300);
+    });
+
+    send.addEventListener("click", async () => {
       if (!draft.value.trim()) return;
 
       const text = draft.value;
+      const previousBody = body;
       const separator = body ? "\n\n" : "";
       const added = countChars(text);
 
       body += separator + text;
 
       lastSend = {
-        previousBody:
-          body.slice(0, -(separator + text).length),
+        previousBody,
         text
       };
 
@@ -228,12 +297,20 @@
       draft.value = "";
 
       update();
-      flash(`パチッ +${added}字`);
+
+      try {
+        await saveBody();
+        await setData("draft", "");
+        flash(`パチッ +${added}字`);
+      } catch {
+        saveStatus.textContent = "保存エラー";
+        flash("保存に失敗しました");
+      }
 
       draft.focus();
     });
 
-    undo.addEventListener("click", () => {
+    undo.addEventListener("click", async () => {
       if (!lastSend) return;
 
       body = lastSend.previousBody;
@@ -245,14 +322,50 @@
       );
 
       lastSend = null;
-
       update();
-      flash("送信を取り消しました");
+
+      try {
+        await setData("body", body);
+        await setData("draft", draft.value);
+        saveStatus.textContent = "Undo 保存済み";
+        flash("送信を取り消しました");
+      } catch {
+        saveStatus.textContent = "保存エラー";
+      }
 
       draft.focus();
     });
 
-    update();
+    async function start() {
+      try {
+        await openDatabase();
+
+        const savedBody = await getData("body");
+        const savedDraft = await getData("draft");
+
+        if (typeof savedBody === "string") {
+          body = savedBody;
+        }
+
+        if (typeof savedDraft === "string") {
+          draft.value = savedDraft;
+        }
+
+        if (navigator.storage?.persist) {
+          try {
+            await navigator.storage.persist();
+          } catch {}
+        }
+
+        saveStatus.textContent = "保存機能 ON";
+        update();
+      } catch {
+        saveStatus.textContent = "保存機能を開始できませんでした";
+        update();
+      }
+    }
+
+    start();
   </script>
 </body>
 </html>
