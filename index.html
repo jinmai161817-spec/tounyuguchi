@@ -80,7 +80,6 @@
       margin-bottom: 6px;
     }
 
-    /* 本文を覗くスクロール窓 */
     #preview {
       height: 82px;
       overflow-y: auto;
@@ -166,7 +165,9 @@
       line-height: 1.55;
     }
 
-    #draft::placeholder { color: #aaa; }
+    #draft::placeholder {
+      color: #aaa;
+    }
 
     .send-row {
       display: flex;
@@ -202,7 +203,9 @@
       font-size: 16px;
     }
 
-    #send:disabled { opacity: .3; }
+    #send:disabled {
+      opacity: .3;
+    }
 
     #toast {
       position: fixed;
@@ -385,7 +388,9 @@
     </header>
 
     <section class="storage">
-      <div class="storage-label">📖 直前　☝️スクロールできます</div>
+      <div class="storage-label">
+        📖 直前　☝️スクロールできます
+      </div>
 
       <div id="preview">
         <div id="previewText">まだ本文はありません。</div>
@@ -450,7 +455,6 @@
       <div class="editor-wrap">
         <textarea id="fullText"></textarea>
       </div>
-
     </div>
   </section>
 
@@ -603,7 +607,6 @@
     }
 
     draft.addEventListener("input", () => {
-      /* 入力中に覗き窓を文末へ勝手に戻さない */
       update(true);
 
       saveStatus.textContent = "保存中…";
@@ -621,10 +624,10 @@
 
       const text = draft.value;
       const previousBody = body;
-      const separator = body ? "\n\n" : "";
       const added = countChars(text);
 
-      body += separator + text;
+      /* 送信では改行を勝手に追加しない */
+      body += text;
 
       lastSend = {
         previousBody,
@@ -634,7 +637,6 @@
       sessionAdded += added;
       draft.value = "";
 
-      /* 送信したら新しい文末へ */
       update();
 
       try {
@@ -731,7 +733,6 @@
       body = fullText.value;
       lastSend = null;
 
-      /* 本文編集時は覗き窓も更新 */
       update();
 
       fullSaveStatus.textContent = "保存中…";
@@ -875,8 +876,6 @@
         applyFont();
 
         saveStatus.textContent = "保存機能 ON";
-
-        /* 起動時は必ず本文末尾 */
         update();
       } catch {
         saveStatus.textContent =
