@@ -2,10 +2,257 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>投入口</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #f3f0ea;
+      color: #222;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    .app {
+      min-height: 100vh;
+      padding:
+        max(16px, env(safe-area-inset-top))
+        14px
+        max(16px, env(safe-area-inset-bottom));
+    }
+
+    header {
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 26px;
+    }
+
+    .meta {
+      margin-top: 4px;
+      font-size: 13px;
+      color: #777;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    #preview {
+      white-space: pre-wrap;
+      line-height: 1.7;
+      color: #444;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 260px;
+      resize: none;
+      border: 0;
+      outline: 0;
+      font: inherit;
+      font-size: 18px;
+      line-height: 1.6;
+      background: transparent;
+    }
+
+    .bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .buttons {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    button {
+      border: 0;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    #undo {
+      background: transparent;
+      color: #e5484d;
+      padding: 12px;
+      display: none;
+    }
+
+    #send {
+      background: #2563eb;
+      color: white;
+      padding: 14px 22px;
+      border-radius: 999px;
+      font-size: 16px;
+    }
+
+    #send:disabled {
+      opacity: .35;
+    }
+
+    #toast {
+      position: fixed;
+      left: 50%;
+      top: 45%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,.8);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 999px;
+      font-weight: 800;
+      display: none;
+    }
+  </style>
 </head>
+
 <body>
-  <h1>投入口 更新成功 🔥</h1>
+  <main class="app">
+    <header>
+      <h1>投入口</h1>
+      <div class="meta">
+        <span id="totalCount">0</span>字
+        ・ 今回 +<span id="sessionCount">0</span>字
+      </div>
+    </header>
+
+    <section class="card">
+      <div class="card-title">📖 直前の本文</div>
+      <div id="preview">まだ本文はありません。</div>
+    </section>
+
+    <section class="card">
+      <textarea
+        id="draft"
+        placeholder="💬 次を書く。"
+      ></textarea>
+
+      <div class="bottom">
+        <span class="meta">
+          <span id="draftCount">0</span>字
+        </span>
+
+        <div class="buttons">
+          <button id="undo">↩︎ Undo</button>
+          <button id="send" disabled>送信 ➤</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast"></div>
+
+  <script>
+    const draft = document.getElementById("draft");
+    const send = document.getElementById("send");
+    const undo = document.getElementById("undo");
+
+    const preview = document.getElementById("preview");
+    const totalCount = document.getElementById("totalCount");
+    const sessionCount = document.getElementById("sessionCount");
+    const draftCount = document.getElementById("draftCount");
+    const toast = document.getElementById("toast");
+
+    let body = "";
+    let sessionAdded = 0;
+    let lastSend = null;
+
+    function countChars(text) {
+      return [...text.replace(/\r?\n/g, "")].length;
+    }
+
+    function update() {
+      totalCount.textContent = countChars(body);
+      sessionCount.textContent = sessionAdded;
+      draftCount.textContent = countChars(draft.value);
+
+      preview.textContent =
+        body || "まだ本文はありません。";
+
+      send.disabled = !draft.value.trim();
+
+      undo.style.display =
+        lastSend ? "block" : "none";
+    }
+
+    function flash(message) {
+      toast.textContent = message;
+      toast.style.display = "block";
+
+      setTimeout(() => {
+        toast.style.display = "none";
+      }, 1200);
+    }
+
+    draft.addEventListener("input", update);
+
+    send.addEventListener("click", () => {
+      if (!draft.value.trim()) return;
+
+      const text = draft.value;
+      const separator = body ? "\n\n" : "";
+      const added = countChars(text);
+
+      body += separator + text;
+
+      lastSend = {
+        previousBody:
+          body.slice(0, -(separator + text).length),
+        text
+      };
+
+      sessionAdded += added;
+      draft.value = "";
+
+      update();
+      flash(`パチッ +${added}字`);
+
+      draft.focus();
+    });
+
+    undo.addEventListener("click", () => {
+      if (!lastSend) return;
+
+      body = lastSend.previousBody;
+      draft.value = lastSend.text;
+
+      sessionAdded = Math.max(
+        0,
+        sessionAdded - countChars(lastSend.text)
+      );
+
+      lastSend = null;
+
+      update();
+      flash("送信を取り消しました");
+
+      draft.focus();
+    });
+
+    update();
+  </script>
 </body>
 </html>
