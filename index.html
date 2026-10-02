@@ -1520,7 +1520,21 @@ send.addEventListener("click", async () => {
   const added = countChars(text);
 
   /* 勝手な改行は追加しない */
-  body += text;
+  const file = getNode(currentFileId);
+const insertAt = Math.min(
+  file?.cursorStart ?? body.length,
+  body.length
+);
+
+body =
+  body.slice(0, insertAt) +
+  text +
+  body.slice(insertAt);
+
+if (file) {
+  file.cursorStart = insertAt + text.length;
+  file.cursorEnd = file.cursorStart;
+}
 
   lastSend = {
     previousBody,
