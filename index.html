@@ -453,7 +453,31 @@ h1 {
   white-space: pre-wrap;
   padding: 18px 20px;
 }
+  #verticalEditor {
 
+  display: none;
+
+  width: 100%;
+
+  height: 100%;
+
+  writing-mode: vertical-rl;
+
+  text-orientation: mixed;
+
+  overflow-x: auto;
+
+  overflow-y: auto;
+
+  white-space: pre-wrap;
+
+  padding: 18px 20px;
+
+  outline: none;
+
+  font: inherit;
+
+}
 /* ---------- ダイアログ ---------- */
 
 .overlay {
@@ -673,6 +697,7 @@ h1 {
 
     <div class="editor-wrap">
       <textarea id="fullText"></textarea>
+      <div id="verticalEditor" contenteditable="true"></div>
     </div>
 
   </div>
@@ -1612,6 +1637,9 @@ function applyDirection() {
     "active",
     !vertical
   );
+  $("verticalEditor").textContent = fullText.value;
+fullText.style.display = vertical ? "none" : "block";
+$("verticalEditor").style.display = vertical ? "block" : "none";
 }
 
 function applyFont() {
@@ -1781,7 +1809,10 @@ fullText.addEventListener("input", () => {
     }
   }, 300);
 });
-
+$("verticalEditor").addEventListener("input", () => {
+  fullText.value = $("verticalEditor").innerText;
+  fullText.dispatchEvent(new Event("input"));
+});
 $("closeFull").onclick = async () => {
   clearTimeout(bodySaveTimer);
 
