@@ -966,8 +966,6 @@ fullText.addEventListener("input", () => {
 ["click", "keyup", "select", "touchend"].forEach(eventName => {
   fullText.addEventListener(eventName, () => rememberHorizontalPosition(true));
 });
-
-});
 /* ---------- 本文編集：縦（表示と入力を分離） ---------- */
 function textLengthIgnoringCaret(node) {
   if (node.nodeType === Node.TEXT_NODE) return node.data.length;
