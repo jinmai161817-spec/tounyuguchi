@@ -873,7 +873,7 @@ send.addEventListener("click", async () => {
   sessionAdded += action.added;
   draft.value = "";
   updateEditorUI();
-  renderPreview(true);
+  renderPreview(false);
   try {
     await saveCurrentFile();
     saveStatus.textContent = "保存済み";
