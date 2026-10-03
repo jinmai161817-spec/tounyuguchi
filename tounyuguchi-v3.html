@@ -1032,11 +1032,7 @@ function textOffsetFromPoint(x, y) {
   }
 }
 
-new ResizeObserver(() => {
-  if (document.activeElement === verticalInput) {
-    keepCaretVisible(true);
-  }
-}).observe(verticalView);
+
   function renderVerticalView(scrollToCaret = false) {
   const pos = currentInsertPosition();
   let caret = verticalView.querySelector(".vertical-caret");
