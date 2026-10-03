@@ -953,7 +953,7 @@ function scheduleBodySave() {
   }, 300);
 }
 function rememberHorizontalPosition(save = true) {
-  if (document.activeElement !== fullText && writingDirection !== "horizontal") return;
+  if (document.activeElement !== fullText || writingDirection !== "horizontal") return;
   const pos = clamp(fullText.selectionStart ?? body.length, 0, body.length);
   setFilePosition(pos, save);
 }
