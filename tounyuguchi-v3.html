@@ -529,6 +529,39 @@ updateVisualViewport();
 window.addEventListener("resize", updateVisualViewport);
 window.visualViewport?.addEventListener("resize", updateVisualViewport);
 window.visualViewport?.addEventListener("scroll", updateVisualViewport);
+  let verticalResizeTimer = null;
+
+window.visualViewport?.addEventListener("resize", () => {
+
+  if (writingDirection !== "vertical") return;
+
+  if (!fullModal.classList.contains("active")) return;
+
+  if (document.activeElement !== verticalInput) return;
+
+  clearTimeout(verticalResizeTimer);
+
+  verticalResizeTimer = setTimeout(() => {
+
+    const caret = verticalView.querySelector(".vertical-caret");
+
+    if (caret) {
+
+      caret.scrollIntoView({
+
+        block: "center",
+
+        inline: "nearest",
+
+        behavior: "auto"
+
+      });
+
+    }
+
+  }, 150);
+
+});
 
 /* ---------- IndexedDB ---------- */
 function openDatabase() {
