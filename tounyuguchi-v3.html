@@ -845,6 +845,11 @@ async function saveCurrentFile() {
 }
 
 /* ---------- 投入口 ---------- */
+  draft.addEventListener("focus", () => {
+  setTimeout(() => {
+    editorScreen.scrollTop = 0;
+  }, 300);
+});
 draft.addEventListener("input", () => {
   draftCount.textContent = countChars(draft.value);
   send.disabled = !draft.value.trim();
