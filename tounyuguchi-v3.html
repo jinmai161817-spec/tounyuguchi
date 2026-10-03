@@ -234,7 +234,6 @@ body.keyboard-open #send {
   color:#222;
   font-size:14px;
   line-height:1.55;
-  box-sizing:border-box;
 }
 #fullText { display:none; resize:none; padding:14px; overflow:auto; -webkit-overflow-scrolling:touch; caret-color:var(--blue);}
 #fullText.active { display:block; }
@@ -840,10 +839,12 @@ async function saveCurrentFile() {
 }
 
 /* ---------- 投入口 ---------- */
+  draft.addEventListener("pointerdown", () => {
+  draftFocusScrollY = window.scrollY;
+});
   draft.addEventListener("focus", () => {
   setTimeout(() => {
     window.scrollTo(0, draftFocusScrollY);
-    renderPreview(true);
   }, 300);
 });
 draft.addEventListener("input", () => {
@@ -885,6 +886,7 @@ send.addEventListener("click", async () => {
   }
   draft.focus({ preventScroll:true });
 });
+
 undo.addEventListener("click", async () => {
   const action = undoStack.pop();
   if (!action) return;
@@ -965,6 +967,9 @@ fullText.addEventListener("input", () => {
 });
 ["click", "keyup", "select", "touchend"].forEach(eventName => {
   fullText.addEventListener(eventName, () => rememberHorizontalPosition(true));
+});
+document.addEventListener("selectionchange", () => {
+  if (document.activeElement === fullText) rememberHorizontalPosition();
 });
 /* ---------- 本文編集：縦（表示と入力を分離） ---------- */
 function textLengthIgnoringCaret(node) {
