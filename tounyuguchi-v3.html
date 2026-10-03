@@ -884,7 +884,7 @@ send.addEventListener("click", async () => {
     flash("保存に失敗しました");
   }
   draft.focus({ preventScroll:true });
-
+});
 undo.addEventListener("click", async () => {
   const action = undoStack.pop();
   if (!action) return;
