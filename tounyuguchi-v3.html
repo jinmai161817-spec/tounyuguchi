@@ -932,7 +932,7 @@ function applyDirection() {
     requestAnimationFrame(() => {
       const pos = currentInsertPosition();
       fullText.setSelectionRange(pos, pos);
-      fullText.focus();
+      fullText.focus({ preventScroll:true });
     });
   }
 }
