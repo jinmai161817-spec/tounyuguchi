@@ -839,12 +839,10 @@ async function saveCurrentFile() {
 }
 
 /* ---------- 投入口 ---------- */
-  draft.addEventListener("pointerdown", () => {
-  draftFocusScrollY = window.scrollY;
-});
   draft.addEventListener("focus", () => {
   setTimeout(() => {
     window.scrollTo(0, draftFocusScrollY);
+    renderPreview(true);
   }, 300);
 });
 draft.addEventListener("input", () => {
