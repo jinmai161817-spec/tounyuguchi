@@ -1094,7 +1094,7 @@ verticalInput.addEventListener("input", () => {
   schedulePositionSave();
   scheduleBodySave();
 });
-["keyup", "select", "click"].forEach(eventName => {
+if (false) ["keyup", "select", "click"].forEach(eventName => {
   verticalInput.addEventListener(eventName, () => {
     if (writingDirection !== "vertical") return;
     const pos = clamp(verticalInput.selectionStart ?? body.length, 0, body.length);
