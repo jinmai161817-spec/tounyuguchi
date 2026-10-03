@@ -932,7 +932,7 @@ function applyDirection() {
     requestAnimationFrame(() => {
       const pos = currentInsertPosition();
       fullText.setSelectionRange(pos, pos);
-      fullText.focus({ preventScroll:true });
+      fullText.focus();
     });
   }
 }
@@ -967,8 +967,7 @@ fullText.addEventListener("input", () => {
 ["click", "keyup", "select", "touchend"].forEach(eventName => {
   fullText.addEventListener(eventName, () => rememberHorizontalPosition(true));
 });
-document.addEventListener("selectionchange", () => {
-  if (document.activeElement === fullText) rememberHorizontalPosition();
+
 });
 /* ---------- 本文編集：縦（表示と入力を分離） ---------- */
 function textLengthIgnoringCaret(node) {
