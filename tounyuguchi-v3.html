@@ -1102,11 +1102,19 @@ verticalInput.addEventListener("input", () => {
     renderVerticalView(true);
   });
 });
+/*
+
 verticalInput.addEventListener("compositionend", () => {
+
   const pos = clamp(verticalInput.selectionStart ?? body.length, 0, body.length);
+
   setFilePosition(pos, true);
+
   renderVerticalView(true);
+
 });
+
+*/
 
 /* ---------- 本文モーダル ---------- */
 $("fullButton").onclick = () => {
