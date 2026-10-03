@@ -925,9 +925,30 @@ function applyDirection() {
     verticalInput.value = body;
     const pos = currentInsertPosition();
     verticalInput.setSelectionRange(pos, pos);
-    renderVerticalView(true);
-    requestAnimationFrame(() => {
-  requestAnimationFrame(() => keepCaretVisible(true));
+    renderVerticalView(false);
+
+requestAnimationFrame(() => {
+
+  requestAnimationFrame(() => {
+
+    const caret = verticalView.querySelector(".vertical-caret");
+
+    if (caret) {
+
+      caret.scrollIntoView({
+
+        block: "center",
+
+        inline: "nearest",
+
+        behavior: "auto"
+
+      });
+
+    }
+
+  });
+
 });
   } else {
     fullText.value = body;
