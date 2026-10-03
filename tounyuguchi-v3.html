@@ -966,7 +966,7 @@ fullText.addEventListener("input", () => {
   schedulePositionSave();
   scheduleBodySave();
 });
-["click", "keyup", "select", "touchend"].forEach(eventName => {
+["click", "keyup"].forEach(eventName => {
   fullText.addEventListener(eventName, () => rememberHorizontalPosition(true));
 });
 
