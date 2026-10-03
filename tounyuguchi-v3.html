@@ -845,6 +845,7 @@ async function saveCurrentFile() {
   draft.addEventListener("focus", () => {
   setTimeout(() => {
     window.scrollTo(0, draftFocusScrollY);
+    renderPreview(true);
   }, 300);
 });
 draft.addEventListener("input", () => {
