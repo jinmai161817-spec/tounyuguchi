@@ -1123,20 +1123,18 @@ function focusVerticalInputAt(position) {
 
  
 }
-  let verticalPointerDownAt = 0;
-
-verticalView.addEventListener("pointerdown", () => {
-
-  verticalPointerDownAt = Date.now();
-
-});
-verticalView.addEventListener("pointerup", event => {
+  verticalView.addEventListener("click", event => {
 
   if (writingDirection !== "vertical") return;
 
-  if (Date.now() - verticalPointerDownAt > 350) return;
+  const selection = window.getSelection();
+
+  if (selection && !selection.isCollapsed) return;
+
   const pos = textOffsetFromPoint(event.clientX, event.clientY);
+
   focusVerticalInputAt(pos ?? currentInsertPosition());
+
 });
 verticalInput.addEventListener("input", () => {
   body = verticalInput.value;
