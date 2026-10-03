@@ -64,7 +64,7 @@ h1 { margin:0; font-size:26px; }
   left:0;
   right:0;
   top:0;
-  height:var(--vvh);
+  height:100dvh;
   overflow:hidden;
   background:var(--bg);
   padding:max(10px, env(safe-area-inset-top)) 14px max(10px, env(safe-area-inset-bottom));
@@ -845,11 +845,7 @@ async function saveCurrentFile() {
 }
 
 /* ---------- 投入口 ---------- */
-  draft.addEventListener("focus", () => {
-  setTimeout(() => {
-    editorScreen.scrollTop = 0;
-  }, 300);
-});
+  
 draft.addEventListener("input", () => {
   draftCount.textContent = countChars(draft.value);
   send.disabled = !draft.value.trim();
