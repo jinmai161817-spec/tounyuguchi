@@ -2,10 +2,8 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0, viewport-fit=cover"
->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
 <title>相槌！</title>
 
 <style>
@@ -13,44 +11,288 @@
   box-sizing: border-box;
 }
 
+:root {
+  --bg: #f5f5f5;
+  --panel: #ffffff;
+  --line: #dddddd;
+  --text: #151515;
+  --sub: #777777;
+  --me: #d9fdd3;
+  --soft: #f0f0f0;
+  --danger: #c62828;
+}
+
 html, body {
   margin: 0;
+  width: 100%;
   height: 100%;
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Helvetica Neue",
-    sans-serif;
-  background: #f5f5f5;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
 }
 
 body {
-  display: flex;
-  flex-direction: column;
+  min-height: 100dvh;
+  overflow: hidden;
 }
 
-header {
-  background: white;
-  padding: 14px 18px 12px;
-  border-bottom: 1px solid #ddd;
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ---------- アプリ全体 ---------- */
+
+#app {
+  width: 100%;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ---------- 共通ヘッダー ---------- */
+
+.topbar {
+  flex: 0 0 auto;
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+  padding:
+    calc(12px + env(safe-area-inset-top))
+    16px
+    12px;
+}
+
+.topbarRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.titleBlock {
+  min-width: 0;
+  flex: 1;
 }
 
 h1 {
   margin: 0;
+  font-size: 22px;
+  line-height: 1.2;
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  color: var(--sub);
+  font-size: 13px;
+}
+
+.iconButton,
+.smallButton {
+  border: 0;
+  background: var(--soft);
+  color: var(--text);
+  border-radius: 999px;
+  min-width: 42px;
+  min-height: 42px;
+  padding: 9px 13px;
+  font-weight: 700;
+}
+
+.iconButton:active,
+.smallButton:active,
+.primaryButton:active,
+.actionButton:active,
+.folderChoice:active,
+.logRow:active {
+  opacity: .62;
+}
+
+/* ---------- 一覧画面 ---------- */
+
+#homeView {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.homeActions {
+  display: flex;
+  gap: 8px;
+  padding: 12px 14px 4px;
+  flex: 0 0 auto;
+}
+
+.primaryButton {
+  flex: 1;
+  border: 0;
+  border-radius: 14px;
+  min-height: 44px;
+  padding: 10px 12px;
+  background: #222;
+  color: white;
+  font-weight: 700;
+}
+
+.secondaryButton {
+  background: white;
+  color: #222;
+  border: 1px solid var(--line);
+}
+
+#folderList {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 8px 14px 30px;
+}
+
+.folderCard {
+  background: white;
+  border-radius: 18px;
+  margin: 10px 0;
+  overflow: hidden;
+  border: 1px solid #ececec;
+}
+
+.folderHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 14px;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.folderName {
+  flex: 1;
+  min-width: 0;
+  font-weight: 800;
+  font-size: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.folderCount {
+  color: var(--sub);
+  font-size: 12px;
+}
+
+.folderMenuButton {
+  border: 0;
+  background: transparent;
+  font-size: 21px;
+  padding: 3px 6px;
+  line-height: 1;
+}
+
+.logList {
+  padding: 4px 0;
+}
+
+.logRow {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 0;
+  background: white;
+  color: var(--text);
+  text-align: left;
+  padding: 12px 14px;
+  border-top: 1px solid #f2f2f2;
+}
+
+.logRow:first-child {
+  border-top: 0;
+}
+
+.logMain {
+  flex: 1;
+  min-width: 0;
+}
+
+.logTitle {
+  font-weight: 700;
+  font-size: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.logMeta {
+  margin-top: 4px;
+  color: var(--sub);
+  font-size: 12px;
+}
+
+.chevron {
+  color: #999;
   font-size: 20px;
 }
 
-header p {
-  margin: 4px 0 0;
+.emptyFolder {
+  padding: 14px;
+  color: #999;
   font-size: 13px;
-  color: #777;
+}
+
+.emptyAll {
+  padding: 40px 22px;
+  text-align: center;
+  color: #888;
+  line-height: 1.8;
+}
+
+/* ---------- チャット画面 ---------- */
+
+#chatView {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.chatHeaderTitle {
+  min-width: 0;
+  flex: 1;
+}
+
+.chatFolder {
+  font-size: 11px;
+  color: var(--sub);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chatTitle {
+  margin-top: 1px;
+  font-size: 17px;
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 #chat {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
-  padding: 14px;
-  padding-bottom: 25px;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding: 14px 14px 24px;
 }
 
 .row {
@@ -71,13 +313,13 @@ header p {
   padding: 10px 14px;
   border-radius: 18px;
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 1.55;
   white-space: pre-wrap;
   word-break: break-word;
 }
 
 .me .bubble {
-  background: #d9fdd3;
+  background: var(--me);
 }
 
 .wall .bubble {
@@ -85,98 +327,209 @@ header p {
 }
 
 #inputArea {
+  flex: 0 0 auto;
   display: flex;
   align-items: flex-end;
   gap: 8px;
-
   background: white;
-
   padding: 10px;
-  padding-bottom:
-    calc(10px + env(safe-area-inset-bottom));
-
-  border-top: 1px solid #ddd;
+  padding-bottom: calc(10px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--line);
 }
 
-textarea {
+#input {
   flex: 1;
-
   resize: none;
-
   min-height: 44px;
-  max-height: 130px;
-
+  max-height: 140px;
   border: none;
   outline: none;
-
   border-radius: 22px;
-
-  background: #f0f0f0;
-
+  background: var(--soft);
   padding: 11px 14px;
-
-  font: inherit;
   font-size: 16px;
+  line-height: 1.4;
 }
 
-button {
+#send {
+  flex: 0 0 auto;
   border: none;
-
   border-radius: 22px;
-
-  padding: 12px 16px;
-
+  min-height: 44px;
+  padding: 10px 16px;
   background: #222;
   color: white;
-
-  font-weight: bold;
+  font-weight: 800;
   font-size: 15px;
 }
 
-button:active {
-  opacity: 0.6;
+/* ---------- モーダル ---------- */
+
+#modalBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0,0,0,.28);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.modalSheet {
+  width: min(100%, 620px);
+  max-height: 80dvh;
+  overflow-y: auto;
+  background: white;
+  border-radius: 22px 22px 0 0;
+  padding: 14px;
+  padding-bottom: calc(14px + env(safe-area-inset-bottom));
+  box-shadow: 0 -10px 30px rgba(0,0,0,.12);
+}
+
+.modalTitle {
+  font-size: 17px;
+  font-weight: 800;
+  padding: 4px 4px 10px;
+}
+
+.actionButton,
+.folderChoice {
+  width: 100%;
+  border: 0;
+  border-radius: 13px;
+  min-height: 48px;
+  padding: 12px 14px;
+  margin: 5px 0;
+  background: var(--soft);
+  color: var(--text);
+  text-align: left;
+  font-weight: 700;
+}
+
+.actionButton.danger {
+  color: var(--danger);
+}
+
+.actionButton.cancel {
+  text-align: center;
+  margin-top: 10px;
+  background: #222;
+  color: white;
+}
+
+.folderChoice.active {
+  background: #e8f7e3;
+}
+
+/* ---------- トースト ---------- */
+
+#toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(86px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  z-index: 200;
+  max-width: calc(100% - 36px);
+  background: rgba(20,20,20,.9);
+  color: white;
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s;
+}
+
+#toast.show {
+  opacity: 1;
 }
 </style>
 </head>
 
 <body>
+<div id="app">
 
-<header>
-  <h1>相槌！</h1>
-  <p>さあどうぞ、話せ！</p>
-</header>
+  <!-- 一覧画面 -->
+  <section id="homeView">
 
-<div id="chat"></div>
+    <header class="topbar">
+      <div class="topbarRow">
+        <div class="titleBlock">
+          <h1>相槌！</h1>
+          <p class="subtitle">さあどうぞ、話せ！</p>
+        </div>
+      </div>
+    </header>
 
-<div id="inputArea">
+    <div class="homeActions">
+      <button id="newLogButton" class="primaryButton">＋ 新しいログ</button>
+      <button id="newFolderButton" class="primaryButton secondaryButton">＋ フォルダ</button>
+    </div>
 
-  <textarea
-    id="input"
-    rows="1"
-    placeholder="なんでも投げる"
-  ></textarea>
+    <div id="folderList"></div>
 
-  <button id="send">
-    送信 ➤
-  </button>
+  </section>
+
+
+  <!-- チャット画面 -->
+  <section id="chatView" class="hidden">
+
+    <header class="topbar">
+      <div class="topbarRow">
+
+        <button id="backButton" class="iconButton" aria-label="戻る">‹</button>
+
+        <div class="chatHeaderTitle">
+          <div id="currentFolderName" class="chatFolder"></div>
+          <div id="currentLogTitle" class="chatTitle"></div>
+        </div>
+
+        <button id="logMenuButton" class="iconButton" aria-label="メニュー">•••</button>
+
+      </div>
+    </header>
+
+    <div id="chat"></div>
+
+    <div id="inputArea">
+      <textarea
+        id="input"
+        rows="1"
+        placeholder="なんでも投げる"
+      ></textarea>
+
+      <button id="send">送信 ➤</button>
+    </div>
+
+  </section>
 
 </div>
 
+<div id="modalBackdrop" class="hidden">
+  <div id="modalSheet" class="modalSheet"></div>
+</div>
+
+<div id="toast"></div>
+
 <script>
 
-/* ========================================
-   相槌 v1.1
+/* =========================================================
+   相槌！ v2
 
-   方針：
-   ・内容は解析しない
-   ・否定しない
-   ・アイデアを追加しない
-   ・楽しそうに聞く
-   ・続きを促すときは基本的に受容を添える
-======================================== */
+   ・複数ログ
+   ・フォルダ分け
+   ・ログ移動
+   ・localStorage保存
+   ・自分の発言だけTXT保存
+   ・スクロール
+   ・内容解析なし
+========================================================= */
+
+const STORAGE_KEY = "aiduchi_v2_data";
+const UNCLASSIFIED_ID = "unclassified";
 
 
-/* --- 軽い食いつき --- */
+/* ---------- 相槌素材 ---------- */
 
 const hooks = [
   "おっ",
@@ -191,9 +544,6 @@ const hooks = [
   "うんうん"
 ];
 
-
-/* --- 肯定・興味 --- */
-
 const positive = [
   "いいねぇ",
   "いいぞ",
@@ -206,13 +556,8 @@ const positive = [
   "まだ化けそう",
   "いい感じ",
   "おもしろいおもしろい",
-  "よしよし"
+  "その調子"
 ];
-
-
-/* --- 続きを促す ---
-   ※原則として単独では出さない
-*/
 
 const continuation = [
   "それから？",
@@ -227,9 +572,6 @@ const continuation = [
   "さてさて？"
 ];
 
-
-/* --- 勢いづけ --- */
-
 const push = [
   "そのまま行こう",
   "いいぞもっとやれ",
@@ -240,9 +582,6 @@ const push = [
   "好きに行こう",
   "どんどん行こう"
 ];
-
-
-/* --- 単独で出しても冷たくない短文 --- */
 
 const warmShort = [
   "うんうん",
@@ -260,9 +599,6 @@ const warmShort = [
   "👀✨"
 ];
 
-
-/* --- たまに出る大きめリアクション --- */
-
 const big = [
   "おお、来た来た！ いいぞもっとやれ",
   "おっ、なんか出てきたな。続けて続けて",
@@ -277,9 +613,34 @@ const big = [
 ];
 
 
-/* ========================================
-   基本処理
-======================================== */
+/* ---------- DOM ---------- */
+
+const homeView =
+  document.getElementById("homeView");
+
+const chatView =
+  document.getElementById("chatView");
+
+const folderList =
+  document.getElementById("folderList");
+
+const newLogButton =
+  document.getElementById("newLogButton");
+
+const newFolderButton =
+  document.getElementById("newFolderButton");
+
+const backButton =
+  document.getElementById("backButton");
+
+const logMenuButton =
+  document.getElementById("logMenuButton");
+
+const currentFolderName =
+  document.getElementById("currentFolderName");
+
+const currentLogTitle =
+  document.getElementById("currentLogTitle");
 
 const chat =
   document.getElementById("chat");
@@ -290,64 +651,1109 @@ const input =
 const send =
   document.getElementById("send");
 
+const modalBackdrop =
+  document.getElementById("modalBackdrop");
 
-let recent = [];
+const modalSheet =
+  document.getElementById("modalSheet");
+
+const toast =
+  document.getElementById("toast");
 
 
-/* 配列からランダム選択 */
+/* ---------- 状態 ---------- */
+
+let data = loadData();
+
+let currentLogId = null;
+
+let recentReactions = [];
+
+
+/* ---------- データ ---------- */
+
+function defaultData() {
+
+  return {
+
+    folders: [
+      {
+        id: UNCLASSIFIED_ID,
+        name: "未分類",
+        system: true
+      }
+    ],
+
+    logs: []
+
+  };
+
+}
+
+
+function loadData() {
+
+  try {
+
+    const raw =
+      localStorage.getItem(STORAGE_KEY);
+
+
+    if (!raw) {
+      return defaultData();
+    }
+
+
+    const parsed =
+      JSON.parse(raw);
+
+
+    if (
+      !parsed ||
+      !Array.isArray(parsed.folders) ||
+      !Array.isArray(parsed.logs)
+    ) {
+
+      return defaultData();
+
+    }
+
+
+    if (
+      !parsed.folders.some(
+        folder =>
+          folder.id === UNCLASSIFIED_ID
+      )
+    ) {
+
+      parsed.folders.unshift({
+        id: UNCLASSIFIED_ID,
+        name: "未分類",
+        system: true
+      });
+
+    }
+
+
+    return parsed;
+
+  }
+
+  catch (error) {
+
+    return defaultData();
+
+  }
+
+}
+
+
+function saveData() {
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(data)
+  );
+
+}
+
+
+function makeId(prefix) {
+
+  return (
+    prefix +
+    "_" +
+    Date.now().toString(36) +
+    "_" +
+    Math.random().toString(36).slice(2, 8)
+  );
+
+}
+
+
+function getLog(id = currentLogId) {
+
+  return data.logs.find(
+    log => log.id === id
+  );
+
+}
+
+
+function getFolder(id) {
+
+  return data.folders.find(
+    folder => folder.id === id
+  );
+
+}
+
+
+/* ---------- 日付 ---------- */
+
+function formatDateTime(timestamp) {
+
+  const d =
+    new Date(timestamp);
+
+
+  return new Intl.DateTimeFormat(
+    "ja-JP",
+    {
+      month: "numeric",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    }
+  ).format(d);
+
+}
+
+
+function defaultLogTitle() {
+
+  const d =
+    new Date();
+
+  const month =
+    d.getMonth() + 1;
+
+  const day =
+    d.getDate();
+
+  const hour =
+    String(
+      d.getHours()
+    ).padStart(2, "0");
+
+  const minute =
+    String(
+      d.getMinutes()
+    ).padStart(2, "0");
+
+
+  return (
+    `${month}/${day} ${hour}:${minute}`
+  );
+
+}
+
+
+/* ---------- トースト ---------- */
+
+let toastTimer = null;
+
+
+function showToast(text) {
+
+  toast.textContent = text;
+
+  toast.classList.add("show");
+
+
+  clearTimeout(toastTimer);
+
+
+  toastTimer =
+    setTimeout(
+      () => {
+
+        toast.classList.remove("show");
+
+      },
+      1800
+    );
+
+}
+
+
+/* ---------- モーダル ---------- */
+
+function openModal(html) {
+
+  modalSheet.innerHTML = html;
+
+  modalBackdrop.classList.remove(
+    "hidden"
+  );
+
+}
+
+
+function closeModal() {
+
+  modalBackdrop.classList.add(
+    "hidden"
+  );
+
+  modalSheet.innerHTML = "";
+
+}
+
+
+modalBackdrop.addEventListener(
+  "click",
+  event => {
+
+    if (
+      event.target === modalBackdrop
+    ) {
+
+      closeModal();
+
+    }
+
+  }
+);
+
+
+/* ---------- 一覧描画 ---------- */
+
+function renderHome() {
+
+  folderList.innerHTML = "";
+
+
+  const folders =
+    [...data.folders];
+
+
+  folders.forEach(
+    folder => {
+
+      const logs =
+        data.logs
+          .filter(
+            log =>
+              log.folderId === folder.id
+          )
+          .sort(
+            (a, b) =>
+              b.updatedAt -
+              a.updatedAt
+          );
+
+
+      const card =
+        document.createElement(
+          "section"
+        );
+
+      card.className =
+        "folderCard";
+
+
+      const header =
+        document.createElement(
+          "div"
+        );
+
+      header.className =
+        "folderHeader";
+
+
+      const name =
+        document.createElement(
+          "div"
+        );
+
+      name.className =
+        "folderName";
+
+      name.textContent =
+        "📁 " + folder.name;
+
+
+      const count =
+        document.createElement(
+          "div"
+        );
+
+      count.className =
+        "folderCount";
+
+      count.textContent =
+        `${logs.length}件`;
+
+
+      header.appendChild(name);
+
+      header.appendChild(count);
+
+
+      if (!folder.system) {
+
+        const menu =
+          document.createElement(
+            "button"
+          );
+
+        menu.className =
+          "folderMenuButton";
+
+        menu.textContent =
+          "•••";
+
+        menu.setAttribute(
+          "aria-label",
+          "フォルダメニュー"
+        );
+
+
+        menu.addEventListener(
+          "click",
+          () => {
+
+            openFolderMenu(
+              folder.id
+            );
+
+          }
+        );
+
+
+        header.appendChild(
+          menu
+        );
+
+      }
+
+
+      card.appendChild(
+        header
+      );
+
+
+      const list =
+        document.createElement(
+          "div"
+        );
+
+      list.className =
+        "logList";
+
+
+      if (
+        logs.length === 0
+      ) {
+
+        const empty =
+          document.createElement(
+            "div"
+          );
+
+        empty.className =
+          "emptyFolder";
+
+        empty.textContent =
+          "まだログはありません";
+
+
+        list.appendChild(
+          empty
+        );
+
+      }
+
+      else {
+
+        logs.forEach(
+          log => {
+
+            const row =
+              document.createElement(
+                "button"
+              );
+
+            row.className =
+              "logRow";
+
+
+            const main =
+              document.createElement(
+                "div"
+              );
+
+            main.className =
+              "logMain";
+
+
+            const title =
+              document.createElement(
+                "div"
+              );
+
+            title.className =
+              "logTitle";
+
+            title.textContent =
+              log.title || "無題";
+
+
+            const meta =
+              document.createElement(
+                "div"
+              );
+
+            meta.className =
+              "logMeta";
+
+
+            const myCount =
+              log.messages.filter(
+                message =>
+                  message.role === "me"
+              ).length;
+
+
+            meta.textContent =
+              `${formatDateTime(log.updatedAt)} ・ 自分 ${myCount}件`;
+
+
+            main.appendChild(
+              title
+            );
+
+            main.appendChild(
+              meta
+            );
+
+
+            const chev =
+              document.createElement(
+                "div"
+              );
+
+            chev.className =
+              "chevron";
+
+            chev.textContent =
+              "›";
+
+
+            row.appendChild(
+              main
+            );
+
+            row.appendChild(
+              chev
+            );
+
+
+            row.addEventListener(
+              "click",
+              () => {
+
+                openLog(
+                  log.id
+                );
+
+              }
+            );
+
+
+            list.appendChild(
+              row
+            );
+
+          }
+        );
+
+      }
+
+
+      card.appendChild(
+        list
+      );
+
+      folderList.appendChild(
+        card
+      );
+
+    }
+  );
+
+
+  if (
+    data.logs.length === 0
+  ) {
+
+    const empty =
+      document.createElement(
+        "div"
+      );
+
+    empty.className =
+      "emptyAll";
+
+    empty.innerHTML =
+      'まだ何もありません。<br>「＋ 新しいログ」から喋り始めよう。';
+
+
+    folderList.appendChild(
+      empty
+    );
+
+  }
+
+}
+
+
+/* ---------- 新規ログ ---------- */
+
+function createLog() {
+
+  const title =
+    prompt(
+      "ログ名",
+      defaultLogTitle()
+    );
+
+
+  if (
+    title === null
+  ) {
+
+    return;
+
+  }
+
+
+  const now =
+    Date.now();
+
+
+  const log = {
+
+    id:
+      makeId("log"),
+
+    folderId:
+      UNCLASSIFIED_ID,
+
+    title:
+      title.trim() ||
+      defaultLogTitle(),
+
+    createdAt:
+      now,
+
+    updatedAt:
+      now,
+
+    messages: [
+      {
+        role: "wall",
+        text: "聞こう！",
+        at: now
+      }
+    ]
+
+  };
+
+
+  data.logs.push(
+    log
+  );
+
+
+  saveData();
+
+
+  openLog(
+    log.id
+  );
+
+}
+
+
+/* ---------- 新規フォルダ ---------- */
+
+function createFolder() {
+
+  const name =
+    prompt(
+      "フォルダ名",
+      ""
+    );
+
+
+  if (
+    name === null
+  ) {
+
+    return;
+
+  }
+
+
+  const clean =
+    name.trim();
+
+
+  if (!clean) {
+
+    showToast(
+      "フォルダ名を入れてね"
+    );
+
+    return;
+
+  }
+
+
+  data.folders.push({
+
+    id:
+      makeId("folder"),
+
+    name:
+      clean,
+
+    system:
+      false
+
+  });
+
+
+  saveData();
+
+  renderHome();
+
+}
+
+
+/* ---------- フォルダメニュー ---------- */
+
+function openFolderMenu(folderId) {
+
+  const folder =
+    getFolder(folderId);
+
+
+  if (
+    !folder ||
+    folder.system
+  ) {
+
+    return;
+
+  }
+
+
+  openModal(`
+    <div class="modalTitle">
+      📁 ${escapeHtml(folder.name)}
+    </div>
+
+    <button
+      class="actionButton"
+      id="renameFolderAction"
+    >
+      名前を変更
+    </button>
+
+    <button
+      class="actionButton danger"
+      id="deleteFolderAction"
+    >
+      フォルダを削除
+    </button>
+
+    <button
+      class="actionButton cancel"
+      id="closeFolderMenu"
+    >
+      閉じる
+    </button>
+  `);
+
+
+  document
+    .getElementById(
+      "renameFolderAction"
+    )
+    .onclick =
+      () => {
+
+        closeModal();
+
+        renameFolder(
+          folderId
+        );
+
+      };
+
+
+  document
+    .getElementById(
+      "deleteFolderAction"
+    )
+    .onclick =
+      () => {
+
+        closeModal();
+
+        deleteFolder(
+          folderId
+        );
+
+      };
+
+
+  document
+    .getElementById(
+      "closeFolderMenu"
+    )
+    .onclick =
+      closeModal;
+
+}
+
+
+function renameFolder(folderId) {
+
+  const folder =
+    getFolder(folderId);
+
+
+  if (
+    !folder ||
+    folder.system
+  ) {
+
+    return;
+
+  }
+
+
+  const name =
+    prompt(
+      "新しいフォルダ名",
+      folder.name
+    );
+
+
+  if (
+    name === null
+  ) {
+
+    return;
+
+  }
+
+
+  const clean =
+    name.trim();
+
+
+  if (!clean) {
+
+    return;
+
+  }
+
+
+  folder.name =
+    clean;
+
+
+  saveData();
+
+  renderHome();
+
+}
+
+
+function deleteFolder(folderId) {
+
+  const folder =
+    getFolder(folderId);
+
+
+  if (
+    !folder ||
+    folder.system
+  ) {
+
+    return;
+
+  }
+
+
+  const count =
+    data.logs.filter(
+      log =>
+        log.folderId === folderId
+    ).length;
+
+
+  const ok =
+    confirm(
+
+      count > 0
+
+        ? `「${folder.name}」を削除します。\n中のログ ${count}件は「未分類」へ移動します。`
+
+        : `「${folder.name}」を削除します。`
+
+    );
+
+
+  if (!ok) {
+
+    return;
+
+  }
+
+
+  data.logs.forEach(
+    log => {
+
+      if (
+        log.folderId === folderId
+      ) {
+
+        log.folderId =
+          UNCLASSIFIED_ID;
+
+        log.updatedAt =
+          Date.now();
+
+      }
+
+    }
+  );
+
+
+  data.folders =
+    data.folders.filter(
+      folder =>
+        folder.id !== folderId
+    );
+
+
+  saveData();
+
+  renderHome();
+
+}
+
+
+/* ---------- ログを開く ---------- */
+
+function openLog(logId) {
+
+  const log =
+    getLog(logId);
+
+
+  if (!log) {
+
+    return;
+
+  }
+
+
+  currentLogId =
+    logId;
+
+
+  homeView.classList.add(
+    "hidden"
+  );
+
+  chatView.classList.remove(
+    "hidden"
+  );
+
+
+  renderChat();
+
+
+  requestAnimationFrame(
+    () => {
+
+      scrollChatToBottom();
+
+      input.focus({
+        preventScroll: true
+      });
+
+    }
+  );
+
+}
+
+
+function closeLog() {
+
+  currentLogId =
+    null;
+
+
+  chatView.classList.add(
+    "hidden"
+  );
+
+  homeView.classList.remove(
+    "hidden"
+  );
+
+
+  renderHome();
+
+}
+
+
+/* ---------- チャット描画 ---------- */
+
+function renderChat() {
+
+  const log =
+    getLog();
+
+
+  if (!log) {
+
+    closeLog();
+
+    return;
+
+  }
+
+
+  const folder =
+    getFolder(
+      log.folderId
+    );
+
+
+  currentFolderName.textContent =
+    folder
+      ? folder.name
+      : "未分類";
+
+
+  currentLogTitle.textContent =
+    log.title || "無題";
+
+
+  chat.innerHTML =
+    "";
+
+
+  log.messages.forEach(
+    message => {
+
+      addMessageElement(
+        message.text,
+        message.role
+      );
+
+    }
+  );
+
+
+  requestAnimationFrame(
+    scrollChatToBottom
+  );
+
+}
+
+
+function addMessageElement(
+  text,
+  role
+) {
+
+  const row =
+    document.createElement(
+      "div"
+    );
+
+  row.className =
+    "row " + role;
+
+
+  const bubble =
+    document.createElement(
+      "div"
+    );
+
+  bubble.className =
+    "bubble";
+
+  bubble.textContent =
+    text;
+
+
+  row.appendChild(
+    bubble
+  );
+
+  chat.appendChild(
+    row
+  );
+
+}
+
+
+function scrollChatToBottom() {
+
+  chat.scrollTop =
+    chat.scrollHeight;
+
+}
+
+
+/* ---------- 相槌生成 ---------- */
 
 function pick(array) {
 
   return array[
     Math.floor(
-      Math.random() * array.length
+      Math.random() *
+      array.length
     )
   ];
 
 }
 
 
-/* ========================================
-   相槌生成
-======================================== */
-
 function generateReaction() {
 
-  let result = "";
+  let result =
+    "";
 
-  const roll = Math.random();
+
+  const roll =
+    Math.random();
 
 
-  /*
-    35%
-    短い温かいリアクション
+  if (
+    roll < 0.35
+  ) {
 
-    「で？」
-    「はい、次」
-    のような圧迫系は入れない
-  */
-
-  if (roll < 0.35) {
-
-    result = pick(warmShort);
+    result =
+      pick(warmShort);
 
   }
 
 
-  /*
-    40%
-    二連リアクション
-
-    ここが主力
-  */
-
-  else if (roll < 0.75) {
+  else if (
+    roll < 0.75
+  ) {
 
     const type =
-      Math.floor(Math.random() * 5);
+      Math.floor(
+        Math.random() * 5
+      );
 
 
-    if (type === 0) {
+    if (
+      type === 0
+    ) {
 
       result =
         pick(hooks) +
@@ -357,7 +1763,9 @@ function generateReaction() {
     }
 
 
-    if (type === 1) {
+    if (
+      type === 1
+    ) {
 
       result =
         pick(positive) +
@@ -367,7 +1775,9 @@ function generateReaction() {
     }
 
 
-    if (type === 2) {
+    if (
+      type === 2
+    ) {
 
       result =
         pick(hooks) +
@@ -377,7 +1787,9 @@ function generateReaction() {
     }
 
 
-    if (type === 3) {
+    if (
+      type === 3
+    ) {
 
       result =
         pick(positive) +
@@ -387,7 +1799,9 @@ function generateReaction() {
     }
 
 
-    if (type === 4) {
+    if (
+      type === 4
+    ) {
 
       result =
         pick(hooks) +
@@ -399,20 +1813,19 @@ function generateReaction() {
   }
 
 
-  /*
-    20%
-    三連リアクション
-
-    少しテンション高め
-  */
-
-  else if (roll < 0.95) {
+  else if (
+    roll < 0.95
+  ) {
 
     const type =
-      Math.floor(Math.random() * 3);
+      Math.floor(
+        Math.random() * 3
+      );
 
 
-    if (type === 0) {
+    if (
+      type === 0
+    ) {
 
       result =
         pick(hooks) +
@@ -424,7 +1837,9 @@ function generateReaction() {
     }
 
 
-    if (type === 1) {
+    if (
+      type === 1
+    ) {
 
       result =
         pick(hooks) +
@@ -436,7 +1851,9 @@ function generateReaction() {
     }
 
 
-    if (type === 2) {
+    if (
+      type === 2
+    ) {
 
       result =
         pick(positive) +
@@ -450,36 +1867,35 @@ function generateReaction() {
   }
 
 
-  /*
-    5%
-    大きく食いつく
-  */
-
   else {
 
-    result = pick(big);
+    result =
+      pick(big);
 
   }
 
 
-  /*
-    直近6件と
-    完全に同じ文章だったら再抽選
-  */
-
-  if (recent.includes(result)) {
+  if (
+    recentReactions.includes(
+      result
+    )
+  ) {
 
     return generateReaction();
 
   }
 
 
-  recent.push(result);
+  recentReactions.push(
+    result
+  );
 
 
-  if (recent.length > 6) {
+  if (
+    recentReactions.length > 6
+  ) {
 
-    recent.shift();
+    recentReactions.shift();
 
   }
 
@@ -489,101 +1905,769 @@ function generateReaction() {
 }
 
 
-/* ========================================
-   メッセージ表示
-======================================== */
+/* ---------- 送信 ---------- */
 
-function addMessage(text, type) {
-
-  const row =
-    document.createElement("div");
-
-  row.className =
-    "row " + type;
-
-
-  const bubble =
-    document.createElement("div");
-
-  bubble.className = "bubble";
-
-  bubble.textContent = text;
-
-
-  row.appendChild(bubble);
-
-  chat.appendChild(row);
-
-
-  chat.scrollTop =
-    chat.scrollHeight;
-
-}
-
-
-/* ========================================
-   送信
-======================================== */
-
-function submit() {
+function submitMessage() {
 
   const text =
     input.value.trim();
 
 
-  if (!text) return;
+  if (!text) {
+
+    return;
+
+  }
 
 
-  addMessage(
+  const log =
+    getLog();
+
+
+  if (!log) {
+
+    return;
+
+  }
+
+
+  const now =
+    Date.now();
+
+
+  log.messages.push({
+
+    role:
+      "me",
+
+    text:
+      text,
+
+    at:
+      now
+
+  });
+
+
+  log.updatedAt =
+    now;
+
+
+  saveData();
+
+
+  addMessageElement(
     text,
     "me"
   );
 
 
-  input.value = "";
+  input.value =
+    "";
 
   input.style.height =
     "44px";
 
 
-  /*
-    少しだけ間を置く
+  requestAnimationFrame(
+    scrollChatToBottom
+  );
 
-    毎回同じ時間だと機械感が出るので
-    0.4〜1.2秒程度で揺らす
-  */
+
+  const targetLogId =
+    log.id;
+
 
   const delay =
     400 +
     Math.random() * 800;
 
 
-  setTimeout(() => {
+  setTimeout(
+    () => {
 
-    addMessage(
-      generateReaction(),
-      "wall"
-    );
+      const targetLog =
+        getLog(
+          targetLogId
+        );
 
-  }, delay);
+
+      if (
+        !targetLog
+      ) {
+
+        return;
+
+      }
+
+
+      const reaction =
+        generateReaction();
+
+
+      targetLog.messages.push({
+
+        role:
+          "wall",
+
+        text:
+          reaction,
+
+        at:
+          Date.now()
+
+      });
+
+
+      targetLog.updatedAt =
+        Date.now();
+
+
+      saveData();
+
+
+      if (
+        currentLogId === targetLogId &&
+        !chatView.classList.contains(
+          "hidden"
+        )
+      ) {
+
+        addMessageElement(
+          reaction,
+          "wall"
+        );
+
+
+        requestAnimationFrame(
+          scrollChatToBottom
+        );
+
+      }
+
+    },
+    delay
+  );
 
 }
 
 
-/* ========================================
-   イベント
-======================================== */
+/* ---------- ログメニュー ---------- */
 
-send.addEventListener(
+function openLogMenu() {
+
+  const log =
+    getLog();
+
+
+  if (!log) {
+
+    return;
+
+  }
+
+
+  openModal(`
+    <div class="modalTitle">
+      ${escapeHtml(log.title)}
+    </div>
+
+    <button
+      class="actionButton"
+      id="renameLogAction"
+    >
+      名前を変更
+    </button>
+
+    <button
+      class="actionButton"
+      id="moveLogAction"
+    >
+      フォルダへ移動
+    </button>
+
+    <button
+      class="actionButton"
+      id="exportLogAction"
+    >
+      自分の発言だけTXT保存
+    </button>
+
+    <button
+      class="actionButton danger"
+      id="deleteLogAction"
+    >
+      このログを削除
+    </button>
+
+    <button
+      class="actionButton cancel"
+      id="closeLogMenu"
+    >
+      閉じる
+    </button>
+  `);
+
+
+  document
+    .getElementById(
+      "renameLogAction"
+    )
+    .onclick =
+      () => {
+
+        closeModal();
+
+        renameCurrentLog();
+
+      };
+
+
+  document
+    .getElementById(
+      "moveLogAction"
+    )
+    .onclick =
+      () => {
+
+        closeModal();
+
+        openMoveMenu();
+
+      };
+
+
+  document
+    .getElementById(
+      "exportLogAction"
+    )
+    .onclick =
+      () => {
+
+        closeModal();
+
+        exportCurrentLogTxt();
+
+      };
+
+
+  document
+    .getElementById(
+      "deleteLogAction"
+    )
+    .onclick =
+      () => {
+
+        closeModal();
+
+        deleteCurrentLog();
+
+      };
+
+
+  document
+    .getElementById(
+      "closeLogMenu"
+    )
+    .onclick =
+      closeModal;
+
+}
+
+
+function renameCurrentLog() {
+
+  const log =
+    getLog();
+
+
+  if (!log) {
+
+    return;
+
+  }
+
+
+  const title =
+    prompt(
+      "新しいログ名",
+      log.title
+    );
+
+
+  if (
+    title === null
+  ) {
+
+    return;
+
+  }
+
+
+  const clean =
+    title.trim();
+
+
+  if (!clean) {
+
+    return;
+
+  }
+
+
+  log.title =
+    clean;
+
+
+  log.updatedAt =
+    Date.now();
+
+
+  saveData();
+
+  renderChat();
+
+}
+
+
+/* ---------- ログ移動 ---------- */
+
+function openMoveMenu() {
+
+  const log =
+    getLog();
+
+
+  if (!log) {
+
+    return;
+
+  }
+
+
+  let html =
+    `<div class="modalTitle">移動先を選ぶ</div>`;
+
+
+  data.folders.forEach(
+    folder => {
+
+      const active =
+        folder.id === log.folderId
+          ? " active"
+          : "";
+
+
+      html += `
+        <button
+          class="folderChoice${active}"
+          data-folder-id="${escapeAttr(folder.id)}"
+        >
+          📁 ${escapeHtml(folder.name)}
+        </button>
+      `;
+
+    }
+  );
+
+
+  html += `
+    <button
+      class="actionButton cancel"
+      id="cancelMove"
+    >
+      キャンセル
+    </button>
+  `;
+
+
+  openModal(
+    html
+  );
+
+
+  modalSheet
+    .querySelectorAll(
+      ".folderChoice"
+    )
+    .forEach(
+      button => {
+
+        button.onclick =
+          () => {
+
+            const folderId =
+              button.dataset.folderId;
+
+
+            moveCurrentLog(
+              folderId
+            );
+
+
+            closeModal();
+
+          };
+
+      }
+    );
+
+
+  document
+    .getElementById(
+      "cancelMove"
+    )
+    .onclick =
+      closeModal;
+
+}
+
+
+function moveCurrentLog(folderId) {
+
+  const log =
+    getLog();
+
+
+  if (!log) {
+
+    return;
+
+  }
+
+
+  const folder =
+    getFolder(
+      folderId
+    );
+
+
+  if (!folder) {
+
+    return;
+
+  }
+
+
+  log.folderId =
+    folderId;
+
+
+  log.updatedAt =
+    Date.now();
+
+
+  saveData();
+
+  renderChat();
+
+
+  showToast(
+    `「${folder.name}」へ移動しました`
+  );
+
+}
+
+
+/* ---------- ログ削除 ---------- */
+
+function deleteCurrentLog() {
+
+  const log =
+    getLog();
+
+
+  if (!log) {
+
+    return;
+
+  }
+
+
+  const ok =
+    confirm(
+      `「${log.title}」を削除します。\nこの操作は元に戻せません。`
+    );
+
+
+  if (!ok) {
+
+    return;
+
+  }
+
+
+  data.logs =
+    data.logs.filter(
+      item =>
+        item.id !== log.id
+    );
+
+
+  saveData();
+
+  closeLog();
+
+}
+
+
+/* ---------- TXT書き出し ---------- */
+
+async function exportCurrentLogTxt() {
+
+  const log =
+    getLog();
+
+
+  if (!log) {
+
+    return;
+
+  }
+
+
+  const myMessages =
+    log.messages
+      .filter(
+        message =>
+          message.role === "me"
+      )
+      .map(
+        message =>
+          message.text
+      );
+
+
+  if (
+    myMessages.length === 0
+  ) {
+
+    showToast(
+      "自分の発言がまだありません"
+    );
+
+    return;
+
+  }
+
+
+  const plainText =
+    myMessages.join(
+      "\n\n"
+    );
+
+
+  const fileName =
+    sanitizeFileName(
+      log.title ||
+      "相槌ログ"
+    ) +
+    ".txt";
+
+
+  try {
+
+    const file =
+      new File(
+        [plainText],
+        fileName,
+        {
+          type:
+            "text/plain;charset=utf-8"
+        }
+      );
+
+
+    if (
+      navigator.share &&
+      navigator.canShare &&
+      navigator.canShare({
+        files: [file]
+      })
+    ) {
+
+      await navigator.share({
+
+        files:
+          [file],
+
+        title:
+          log.title
+
+      });
+
+
+      return;
+
+    }
+
+  }
+
+  catch (error) {
+
+    if (
+      error &&
+      error.name === "AbortError"
+    ) {
+
+      return;
+
+    }
+
+  }
+
+
+  const blob =
+    new Blob(
+      [plainText],
+      {
+        type:
+          "text/plain;charset=utf-8"
+      }
+    );
+
+
+  const url =
+    URL.createObjectURL(
+      blob
+    );
+
+
+  const a =
+    document.createElement(
+      "a"
+    );
+
+
+  a.href =
+    url;
+
+  a.download =
+    fileName;
+
+
+  document.body.appendChild(
+    a
+  );
+
+
+  a.click();
+
+
+  a.remove();
+
+
+  setTimeout(
+    () => {
+
+      URL.revokeObjectURL(
+        url
+      );
+
+    },
+    1000
+  );
+
+
+  showToast(
+    "TXTを書き出しました"
+  );
+
+}
+
+
+function sanitizeFileName(name) {
+
+  return name
+    .replace(
+      /[\\/:*?"<>|]/g,
+      "_"
+    )
+    .replace(
+      /\s+/g,
+      " "
+    )
+    .trim()
+    .slice(
+      0,
+      80
+    ) ||
+    "相槌ログ";
+
+}
+
+
+/* ---------- HTMLエスケープ ---------- */
+
+function escapeHtml(text) {
+
+  return String(text)
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+function escapeAttr(text) {
+
+  return escapeHtml(
+    text
+  );
+
+}
+
+
+/* ---------- イベント ---------- */
+
+newLogButton.addEventListener(
   "click",
-  submit
+  createLog
 );
 
 
-/*
-  入力に合わせて
-  テキスト欄を伸縮
-*/
+newFolderButton.addEventListener(
+  "click",
+  createFolder
+);
+
+
+backButton.addEventListener(
+  "click",
+  closeLog
+);
+
+
+logMenuButton.addEventListener(
+  "click",
+  openLogMenu
+);
+
+
+send.addEventListener(
+  "click",
+  submitMessage
+);
+
+
+/* 入力欄を自動で伸ばす */
 
 input.addEventListener(
   "input",
@@ -592,26 +2676,47 @@ input.addEventListener(
     input.style.height =
       "44px";
 
+
     input.style.height =
       Math.min(
         input.scrollHeight,
-        130
-      ) + "px";
+        140
+      ) +
+      "px";
 
   }
 );
 
 
-/* ========================================
-   開幕
-======================================== */
+/* 外付けキーボードなら
+   Cmd/Ctrl + Enterで送信 */
 
-addMessage(
-  "聞こう！",
-  "wall"
+input.addEventListener(
+  "keydown",
+  event => {
+
+    if (
+      (
+        event.metaKey ||
+        event.ctrlKey
+      ) &&
+      event.key === "Enter"
+    ) {
+
+      event.preventDefault();
+
+      submitMessage();
+
+    }
+
+  }
 );
 
-</script>
 
+/* ---------- 起動 ---------- */
+
+renderHome();
+
+</script>
 </body>
 </html>
