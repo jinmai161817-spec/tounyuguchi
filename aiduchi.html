@@ -975,6 +975,21 @@ h1 {
 
     </div>
 
+    <div class="homeActions">
+
+      <button id="backupButton" class="primaryButton secondaryButton">
+        JSONバックアップ
+      </button>
+
+      <button id="restoreButton" class="primaryButton secondaryButton">
+        JSON復元
+      </button>
+
+      <input id="restoreFileInput" type="file"
+        accept=".json,application/json" class="hidden">
+
+    </div>
+
 
     <div id="folderList"></div>
 
@@ -1085,7 +1100,7 @@ h1 {
 
 /* =========================================================
 
-   相槌！ v2.2
+   相槌！ v2.3
 
    ・複数ログ
    ・フォルダ
@@ -1097,6 +1112,9 @@ h1 {
    ・個別削除
    ・チャットスクロール
    ・iPhone Safariキーボード対策
+   ・自然な質問・要求をたまに挟む
+   ・全データJSONバックアップ／復元
+   ・保存失敗時のエラー処理
    ・内容解析なし
 
 ========================================================= */
@@ -1271,6 +1289,31 @@ const big = [
 
 ];
 
+/* 普通の会話に紛れる質問・要求。内容解析はしない */
+const questions = [
+  "それで、次は？",
+  "誰が一番困ってる？",
+  "最初になんて言う？",
+  "そのあとどうなる？",
+  "一個だけ決めるなら？",
+  "その人はどうする？",
+  "そこ、どうなってる？",
+  "逆に、なくてもいいものある？",
+  "じゃあ次に見せるものは？",
+  "ここで一番気になるのは？"
+];
+
+const nudges = [
+  "そこ、もうちょい聞きたい",
+  "そのへんもう少し考えてみよう",
+  "じゃあ次の一手だけ決めよう",
+  "今のところ、一回つなげてみて",
+  "そこだけちょっと詰めてみよう",
+  "一番気になるところから行こう",
+  "もう一個だけ決めてみよう",
+  "そこだけ先に固めてみよう"
+];
+
 
 
 /* =========================================================
@@ -1306,6 +1349,15 @@ const newFolderButton =
   document.getElementById(
     "newFolderButton"
   );
+
+const backupButton =
+  document.getElementById("backupButton");
+
+const restoreButton =
+  document.getElementById("restoreButton");
+
+const restoreFileInput =
+  document.getElementById("restoreFileInput");
 
 
 const backButton =
@@ -1388,6 +1440,10 @@ let recentReactions =
 
 let toastTimer =
   null;
+
+/* 最低4回は通常相槌。その後は各ターン25%で質問・要求 */
+let sincePrompt =
+  0;
 
 
 
@@ -1614,16 +1670,25 @@ function loadData() {
 
 function saveData() {
 
-  localStorage.setItem(
+  try {
 
-    STORAGE_KEY,
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(data)
+    );
 
-    JSON.stringify(
-      data
-    )
+    return true;
 
-  );
+  } catch (error) {
 
+    console.error("保存に失敗しました", error);
+
+    showToast(
+      "保存できませんでした。JSONバックアップをおすすめします"
+    );
+
+    return false;
+  }
 }
 
 
@@ -3637,6 +3702,23 @@ function submitMessage() {
     log.id;
 
 
+  /*
+    最低4回は普通の相槌。
+    以後25%で自然な質問・要求。
+    見た目は通常相槌と同じ。
+  */
+  sincePrompt++;
+
+  const isPrompt =
+    sincePrompt >= 4
+    &&
+    Math.random() < .25;
+
+  if (isPrompt) {
+    sincePrompt = 0;
+  }
+
+
   const delay =
 
     400
@@ -3679,7 +3761,13 @@ function submitMessage() {
 
 
         text:
-          generateReaction(),
+          isPrompt
+            ? (
+                Math.random() < .7
+                  ? pick(questions)
+                  : pick(nudges)
+              )
+            : generateReaction(),
 
 
         at:
@@ -4880,6 +4968,193 @@ async function exportCurrentLogTxt() {
 
 
 /* =========================================================
+   全データJSONバックアップ／復元
+========================================================= */
+
+function makeBackupFileName() {
+  const d = new Date();
+
+  const stamp =
+    d.getFullYear() + "-"
+    + String(d.getMonth() + 1).padStart(2, "0") + "-"
+    + String(d.getDate()).padStart(2, "0") + "_"
+    + String(d.getHours()).padStart(2, "0") + "-"
+    + String(d.getMinutes()).padStart(2, "0");
+
+  return `aiduchi-backup_${stamp}.json`;
+}
+
+
+async function exportAllDataJson() {
+
+  const backup = {
+    app: "相槌！",
+    version: "2.3",
+    exportedAt: new Date().toISOString(),
+    data: data
+  };
+
+  const jsonText =
+    JSON.stringify(backup, null, 2);
+
+  const fileName =
+    makeBackupFileName();
+
+  try {
+
+    const file =
+      new File(
+        [jsonText],
+        fileName,
+        { type: "application/json" }
+      );
+
+    if (
+      navigator.share
+      &&
+      navigator.canShare
+      &&
+      navigator.canShare({ files: [file] })
+    ) {
+
+      await navigator.share({
+        files: [file],
+        title: "相槌！バックアップ"
+      });
+
+      return;
+    }
+
+  } catch (error) {
+
+    if (
+      error
+      &&
+      error.name === "AbortError"
+    ) {
+      return;
+    }
+  }
+
+  const blob =
+    new Blob(
+      [jsonText],
+      { type: "application/json" }
+    );
+
+  const url =
+    URL.createObjectURL(blob);
+
+  const a =
+    document.createElement("a");
+
+  a.href = url;
+  a.download = fileName;
+
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+
+  setTimeout(
+    () => URL.revokeObjectURL(url),
+    1000
+  );
+
+  showToast(
+    "JSONバックアップを書き出しました"
+  );
+}
+
+
+function openRestorePicker() {
+  restoreFileInput.value = "";
+  restoreFileInput.click();
+}
+
+
+async function restoreAllDataJson(file) {
+
+  if (!file) {
+    return;
+  }
+
+  let parsed;
+
+  try {
+
+    const fileText =
+      await file.text();
+
+    parsed =
+      JSON.parse(fileText);
+
+  } catch (error) {
+
+    showToast(
+      "JSONを読み込めませんでした"
+    );
+
+    return;
+  }
+
+  const candidate =
+    parsed && parsed.data
+      ? parsed.data
+      : parsed;
+
+  if (
+    !candidate
+    ||
+    !Array.isArray(candidate.folders)
+    ||
+    !Array.isArray(candidate.logs)
+  ) {
+
+    showToast(
+      "相槌！のバックアップではなさそうです"
+    );
+
+    return;
+  }
+
+  const ok =
+    confirm(
+      "現在のログ・フォルダを、このJSONの内容で置き換えます。\n先に現在データをJSONバックアップしておくと安全です。"
+    );
+
+  if (!ok) {
+    return;
+  }
+
+  const restored =
+    normalizeData(candidate);
+
+  const oldData =
+    data;
+
+  data =
+    restored;
+
+  if (!saveData()) {
+    data = oldData;
+    return;
+  }
+
+  currentLogId = null;
+  sincePrompt = 0;
+
+  chatView.classList.add("hidden");
+  homeView.classList.remove("hidden");
+
+  renderHome();
+
+  showToast(
+    "JSONから復元しました"
+  );
+}
+
+
+/* =========================================================
    イベント
 ========================================================= */
 
@@ -4899,6 +5174,32 @@ newFolderButton.addEventListener(
 
   createFolder
 
+);
+
+
+backupButton.addEventListener(
+  "click",
+  exportAllDataJson
+);
+
+
+restoreButton.addEventListener(
+  "click",
+  openRestorePicker
+);
+
+
+restoreFileInput.addEventListener(
+  "change",
+  event => {
+
+    const file =
+      event.target.files
+      &&
+      event.target.files[0];
+
+    restoreAllDataJson(file);
+  }
 );
 
 
