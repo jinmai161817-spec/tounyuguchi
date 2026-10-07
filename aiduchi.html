@@ -2,150 +2,272 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#ffffff">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+<meta
+  name="theme-color"
+  content="#ffffff"
+>
+
 <title>相槌！</title>
 
 <style>
+
+/* =========================================================
+   基本
+========================================================= */
+
 * {
   box-sizing: border-box;
 }
 
 :root {
+
   --bg: #f5f5f5;
+
   --panel: #ffffff;
+
   --line: #dddddd;
+
   --text: #151515;
+
   --sub: #777777;
+
   --me: #d9fdd3;
+
   --soft: #f0f0f0;
+
   --danger: #c62828;
+
+  /*
+    iPhone Safari対策
+  */
+
   --app-height: 100dvh;
+
+  --app-top: 0px;
 }
+
 
 html,
 body {
+
   margin: 0;
+
   width: 100%;
+
   height: 100%;
+
   background: var(--bg);
+
   color: var(--text);
+
   font-family:
     -apple-system,
     BlinkMacSystemFont,
     "Helvetica Neue",
     sans-serif;
+
   overflow: hidden;
+
 }
 
+
 body {
+
   min-height: 100dvh;
+
 }
+
 
 button,
 input,
 textarea {
+
   font: inherit;
+
 }
+
 
 button {
+
   -webkit-tap-highlight-color: transparent;
+
 }
+
 
 .hidden {
+
   display: none !important;
+
 }
+
+
+/* =========================================================
+   アプリ全体
+
+   iPhone Safariでキーボードが出た時、
+   visualViewportの位置と高さに追従する
+========================================================= */
 
 #app {
+
+  position: fixed;
+
+  left: 0;
+
+  right: 0;
+
+  top: var(--app-top);
+
   width: 100%;
+
   height: var(--app-height);
+
   display: flex;
+
   flex-direction: column;
+
   overflow: hidden;
+
 }
 
-/* ---------- ヘッダー ---------- */
+
+/* =========================================================
+   ヘッダー
+========================================================= */
 
 .topbar {
+
   flex: 0 0 auto;
+
   background: var(--panel);
+
   border-bottom: 1px solid var(--line);
 
   padding:
     calc(12px + env(safe-area-inset-top))
     16px
     12px;
+
 }
+
 
 .topbarRow {
+
   display: flex;
+
   align-items: center;
+
   gap: 10px;
+
 }
+
 
 .titleBlock {
+
   min-width: 0;
+
   flex: 1;
+
 }
+
 
 h1 {
+
   margin: 0;
+
   font-size: 22px;
+
   line-height: 1.2;
+
 }
+
 
 .subtitle {
+
   margin: 4px 0 0;
+
   color: var(--sub);
+
   font-size: 13px;
+
 }
 
+
 .iconButton {
+
   border: 0;
+
   background: var(--soft);
+
   color: var(--text);
+
   border-radius: 999px;
 
   min-width: 42px;
+
   min-height: 42px;
 
   padding: 9px 13px;
 
   font-weight: 700;
+
 }
+
 
 .iconButton:active,
 .primaryButton:active,
 .actionButton:active,
 .folderChoice:active,
 .logRow:active {
+
   opacity: .62;
+
 }
 
-/* ---------- 一覧 ---------- */
+
+/* =========================================================
+   一覧画面
+========================================================= */
 
 #homeView,
 #chatView {
+
   flex: 1;
+
   min-height: 0;
 
   display: flex;
+
   flex-direction: column;
+
 }
 
+
 .homeActions {
+
   display: flex;
+
   gap: 8px;
 
   padding: 12px 14px 4px;
 
   flex: 0 0 auto;
+
 }
 
+
 .primaryButton {
+
   flex: 1;
 
   border: 0;
+
   border-radius: 14px;
 
   min-height: 44px;
@@ -153,20 +275,29 @@ h1 {
   padding: 10px 12px;
 
   background: #222;
+
   color: white;
 
   font-weight: 700;
+
 }
 
+
 .secondaryButton {
+
   background: white;
+
   color: #222;
 
   border: 1px solid var(--line);
+
 }
 
+
 #folderList {
+
   flex: 1;
+
   min-height: 0;
 
   overflow-y: auto;
@@ -174,9 +305,12 @@ h1 {
   -webkit-overflow-scrolling: touch;
 
   padding: 8px 14px 30px;
+
 }
 
+
 .folderCard {
+
   background: white;
 
   border-radius: 18px;
@@ -186,37 +320,57 @@ h1 {
   overflow: hidden;
 
   border: 1px solid #ececec;
+
 }
 
+
 .folderHeader {
+
   display: flex;
+
   align-items: center;
+
   gap: 8px;
 
   padding: 13px 14px;
 
   border-bottom: 1px solid #eeeeee;
+
 }
 
+
 .folderName {
+
   flex: 1;
+
   min-width: 0;
 
   font-weight: 800;
+
   font-size: 16px;
 
   overflow: hidden;
+
   text-overflow: ellipsis;
+
   white-space: nowrap;
+
 }
+
 
 .folderCount {
+
   color: var(--sub);
+
   font-size: 12px;
+
 }
 
+
 .folderMenuButton {
+
   border: 0;
+
   background: transparent;
 
   font-size: 21px;
@@ -224,22 +378,31 @@ h1 {
   padding: 3px 6px;
 
   line-height: 1;
+
 }
+
 
 .logList {
+
   padding: 4px 0;
+
 }
 
+
 .logRow {
+
   width: 100%;
 
   display: flex;
+
   align-items: center;
+
   gap: 10px;
 
   border: 0;
 
   background: white;
+
   color: var(--text);
 
   text-align: left;
@@ -247,46 +410,74 @@ h1 {
   padding: 12px 14px;
 
   border-top: 1px solid #f2f2f2;
+
 }
+
 
 .logRow:first-child {
+
   border-top: 0;
+
 }
+
 
 .logMain {
+
   flex: 1;
+
   min-width: 0;
+
 }
 
+
 .logTitle {
+
   font-weight: 700;
+
   font-size: 16px;
 
   white-space: nowrap;
+
   overflow: hidden;
+
   text-overflow: ellipsis;
+
 }
 
+
 .logMeta {
+
   margin-top: 4px;
 
   color: var(--sub);
+
   font-size: 12px;
+
 }
+
 
 .chevron {
+
   color: #999;
+
   font-size: 20px;
+
 }
 
+
 .emptyFolder {
+
   padding: 14px;
 
   color: #999;
+
   font-size: 13px;
+
 }
 
+
 .emptyAll {
+
   padding: 40px 22px;
 
   text-align: center;
@@ -294,63 +485,97 @@ h1 {
   color: #888;
 
   line-height: 1.8;
+
 }
 
-/* ---------- チャット ---------- */
+
+/* =========================================================
+   チャット画面
+========================================================= */
 
 .chatHeaderTitle {
+
   min-width: 0;
+
   flex: 1;
+
 }
 
+
 .chatFolder {
+
   font-size: 11px;
 
   color: var(--sub);
 
   white-space: nowrap;
+
   overflow: hidden;
+
   text-overflow: ellipsis;
+
 }
 
+
 .chatTitle {
+
   margin-top: 1px;
 
   font-size: 17px;
+
   font-weight: 800;
 
   white-space: nowrap;
+
   overflow: hidden;
+
   text-overflow: ellipsis;
+
 }
 
+
 #chat {
+
   flex: 1;
+
   min-height: 0;
 
   overflow-y: auto;
 
   -webkit-overflow-scrolling: touch;
+
   overscroll-behavior: contain;
 
   padding: 14px 14px 28px;
+
 }
 
+
 .row {
+
   display: flex;
 
   margin: 9px 0;
+
 }
+
 
 .me {
+
   justify-content: flex-end;
+
 }
+
 
 .wall {
+
   justify-content: flex-start;
+
 }
 
+
 .bubble {
+
   max-width: 82%;
 
   padding: 10px 14px;
@@ -358,55 +583,80 @@ h1 {
   border-radius: 18px;
 
   font-size: 16px;
+
   line-height: 1.55;
 
   white-space: pre-wrap;
+
   word-break: break-word;
+
 }
 
+
 .me .bubble {
+
   background: var(--me);
 
   cursor: pointer;
 
   position: relative;
+
 }
+
 
 .wall .bubble {
+
   background: white;
+
 }
 
-/* TXT除外中 */
+
+/* =========================================================
+   TXT除外中
+========================================================= */
 
 .me .bubble.excluded {
+
   opacity: .48;
 
   outline: 1px dashed #7c8f78;
+
 }
 
+
 .excludeBadge {
+
   display: block;
 
   margin-top: 6px;
 
   font-size: 11px;
+
   font-weight: 700;
 
   color: #586b55;
+
 }
 
-/* ---------- 入力 ---------- */
+
+/* =========================================================
+   入力欄
+========================================================= */
 
 #inputArea {
+
   flex: 0 0 auto;
 
   display: flex;
+
   align-items: flex-end;
+
   gap: 8px;
 
   background: white;
 
   padding: 10px;
+
   padding-bottom:
     calc(
       10px +
@@ -414,17 +664,22 @@ h1 {
     );
 
   border-top: 1px solid var(--line);
+
 }
 
+
 #input {
+
   flex: 1;
 
   resize: none;
 
   min-height: 44px;
+
   max-height: 140px;
 
   border: 0;
+
   outline: 0;
 
   border-radius: 22px;
@@ -434,10 +689,14 @@ h1 {
   padding: 11px 14px;
 
   font-size: 16px;
+
   line-height: 1.4;
+
 }
 
+
 #send {
+
   flex: 0 0 auto;
 
   border: 0;
@@ -449,15 +708,22 @@ h1 {
   padding: 10px 16px;
 
   background: #222;
+
   color: white;
 
   font-weight: 800;
+
   font-size: 15px;
+
 }
 
-/* ---------- 下から出るメニュー ---------- */
+
+/* =========================================================
+   下から出るメニュー
+========================================================= */
 
 #modalBackdrop {
+
   position: fixed;
 
   inset: 0;
@@ -467,11 +733,16 @@ h1 {
   background: rgba(0,0,0,.28);
 
   display: flex;
+
   align-items: flex-end;
+
   justify-content: center;
+
 }
 
+
 .modalSheet {
+
   width: min(100%, 620px);
 
   max-height: 82dvh;
@@ -497,17 +768,24 @@ h1 {
   box-shadow:
     0 -10px 30px
     rgba(0,0,0,.12);
+
 }
 
+
 .modalTitle {
+
   font-size: 17px;
+
   font-weight: 800;
 
   padding: 4px 4px 10px;
+
 }
+
 
 .actionButton,
 .folderChoice {
+
   width: 100%;
 
   border: 0;
@@ -521,36 +799,53 @@ h1 {
   margin: 5px 0;
 
   background: var(--soft);
+
   color: var(--text);
 
   text-align: left;
 
   font-weight: 700;
+
 }
+
 
 .actionButton.danger {
+
   color: var(--danger);
+
 }
 
+
 .actionButton.cancel {
+
   text-align: center;
 
   margin-top: 10px;
 
   background: #222;
+
   color: white;
+
 }
+
 
 .folderChoice.active {
+
   background: #e8f7e3;
+
 }
 
-/* ---------- 編集欄 ---------- */
+
+/* =========================================================
+   発言編集欄
+========================================================= */
 
 .editBox {
+
   width: 100%;
 
   min-height: 180px;
+
   max-height: 42dvh;
 
   resize: vertical;
@@ -562,16 +857,22 @@ h1 {
   padding: 12px;
 
   font-size: 16px;
+
   line-height: 1.5;
 
   outline: none;
 
   background: #fafafa;
+
 }
 
-/* ---------- トースト ---------- */
+
+/* =========================================================
+   トースト
+========================================================= */
 
 #toast {
+
   position: fixed;
 
   left: 50%;
@@ -582,8 +883,7 @@ h1 {
       env(safe-area-inset-bottom)
     );
 
-  transform:
-    translateX(-50%);
+  transform: translateX(-50%);
 
   z-index: 200;
 
@@ -608,25 +908,32 @@ h1 {
 
   pointer-events: none;
 
-  transition:
-    opacity .2s;
+  transition: opacity .2s;
+
 }
 
+
 #toast.show {
+
   opacity: 1;
+
 }
+
 </style>
 </head>
 
 <body>
 
+
 <div id="app">
 
-  <!-- =========================
+
+  <!-- =====================================================
        ログ一覧
-  ========================== -->
+  ====================================================== -->
 
   <section id="homeView">
+
 
     <header class="topbar">
 
@@ -671,21 +978,25 @@ h1 {
 
     <div id="folderList"></div>
 
+
   </section>
 
 
-  <!-- =========================
+
+  <!-- =====================================================
        チャット
-  ========================== -->
+  ====================================================== -->
 
   <section
     id="chatView"
     class="hidden"
   >
 
+
     <header class="topbar">
 
       <div class="topbarRow">
+
 
         <button
           id="backButton"
@@ -703,7 +1014,6 @@ h1 {
             class="chatFolder"
           ></div>
 
-
           <div
             id="currentLogTitle"
             class="chatTitle"
@@ -720,6 +1030,7 @@ h1 {
           •••
         </button>
 
+
       </div>
 
     </header>
@@ -729,6 +1040,7 @@ h1 {
 
 
     <div id="inputArea">
+
 
       <textarea
         id="input"
@@ -741,11 +1053,15 @@ h1 {
         送信 ➤
       </button>
 
+
     </div>
+
 
   </section>
 
+
 </div>
+
 
 
 <div
@@ -764,21 +1080,24 @@ h1 {
 <div id="toast"></div>
 
 
+
 <script>
 
 /* =========================================================
 
-   相槌！ v2.1
+   相槌！ v2.2
 
    ・複数ログ
    ・フォルダ
    ・ログ移動
    ・自動保存
-   ・TXT書き出し
-   ・自分の発言編集
+   ・自分の発言だけTXT
+   ・発言編集
    ・TXTから個別除外
    ・個別削除
-   ・iPhoneキーボード時スクロール追従
+   ・チャットスクロール
+   ・iPhone Safariキーボード対策
+   ・内容解析なし
 
 ========================================================= */
 
@@ -791,21 +1110,32 @@ const UNCLASSIFIED_ID =
   "unclassified";
 
 
+
 /* =========================================================
-   相槌
+   相槌素材
 ========================================================= */
+
 
 const hooks = [
 
   "おっ",
+
   "ほうほう",
+
   "おお！",
+
   "おお？",
+
   "へえ！",
+
   "ふむふむ",
+
   "来た来た",
+
   "おっと？",
+
   "なるほどなるほど",
+
   "うんうん"
 
 ];
@@ -814,16 +1144,27 @@ const hooks = [
 const positive = [
 
   "いいねぇ",
+
   "いいぞ",
+
   "それ気になる",
+
   "そこいい",
+
   "今のいい",
+
   "なんか出てきたな",
+
   "面白くなってきた",
+
   "これは楽しみ",
+
   "まだ化けそう",
+
   "いい感じ",
+
   "おもしろいおもしろい",
+
   "その調子"
 
 ];
@@ -832,14 +1173,23 @@ const positive = [
 const continuation = [
 
   "それから？",
+
   "続き聞かせて",
+
   "その先は？",
+
   "続けて続けて",
+
   "聞かせて",
+
   "もうちょい",
+
   "どうぞどうぞ",
+
   "そのままどうぞ",
+
   "まだ聞こう",
+
   "さてさて？"
 
 ];
@@ -848,12 +1198,19 @@ const continuation = [
 const push = [
 
   "そのまま行こう",
+
   "いいぞもっとやれ",
+
   "もう一段いこう",
+
   "アクセル踏んでいいぞ",
+
   "行ける行ける",
+
   "その調子",
+
   "好きに行こう",
+
   "どんどん行こう"
 
 ];
@@ -862,17 +1219,29 @@ const push = [
 const warmShort = [
 
   "うんうん",
+
   "ほうほう",
+
   "おっ",
+
   "おお！",
+
   "へえ！",
+
   "ふむふむ",
+
   "なるほどなるほど",
+
   "いいねぇ",
+
   "いいぞ",
+
   "来た来た",
+
   "それ気になる",
+
   "おもしろいおもしろい",
+
   "👀✨"
 
 ];
@@ -903,9 +1272,11 @@ const big = [
 ];
 
 
+
 /* =========================================================
    DOM
 ========================================================= */
+
 
 const homeView =
   document.getElementById(
@@ -997,9 +1368,11 @@ const toast =
   );
 
 
+
 /* =========================================================
    状態
 ========================================================= */
+
 
 let data =
   loadData();
@@ -1017,9 +1390,11 @@ let toastTimer =
   null;
 
 
+
 /* =========================================================
    データ
 ========================================================= */
+
 
 function makeId(prefix) {
 
@@ -1041,6 +1416,7 @@ function makeId(prefix) {
   );
 
 }
+
 
 
 function defaultData() {
@@ -1071,9 +1447,13 @@ function defaultData() {
 }
 
 
-/* 旧v2データもそのまま使えるよう整える */
+
+/*
+  古いv2ログもそのまま使う
+*/
 
 function normalizeData(parsed) {
+
 
   if (
 
@@ -1081,7 +1461,9 @@ function normalizeData(parsed) {
 
     !Array.isArray(
       parsed.folders
-    ) ||
+    )
+
+    ||
 
     !Array.isArray(
       parsed.logs
@@ -1097,9 +1479,11 @@ function normalizeData(parsed) {
   if (
 
     !parsed.folders.some(
+
       folder =>
         folder.id ===
         UNCLASSIFIED_ID
+
     )
 
   ) {
@@ -1121,21 +1505,28 @@ function normalizeData(parsed) {
 
 
   parsed.logs.forEach(
+
     log => {
 
+
       if (
+
         !Array.isArray(
           log.messages
         )
+
       ) {
 
-        log.messages = [];
+        log.messages =
+          [];
 
       }
 
 
       log.messages.forEach(
+
         message => {
+
 
           if (
             !message.id
@@ -1151,10 +1542,14 @@ function normalizeData(parsed) {
 
           if (
 
-            message.role === "me" &&
+            message.role ===
+            "me"
+
+            &&
 
             typeof message.excluded
-              !== "boolean"
+              !==
+              "boolean"
 
           ) {
 
@@ -1164,9 +1559,11 @@ function normalizeData(parsed) {
           }
 
         }
+
       );
 
     }
+
   );
 
 
@@ -1175,9 +1572,11 @@ function normalizeData(parsed) {
 }
 
 
+
 function loadData() {
 
   try {
+
 
     const raw =
       localStorage.getItem(
@@ -1193,10 +1592,15 @@ function loadData() {
 
 
     return normalizeData(
-      JSON.parse(raw)
+
+      JSON.parse(
+        raw
+      )
+
     );
 
   }
+
 
   catch (error) {
 
@@ -1205,6 +1609,7 @@ function loadData() {
   }
 
 }
+
 
 
 function saveData() {
@@ -1222,26 +1627,33 @@ function saveData() {
 }
 
 
+
 function getLog(
   id = currentLogId
 ) {
 
   return data.logs.find(
+
     log =>
       log.id === id
+
   );
 
 }
+
 
 
 function getFolder(id) {
 
   return data.folders.find(
+
     folder =>
       folder.id === id
+
   );
 
 }
+
 
 
 function getMessage(
@@ -1260,17 +1672,21 @@ function getMessage(
 
 
   return log.messages.find(
+
     message =>
       message.id ===
       messageId
+
   );
 
 }
 
 
+
 /* =========================================================
    日時
 ========================================================= */
+
 
 function formatDateTime(
   timestamp
@@ -1307,6 +1723,7 @@ function formatDateTime(
 }
 
 
+
 function defaultLogTitle() {
 
   const d =
@@ -1328,9 +1745,13 @@ function defaultLogTitle() {
     ).padStart(
       2,
       "0"
-    ) +
+    )
 
-    ":" +
+    +
+
+    ":"
+
+    +
 
     String(
       d.getMinutes()
@@ -1344,9 +1765,11 @@ function defaultLogTitle() {
 }
 
 
+
 /* =========================================================
-   HTML安全処理
+   安全処理
 ========================================================= */
+
 
 function escapeHtml(text) {
 
@@ -1380,6 +1803,7 @@ function escapeHtml(text) {
 }
 
 
+
 function escapeAttr(text) {
 
   return escapeHtml(
@@ -1387,6 +1811,7 @@ function escapeAttr(text) {
   );
 
 }
+
 
 
 function sanitizeFileName(name) {
@@ -1421,9 +1846,11 @@ function sanitizeFileName(name) {
 }
 
 
+
 /* =========================================================
    トースト
 ========================================================= */
+
 
 function showToast(text) {
 
@@ -1459,9 +1886,11 @@ function showToast(text) {
 }
 
 
+
 /* =========================================================
    モーダル
 ========================================================= */
+
 
 function openModal(html) {
 
@@ -1474,6 +1903,7 @@ function openModal(html) {
   );
 
 }
+
 
 
 function closeModal() {
@@ -1489,6 +1919,7 @@ function closeModal() {
 }
 
 
+
 modalBackdrop.addEventListener(
 
   "click",
@@ -1496,8 +1927,10 @@ modalBackdrop.addEventListener(
   event => {
 
     if (
+
       event.target ===
       modalBackdrop
+
     ) {
 
       closeModal();
@@ -1509,19 +1942,36 @@ modalBackdrop.addEventListener(
 );
 
 
+
 /* =========================================================
-   iPhoneキーボード対策
+   iPhone Safari
+   キーボード・画面位置対策
 ========================================================= */
+
 
 function syncViewport() {
 
+
+  const viewport =
+    window.visualViewport;
+
+
   const height =
 
-    window.visualViewport
+    viewport
 
-      ? window.visualViewport.height
+      ? viewport.height
 
       : window.innerHeight;
+
+
+  const top =
+
+    viewport
+
+      ? viewport.offsetTop
+
+      : 0;
 
 
   document.documentElement
@@ -1535,9 +1985,22 @@ function syncViewport() {
     );
 
 
+  document.documentElement
+    .style
+    .setProperty(
+
+      "--app-top",
+
+      `${Math.round(top)}px`
+
+    );
+
+
   if (
+
     document.activeElement ===
     input
+
   ) {
 
     keepLatestVisible();
@@ -1547,58 +2010,88 @@ function syncViewport() {
 }
 
 
-/* 最新メッセージを入力欄の上に戻す */
+
+/*
+  最新発言を
+  入力欄のすぐ上へ戻す
+
+  iPhoneではキーボード開閉中、
+  何段階か画面位置が変わるので
+  複数回補正する
+*/
 
 function keepLatestVisible() {
 
+
   requestAnimationFrame(
+
     () => {
 
       chat.scrollTop =
         chat.scrollHeight;
 
     }
+
   );
 
 
-  /*
-    iPhoneはキーボード開閉中に
-    何段階か画面サイズが変わるので
-    少し時間をずらして再調整
-  */
-
   setTimeout(
+
     () => {
 
       chat.scrollTop =
         chat.scrollHeight;
 
     },
-    80
+
+    60
+
   );
 
 
   setTimeout(
+
     () => {
 
       chat.scrollTop =
         chat.scrollHeight;
 
     },
-    220
+
+    160
+
+  );
+
+
+  setTimeout(
+
+    () => {
+
+      chat.scrollTop =
+        chat.scrollHeight;
+
+    },
+
+    320
+
   );
 
 }
+
 
 
 if (
   window.visualViewport
 ) {
 
+
   window.visualViewport
     .addEventListener(
+
       "resize",
+
       syncViewport
+
     );
 
 
@@ -1607,60 +2100,78 @@ if (
 
       "scroll",
 
-      () => {
-
-        if (
-          document.activeElement ===
-          input
-        ) {
-
-          keepLatestVisible();
-
-        }
-
-      }
+      syncViewport
 
     );
 
 }
 
 
+
 window.addEventListener(
+
   "resize",
+
   syncViewport
+
+);
+
+
+window.addEventListener(
+
+  "orientationchange",
+
+  () => {
+
+    setTimeout(
+      syncViewport,
+      200
+    );
+
+  }
+
 );
 
 
 syncViewport();
 
 
+
 /* =========================================================
-   一覧
+   一覧描画
 ========================================================= */
 
+
 function renderHome() {
+
 
   folderList.innerHTML =
     "";
 
 
   data.folders.forEach(
+
     folder => {
+
 
       const logs =
 
         data.logs
 
           .filter(
+
             log =>
               log.folderId ===
               folder.id
+
           )
 
           .sort(
+
             (a, b) =>
               b.updatedAt -
               a.updatedAt
+
           );
 
 
@@ -1723,6 +2234,7 @@ function renderHome() {
         !folder.system
       ) {
 
+
         const menu =
           document.createElement(
             "button"
@@ -1773,6 +2285,7 @@ function renderHome() {
         !logs.length
       ) {
 
+
         const empty =
           document.createElement(
             "div"
@@ -1796,8 +2309,11 @@ function renderHome() {
 
       else {
 
+
         logs.forEach(
+
           log => {
+
 
             const row =
               document.createElement(
@@ -1847,17 +2363,23 @@ function renderHome() {
             const myCount =
 
               log.messages.filter(
+
                 message =>
                   message.role ===
                   "me"
+
               ).length;
 
 
             meta.textContent =
 
-              `${formatDateTime(log.updatedAt)}` +
+              `${formatDateTime(log.updatedAt)}`
 
-              " ・ " +
+              +
+
+              " ・ "
+
+              +
 
               `自分 ${myCount}件`;
 
@@ -1903,6 +2425,7 @@ function renderHome() {
             );
 
           }
+
         );
 
       }
@@ -1918,12 +2441,14 @@ function renderHome() {
       );
 
     }
+
   );
 
 
   if (
     !data.logs.length
   ) {
+
 
     const empty =
       document.createElement(
@@ -1948,16 +2473,22 @@ function renderHome() {
 }
 
 
+
 /* =========================================================
    新規ログ
 ========================================================= */
 
+
 function createLog() {
+
 
   const title =
     prompt(
+
       "ログ名",
+
       defaultLogTitle()
+
     );
 
 
@@ -1976,24 +2507,30 @@ function createLog() {
 
   const log = {
 
+
     id:
       makeId(
         "log"
       ),
 
+
     folderId:
       UNCLASSIFIED_ID,
+
 
     title:
       title.trim()
       ||
       defaultLogTitle(),
 
+
     createdAt:
       now,
 
+
     updatedAt:
       now,
+
 
     messages: [
 
@@ -2035,16 +2572,22 @@ function createLog() {
 }
 
 
+
 /* =========================================================
    フォルダ
 ========================================================= */
 
+
 function createFolder() {
+
 
   const name =
     prompt(
+
       "フォルダ名",
+
       ""
+
     );
 
 
@@ -2063,9 +2606,11 @@ function createFolder() {
 
   if (!clean) {
 
+
     showToast(
       "フォルダ名を入れてね"
     );
+
 
     return;
 
@@ -2090,14 +2635,17 @@ function createFolder() {
 
   saveData();
 
+
   renderHome();
 
 }
 
 
+
 function openFolderMenu(
   folderId
 ) {
+
 
   const folder =
     getFolder(
@@ -2106,8 +2654,11 @@ function openFolderMenu(
 
 
   if (
+
     !folder ||
+
     folder.system
+
   ) {
 
     return;
@@ -2118,28 +2669,39 @@ function openFolderMenu(
   openModal(`
 
     <div class="modalTitle">
+
       📁 ${escapeHtml(folder.name)}
+
     </div>
+
 
     <button
       class="actionButton"
       id="renameFolderAction"
     >
+
       名前を変更
+
     </button>
+
 
     <button
       class="actionButton danger"
       id="deleteFolderAction"
     >
+
       フォルダを削除
+
     </button>
+
 
     <button
       class="actionButton cancel"
       id="closeFolderMenu"
     >
+
       閉じる
+
     </button>
 
   `);
@@ -2187,9 +2749,11 @@ function openFolderMenu(
 }
 
 
+
 function renameFolder(
   folderId
 ) {
+
 
   const folder =
     getFolder(
@@ -2198,8 +2762,11 @@ function renameFolder(
 
 
   if (
+
     !folder ||
+
     folder.system
+
   ) {
 
     return;
@@ -2209,14 +2776,20 @@ function renameFolder(
 
   const name =
     prompt(
+
       "新しいフォルダ名",
+
       folder.name
+
     );
 
 
   if (
+
     name === null ||
+
     !name.trim()
+
   ) {
 
     return;
@@ -2230,14 +2803,17 @@ function renameFolder(
 
   saveData();
 
+
   renderHome();
 
 }
 
 
+
 function deleteFolder(
   folderId
 ) {
+
 
   const folder =
     getFolder(
@@ -2246,8 +2822,11 @@ function deleteFolder(
 
 
   if (
+
     !folder ||
+
     folder.system
+
   ) {
 
     return;
@@ -2258,9 +2837,11 @@ function deleteFolder(
   const count =
 
     data.logs.filter(
+
       log =>
         log.folderId ===
         folderId
+
     ).length;
 
 
@@ -2269,9 +2850,13 @@ function deleteFolder(
 
       count
 
-        ? `「${folder.name}」を削除します。\n中のログ ${count}件は「未分類」へ移動します。`
+        ?
 
-        : `「${folder.name}」を削除します。`
+        `「${folder.name}」を削除します。\n中のログ ${count}件は「未分類」へ移動します。`
+
+        :
+
+        `「${folder.name}」を削除します。`
 
     );
 
@@ -2284,12 +2869,17 @@ function deleteFolder(
 
 
   data.logs.forEach(
+
     log => {
 
+
       if (
+
         log.folderId ===
         folderId
+
       ) {
+
 
         log.folderId =
           UNCLASSIFIED_ID;
@@ -2301,32 +2891,39 @@ function deleteFolder(
       }
 
     }
+
   );
 
 
   data.folders =
 
     data.folders.filter(
+
       folder =>
         folder.id !==
         folderId
+
     );
 
 
   saveData();
+
 
   renderHome();
 
 }
 
 
+
 /* =========================================================
    ログを開く
 ========================================================= */
 
+
 function openLog(
   logId
 ) {
+
 
   const log =
     getLog(
@@ -2355,26 +2952,42 @@ function openLog(
   );
 
 
+  /*
+    ログを開いただけでは
+    キーボードを出さない
+  */
+
+  input.blur();
+
+
   renderChat();
 
 
-  /*
-    ここでは入力欄を
-    自動フォーカスしない
-  */
-
   setTimeout(
-    keepLatestVisible,
-    50
+
+    () => {
+
+      chat.scrollTop =
+        chat.scrollHeight;
+
+    },
+
+    30
+
   );
 
 }
 
 
+
 function closeLog() {
+
 
   currentLogId =
     null;
+
+
+  input.blur();
 
 
   chatView.classList.add(
@@ -2387,19 +3000,19 @@ function closeLog() {
   );
 
 
-  input.blur();
-
-
   renderHome();
 
 }
+
 
 
 /* =========================================================
    チャット描画
 ========================================================= */
 
+
 function renderChat() {
+
 
   const log =
     getLog();
@@ -2407,7 +3020,9 @@ function renderChat() {
 
   if (!log) {
 
+
     closeLog();
+
 
     return;
 
@@ -2423,13 +3038,18 @@ function renderChat() {
   currentFolderName.textContent =
 
     folder
+
       ? folder.name
+
       : "未分類";
 
 
   currentLogTitle.textContent =
 
-    log.title ||
+    log.title
+
+    ||
+
     "無題";
 
 
@@ -2438,6 +3058,7 @@ function renderChat() {
 
 
   log.messages.forEach(
+
     message => {
 
       addMessageElement(
@@ -2445,26 +3066,33 @@ function renderChat() {
       );
 
     }
+
   );
 
 
   requestAnimationFrame(
+
     () => {
 
       chat.scrollTop =
         chat.scrollHeight;
 
     }
+
   );
 
 }
 
 
-/* メッセージ1件描画 */
+
+/*
+  メッセージ1件
+*/
 
 function addMessageElement(
   message
 ) {
+
 
   const row =
     document.createElement(
@@ -2484,15 +3112,24 @@ function addMessageElement(
 
 
   bubble.className =
-    "bubble" +
+
+    "bubble"
+
+    +
 
     (
-      message.role === "me" &&
+
+      message.role ===
+      "me"
+
+      &&
+
       message.excluded
 
         ? " excluded"
 
         : ""
+
     );
 
 
@@ -2501,18 +3138,22 @@ function addMessageElement(
 
 
   /*
-    自分の吹き出しだけ
+    自分の発言だけ
     タップ可能
   */
 
   if (
+
     message.role ===
     "me"
+
   ) {
+
 
     if (
       message.excluded
     ) {
+
 
       const badge =
         document.createElement(
@@ -2564,23 +3205,32 @@ function addMessageElement(
 }
 
 
+
 /* =========================================================
    相槌生成
 ========================================================= */
 
+
 function pick(array) {
 
   return array[
+
     Math.floor(
+
       Math.random() *
+
       array.length
+
     )
+
   ];
 
 }
 
 
+
 function generateReaction() {
+
 
   let result =
     "";
@@ -2590,9 +3240,15 @@ function generateReaction() {
     Math.random();
 
 
+  /*
+    35%
+    短い
+  */
+
   if (
     roll < .35
   ) {
+
 
     result =
       pick(
@@ -2602,14 +3258,23 @@ function generateReaction() {
   }
 
 
+  /*
+    40%
+    二連
+  */
+
   else if (
     roll < .75
   ) {
 
+
     const type =
       Math.floor(
+
         Math.random() *
+
         5
+
       );
 
 
@@ -2617,9 +3282,17 @@ function generateReaction() {
       type === 0
     ) {
 
+
       result =
-        pick(hooks) +
-        "、" +
+
+        pick(hooks)
+
+        +
+
+        "、"
+
+        +
+
         pick(continuation);
 
     }
@@ -2629,9 +3302,17 @@ function generateReaction() {
       type === 1
     ) {
 
+
       result =
-        pick(positive) +
-        "。 " +
+
+        pick(positive)
+
+        +
+
+        "。 "
+
+        +
+
         pick(continuation);
 
     }
@@ -2641,9 +3322,17 @@ function generateReaction() {
       type === 2
     ) {
 
+
       result =
-        pick(hooks) +
-        "、" +
+
+        pick(hooks)
+
+        +
+
+        "、"
+
+        +
+
         pick(positive);
 
     }
@@ -2653,9 +3342,17 @@ function generateReaction() {
       type === 3
     ) {
 
+
       result =
-        pick(positive) +
-        "。 " +
+
+        pick(positive)
+
+        +
+
+        "。 "
+
+        +
+
         pick(push);
 
     }
@@ -2665,9 +3362,17 @@ function generateReaction() {
       type === 4
     ) {
 
+
       result =
-        pick(hooks) +
-        "。 " +
+
+        pick(hooks)
+
+        +
+
+        "。 "
+
+        +
+
         pick(push);
 
     }
@@ -2675,14 +3380,23 @@ function generateReaction() {
   }
 
 
+  /*
+    20%
+    三連
+  */
+
   else if (
     roll < .95
   ) {
 
+
     const type =
       Math.floor(
+
         Math.random() *
+
         3
+
       );
 
 
@@ -2690,11 +3404,25 @@ function generateReaction() {
       type === 0
     ) {
 
+
       result =
-        pick(hooks) +
-        "、" +
-        pick(positive) +
-        "。 " +
+
+        pick(hooks)
+
+        +
+
+        "、"
+
+        +
+
+        pick(positive)
+
+        +
+
+        "。 "
+
+        +
+
         pick(continuation);
 
     }
@@ -2704,11 +3432,25 @@ function generateReaction() {
       type === 1
     ) {
 
+
       result =
-        pick(hooks) +
-        "、" +
-        pick(positive) +
-        "。 " +
+
+        pick(hooks)
+
+        +
+
+        "、"
+
+        +
+
+        pick(positive)
+
+        +
+
+        "。 "
+
+        +
+
         pick(push);
 
     }
@@ -2718,11 +3460,25 @@ function generateReaction() {
       type === 2
     ) {
 
+
       result =
-        pick(positive) +
-        "。 " +
-        pick(continuation) +
-        " " +
+
+        pick(positive)
+
+        +
+
+        "。 "
+
+        +
+
+        pick(continuation)
+
+        +
+
+        " "
+
+        +
+
         pick(push);
 
     }
@@ -2730,7 +3486,13 @@ function generateReaction() {
   }
 
 
+  /*
+    5%
+    大きい反応
+  */
+
   else {
+
 
     result =
       pick(
@@ -2740,6 +3502,10 @@ function generateReaction() {
   }
 
 
+  /*
+    完全同一の連発防止
+  */
+
   if (
 
     recentReactions.includes(
@@ -2747,6 +3513,7 @@ function generateReaction() {
     )
 
   ) {
+
 
     return generateReaction();
 
@@ -2759,9 +3526,12 @@ function generateReaction() {
 
 
   if (
+
     recentReactions.length >
     6
+
   ) {
+
 
     recentReactions.shift();
 
@@ -2773,11 +3543,14 @@ function generateReaction() {
 }
 
 
+
 /* =========================================================
    送信
 ========================================================= */
 
+
 function submitMessage() {
+
 
   const text =
     input.value.trim();
@@ -2807,19 +3580,24 @@ function submitMessage() {
 
   const message = {
 
+
     id:
       makeId(
         "msg"
       ),
 
+
     role:
       "me",
+
 
     text:
       text,
 
+
     at:
       now,
+
 
     excluded:
       false
@@ -2861,7 +3639,9 @@ function submitMessage() {
 
   const delay =
 
-    400 +
+    400
+
+    +
 
     Math.random() *
     800;
@@ -2870,6 +3650,7 @@ function submitMessage() {
   setTimeout(
 
     () => {
+
 
       const targetLog =
         getLog(
@@ -2886,16 +3667,20 @@ function submitMessage() {
 
       const reaction = {
 
+
         id:
           makeId(
             "msg"
           ),
 
+
         role:
           "wall",
 
+
         text:
           generateReaction(),
+
 
         at:
           Date.now()
@@ -2918,7 +3703,9 @@ function submitMessage() {
       if (
 
         currentLogId ===
-        targetLogId &&
+        targetLogId
+
+        &&
 
         !chatView
           .classList
@@ -2927,6 +3714,7 @@ function submitMessage() {
           )
 
       ) {
+
 
         addMessageElement(
           reaction
@@ -2946,18 +3734,16 @@ function submitMessage() {
 }
 
 
+
 /* =========================================================
    自分の発言メニュー
 ========================================================= */
+
 
 function openMessageMenu(
   messageId
 ) {
 
-  /*
-    メニューを見るときは
-    キーボードを一度閉じる
-  */
 
   input.blur();
 
@@ -2970,9 +3756,12 @@ function openMessageMenu(
 
   if (
 
-    !message ||
+    !message
 
-    message.role !== "me"
+    ||
+
+    message.role !==
+    "me"
 
   ) {
 
@@ -2987,17 +3776,22 @@ function openMessageMenu(
       この発言
     </div>
 
+
     <button
       class="actionButton"
       id="editMessageAction"
     >
+
       ✏️ 編集
+
     </button>
+
 
     <button
       class="actionButton"
       id="toggleExcludeAction"
     >
+
       ${
         message.excluded
 
@@ -3005,20 +3799,27 @@ function openMessageMenu(
 
           : "🚫 TXTから除外"
       }
+
     </button>
+
 
     <button
       class="actionButton danger"
       id="deleteMessageAction"
     >
+
       🗑 発言を削除
+
     </button>
+
 
     <button
       class="actionButton cancel"
       id="closeMessageMenu"
     >
+
       閉じる
+
     </button>
 
   `);
@@ -3082,13 +3883,16 @@ function openMessageMenu(
 }
 
 
+
 /* =========================================================
    発言編集
 ========================================================= */
 
+
 function openEditMessageModal(
   messageId
 ) {
+
 
   const message =
     getMessage(
@@ -3109,23 +3913,30 @@ function openEditMessageModal(
       発言を編集
     </div>
 
+
     <textarea
       id="editMessageBox"
       class="editBox"
     >${escapeHtml(message.text)}</textarea>
 
+
     <button
       class="actionButton"
       id="saveEditAction"
     >
+
       保存
+
     </button>
+
 
     <button
       class="actionButton cancel"
       id="cancelEditAction"
     >
+
       キャンセル
+
     </button>
 
   `);
@@ -3140,6 +3951,7 @@ function openEditMessageModal(
   setTimeout(
 
     () => {
+
 
       box.focus();
 
@@ -3162,15 +3974,18 @@ function openEditMessageModal(
     .onclick =
       () => {
 
+
         const clean =
           box.value.trim();
 
 
         if (!clean) {
 
+
           showToast(
             "空にはできません"
           );
+
 
           return;
 
@@ -3219,13 +4034,16 @@ function openEditMessageModal(
 }
 
 
+
 /* =========================================================
    TXT除外
 ========================================================= */
 
+
 function toggleExcludeMessage(
   messageId
 ) {
+
 
   const message =
     getMessage(
@@ -3271,13 +4089,16 @@ function toggleExcludeMessage(
 }
 
 
+
 /* =========================================================
-   発言削除
+   個別削除
 ========================================================= */
+
 
 function deleteMessage(
   messageId
 ) {
+
 
   const log =
     getLog();
@@ -3290,8 +4111,11 @@ function deleteMessage(
 
 
   if (
+
     !log ||
+
     !message
+
   ) {
 
     return;
@@ -3303,18 +4127,28 @@ function deleteMessage(
 
     message.text.length > 30
 
-      ? message.text.slice(
-          0,
-          30
-        ) + "…"
+      ?
 
-      : message.text;
+      message.text.slice(
+        0,
+        30
+      )
+
+      +
+
+      "…"
+
+      :
+
+      message.text;
 
 
   const ok =
     confirm(
 
-      "この発言を削除します。\n\n" +
+      "この発言を削除します。\n\n"
+
+      +
 
       preview
 
@@ -3331,9 +4165,11 @@ function deleteMessage(
   log.messages =
 
     log.messages.filter(
+
       message =>
         message.id !==
         messageId
+
     );
 
 
@@ -3354,11 +4190,14 @@ function deleteMessage(
 }
 
 
+
 /* =========================================================
    ログメニュー
 ========================================================= */
 
+
 function openLogMenu() {
+
 
   input.blur();
 
@@ -3377,42 +4216,59 @@ function openLogMenu() {
   openModal(`
 
     <div class="modalTitle">
+
       ${escapeHtml(log.title)}
+
     </div>
+
 
     <button
       class="actionButton"
       id="renameLogAction"
     >
+
       名前を変更
+
     </button>
+
 
     <button
       class="actionButton"
       id="moveLogAction"
     >
+
       フォルダへ移動
+
     </button>
+
 
     <button
       class="actionButton"
       id="exportLogAction"
     >
+
       自分の発言だけTXT保存
+
     </button>
+
 
     <button
       class="actionButton danger"
       id="deleteLogAction"
     >
+
       このログを削除
+
     </button>
+
 
     <button
       class="actionButton cancel"
       id="closeLogMenu"
     >
+
       閉じる
+
     </button>
 
   `);
@@ -3484,11 +4340,14 @@ function openLogMenu() {
 }
 
 
+
 /* =========================================================
    ログ名変更
 ========================================================= */
 
+
 function renameCurrentLog() {
+
 
   const log =
     getLog();
@@ -3503,14 +4362,19 @@ function renameCurrentLog() {
 
   const title =
     prompt(
+
       "新しいログ名",
+
       log.title
+
     );
 
 
   if (
 
-    title === null ||
+    title === null
+
+    ||
 
     !title.trim()
 
@@ -3537,11 +4401,14 @@ function renameCurrentLog() {
 }
 
 
+
 /* =========================================================
    ログ移動
 ========================================================= */
 
+
 function openMoveMenu() {
+
 
   const log =
     getLog();
@@ -3560,15 +4427,20 @@ function openMoveMenu() {
 
 
   data.folders.forEach(
+
     folder => {
+
 
       html += `
 
         <button
 
           class="folderChoice${
-            folder.id === log.folderId
+            folder.id ===
+            log.folderId
+
               ? " active"
+
               : ""
           }"
 
@@ -3587,6 +4459,7 @@ function openMoveMenu() {
       `;
 
     }
+
   );
 
 
@@ -3596,7 +4469,9 @@ function openMoveMenu() {
       class="actionButton cancel"
       id="cancelMove"
     >
+
       キャンセル
+
     </button>
 
   `;
@@ -3612,10 +4487,13 @@ function openMoveMenu() {
       ".folderChoice"
     )
     .forEach(
+
       button => {
+
 
         button.onclick =
           () => {
+
 
             moveCurrentLog(
               button.dataset.folderId
@@ -3627,6 +4505,7 @@ function openMoveMenu() {
           };
 
       }
+
     );
 
 
@@ -3640,9 +4519,11 @@ function openMoveMenu() {
 }
 
 
+
 function moveCurrentLog(
   folderId
 ) {
+
 
   const log =
     getLog();
@@ -3655,8 +4536,11 @@ function moveCurrentLog(
 
 
   if (
+
     !log ||
+
     !folder
+
   ) {
 
     return;
@@ -3687,11 +4571,14 @@ function moveCurrentLog(
 }
 
 
+
 /* =========================================================
    ログ削除
 ========================================================= */
 
+
 function deleteCurrentLog() {
+
 
   const log =
     getLog();
@@ -3722,9 +4609,11 @@ function deleteCurrentLog() {
   data.logs =
 
     data.logs.filter(
+
       item =>
         item.id !==
         log.id
+
     );
 
 
@@ -3736,11 +4625,14 @@ function deleteCurrentLog() {
 }
 
 
+
 /* =========================================================
    TXT書き出し
 ========================================================= */
 
+
 async function exportCurrentLogTxt() {
+
 
   const log =
     getLog();
@@ -3755,8 +4647,10 @@ async function exportCurrentLogTxt() {
 
   /*
     自分の発言だけ
-    ＋
-    excluded が false のものだけ
+
+    かつ
+
+    TXT除外していないもの
   */
 
   const myMessages =
@@ -3764,6 +4658,7 @@ async function exportCurrentLogTxt() {
     log.messages
 
       .filter(
+
         message =>
 
           message.role ===
@@ -3772,11 +4667,14 @@ async function exportCurrentLogTxt() {
           &&
 
           !message.excluded
+
       )
 
       .map(
+
         message =>
           message.text
+
       );
 
 
@@ -3784,9 +4682,11 @@ async function exportCurrentLogTxt() {
     !myMessages.length
   ) {
 
+
     showToast(
       "TXTに出す発言がありません"
     );
+
 
     return;
 
@@ -3803,7 +4703,10 @@ async function exportCurrentLogTxt() {
 
     sanitizeFileName(
 
-      log.title ||
+      log.title
+
+      ||
+
       "相槌ログ"
 
     )
@@ -3814,11 +4717,11 @@ async function exportCurrentLogTxt() {
 
 
   /*
-    iPhoneでは
-    共有シートを優先
+    iPhoneでは共有シート優先
   */
 
   try {
+
 
     const file =
       new File(
@@ -3841,9 +4744,13 @@ async function exportCurrentLogTxt() {
 
     if (
 
-      navigator.share &&
+      navigator.share
 
-      navigator.canShare &&
+      &&
+
+      navigator.canShare
+
+      &&
 
       navigator.canShare({
 
@@ -3853,6 +4760,7 @@ async function exportCurrentLogTxt() {
       })
 
     ) {
+
 
       await navigator.share({
 
@@ -3871,16 +4779,21 @@ async function exportCurrentLogTxt() {
 
   }
 
+
   catch (error) {
+
 
     if (
 
-      error &&
+      error
+
+      &&
 
       error.name ===
       "AbortError"
 
     ) {
+
 
       return;
 
@@ -3891,8 +4804,9 @@ async function exportCurrentLogTxt() {
 
   /*
     共有できない環境は
-    普通にダウンロード
+    ダウンロード
   */
+
 
   const blob =
     new Blob(
@@ -3943,6 +4857,7 @@ async function exportCurrentLogTxt() {
 
 
   setTimeout(
+
     () => {
 
       URL.revokeObjectURL(
@@ -3950,7 +4865,9 @@ async function exportCurrentLogTxt() {
       );
 
     },
+
     1000
+
   );
 
 
@@ -3961,58 +4878,85 @@ async function exportCurrentLogTxt() {
 }
 
 
+
 /* =========================================================
    イベント
 ========================================================= */
 
+
 newLogButton.addEventListener(
+
   "click",
+
   createLog
+
 );
 
 
 newFolderButton.addEventListener(
+
   "click",
+
   createFolder
+
 );
 
 
 backButton.addEventListener(
+
   "click",
+
   closeLog
+
 );
 
 
 logMenuButton.addEventListener(
+
   "click",
+
   openLogMenu
+
 );
 
 
 send.addEventListener(
+
   "click",
+
   submitMessage
+
 );
+
 
 
 /*
   入力欄をタップしたら
-  最新発言を戻す
+
+  ・viewportを再取得
+  ・最新発言を見える位置へ
 */
 
 input.addEventListener(
 
   "focus",
 
-  keepLatestVisible
+  () => {
+
+
+    syncViewport();
+
+
+    keepLatestVisible();
+
+  }
 
 );
 
 
+
 /*
   入力欄の高さ変更
-  ＋
-  入力中も最新位置追従
 */
 
 input.addEventListener(
@@ -4020,6 +4964,7 @@ input.addEventListener(
   "input",
 
   () => {
+
 
     input.style.height =
       "44px";
@@ -4047,8 +4992,40 @@ input.addEventListener(
 );
 
 
+
+/*
+  キーボード閉じた時も
+  viewportを元へ戻す
+*/
+
+input.addEventListener(
+
+  "blur",
+
+  () => {
+
+
+    setTimeout(
+
+      () => {
+
+        syncViewport();
+
+      },
+
+      120
+
+    );
+
+  }
+
+);
+
+
+
 /*
   外付けキーボード
+
   Cmd / Ctrl + Enter
 */
 
@@ -4058,10 +5035,12 @@ input.addEventListener(
 
   event => {
 
+
     if (
 
       (
-        event.metaKey ||
+        event.metaKey
+        ||
         event.ctrlKey
       )
 
@@ -4071,6 +5050,7 @@ input.addEventListener(
       "Enter"
 
     ) {
+
 
       event.preventDefault();
 
@@ -4084,11 +5064,17 @@ input.addEventListener(
 );
 
 
+
 /* =========================================================
    起動
 ========================================================= */
 
+
 renderHome();
+
+
+syncViewport();
+
 
 </script>
 
