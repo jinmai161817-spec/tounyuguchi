@@ -20,26 +20,31 @@
   --me: #d9fdd3;
   --soft: #f0f0f0;
   --danger: #c62828;
+  --app-height: 100dvh;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   width: 100%;
   height: 100%;
   background: var(--bg);
   color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Helvetica Neue",
+    sans-serif;
+  overflow: hidden;
 }
 
 body {
   min-height: 100dvh;
-  overflow: hidden;
 }
 
 button,
 input,
-textarea,
-select {
+textarea {
   font: inherit;
 }
 
@@ -51,22 +56,21 @@ button {
   display: none !important;
 }
 
-/* ---------- アプリ全体 ---------- */
-
 #app {
   width: 100%;
-  height: 100dvh;
+  height: var(--app-height);
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
-/* ---------- 共通ヘッダー ---------- */
+/* ---------- ヘッダー ---------- */
 
 .topbar {
   flex: 0 0 auto;
   background: var(--panel);
   border-bottom: 1px solid var(--line);
+
   padding:
     calc(12px + env(safe-area-inset-top))
     16px
@@ -96,20 +100,21 @@ h1 {
   font-size: 13px;
 }
 
-.iconButton,
-.smallButton {
+.iconButton {
   border: 0;
   background: var(--soft);
   color: var(--text);
   border-radius: 999px;
+
   min-width: 42px;
   min-height: 42px;
+
   padding: 9px 13px;
+
   font-weight: 700;
 }
 
 .iconButton:active,
-.smallButton:active,
 .primaryButton:active,
 .actionButton:active,
 .folderChoice:active,
@@ -117,11 +122,13 @@ h1 {
   opacity: .62;
 }
 
-/* ---------- 一覧画面 ---------- */
+/* ---------- 一覧 ---------- */
 
-#homeView {
+#homeView,
+#chatView {
   flex: 1;
   min-height: 0;
+
   display: flex;
   flex-direction: column;
 }
@@ -129,40 +136,55 @@ h1 {
 .homeActions {
   display: flex;
   gap: 8px;
+
   padding: 12px 14px 4px;
+
   flex: 0 0 auto;
 }
 
 .primaryButton {
   flex: 1;
+
   border: 0;
   border-radius: 14px;
+
   min-height: 44px;
+
   padding: 10px 12px;
+
   background: #222;
   color: white;
+
   font-weight: 700;
 }
 
 .secondaryButton {
   background: white;
   color: #222;
+
   border: 1px solid var(--line);
 }
 
 #folderList {
   flex: 1;
   min-height: 0;
+
   overflow-y: auto;
+
   -webkit-overflow-scrolling: touch;
+
   padding: 8px 14px 30px;
 }
 
 .folderCard {
   background: white;
+
   border-radius: 18px;
+
   margin: 10px 0;
+
   overflow: hidden;
+
   border: 1px solid #ececec;
 }
 
@@ -170,15 +192,19 @@ h1 {
   display: flex;
   align-items: center;
   gap: 8px;
+
   padding: 13px 14px;
+
   border-bottom: 1px solid #eeeeee;
 }
 
 .folderName {
   flex: 1;
   min-width: 0;
+
   font-weight: 800;
   font-size: 16px;
+
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -192,8 +218,11 @@ h1 {
 .folderMenuButton {
   border: 0;
   background: transparent;
+
   font-size: 21px;
+
   padding: 3px 6px;
+
   line-height: 1;
 }
 
@@ -203,14 +232,20 @@ h1 {
 
 .logRow {
   width: 100%;
+
   display: flex;
   align-items: center;
   gap: 10px;
+
   border: 0;
+
   background: white;
   color: var(--text);
+
   text-align: left;
+
   padding: 12px 14px;
+
   border-top: 1px solid #f2f2f2;
 }
 
@@ -226,6 +261,7 @@ h1 {
 .logTitle {
   font-weight: 700;
   font-size: 16px;
+
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -233,6 +269,7 @@ h1 {
 
 .logMeta {
   margin-top: 4px;
+
   color: var(--sub);
   font-size: 12px;
 }
@@ -244,25 +281,22 @@ h1 {
 
 .emptyFolder {
   padding: 14px;
+
   color: #999;
   font-size: 13px;
 }
 
 .emptyAll {
   padding: 40px 22px;
+
   text-align: center;
+
   color: #888;
+
   line-height: 1.8;
 }
 
-/* ---------- チャット画面 ---------- */
-
-#chatView {
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-}
+/* ---------- チャット ---------- */
 
 .chatHeaderTitle {
   min-width: 0;
@@ -271,7 +305,9 @@ h1 {
 
 .chatFolder {
   font-size: 11px;
+
   color: var(--sub);
+
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -279,8 +315,10 @@ h1 {
 
 .chatTitle {
   margin-top: 1px;
+
   font-size: 17px;
   font-weight: 800;
+
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -289,14 +327,18 @@ h1 {
 #chat {
   flex: 1;
   min-height: 0;
+
   overflow-y: auto;
+
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
-  padding: 14px 14px 24px;
+
+  padding: 14px 14px 28px;
 }
 
 .row {
   display: flex;
+
   margin: 9px 0;
 }
 
@@ -310,66 +352,120 @@ h1 {
 
 .bubble {
   max-width: 82%;
+
   padding: 10px 14px;
+
   border-radius: 18px;
+
   font-size: 16px;
   line-height: 1.55;
+
   white-space: pre-wrap;
   word-break: break-word;
 }
 
 .me .bubble {
   background: var(--me);
+
+  cursor: pointer;
+
+  position: relative;
 }
 
 .wall .bubble {
   background: white;
 }
 
+/* TXT除外中 */
+
+.me .bubble.excluded {
+  opacity: .48;
+
+  outline: 1px dashed #7c8f78;
+}
+
+.excludeBadge {
+  display: block;
+
+  margin-top: 6px;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  color: #586b55;
+}
+
+/* ---------- 入力 ---------- */
+
 #inputArea {
   flex: 0 0 auto;
+
   display: flex;
   align-items: flex-end;
   gap: 8px;
+
   background: white;
+
   padding: 10px;
-  padding-bottom: calc(10px + env(safe-area-inset-bottom));
+  padding-bottom:
+    calc(
+      10px +
+      env(safe-area-inset-bottom)
+    );
+
   border-top: 1px solid var(--line);
 }
 
 #input {
   flex: 1;
+
   resize: none;
+
   min-height: 44px;
   max-height: 140px;
-  border: none;
-  outline: none;
+
+  border: 0;
+  outline: 0;
+
   border-radius: 22px;
+
   background: var(--soft);
+
   padding: 11px 14px;
+
   font-size: 16px;
   line-height: 1.4;
 }
 
 #send {
   flex: 0 0 auto;
-  border: none;
+
+  border: 0;
+
   border-radius: 22px;
+
   min-height: 44px;
+
   padding: 10px 16px;
+
   background: #222;
   color: white;
+
   font-weight: 800;
   font-size: 15px;
 }
 
-/* ---------- モーダル ---------- */
+/* ---------- 下から出るメニュー ---------- */
 
 #modalBackdrop {
   position: fixed;
+
   inset: 0;
+
   z-index: 100;
+
   background: rgba(0,0,0,.28);
+
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -377,32 +473,58 @@ h1 {
 
 .modalSheet {
   width: min(100%, 620px);
-  max-height: 80dvh;
+
+  max-height: 82dvh;
+
   overflow-y: auto;
+
   background: white;
-  border-radius: 22px 22px 0 0;
+
+  border-radius:
+    22px
+    22px
+    0
+    0;
+
   padding: 14px;
-  padding-bottom: calc(14px + env(safe-area-inset-bottom));
-  box-shadow: 0 -10px 30px rgba(0,0,0,.12);
+
+  padding-bottom:
+    calc(
+      14px +
+      env(safe-area-inset-bottom)
+    );
+
+  box-shadow:
+    0 -10px 30px
+    rgba(0,0,0,.12);
 }
 
 .modalTitle {
   font-size: 17px;
   font-weight: 800;
+
   padding: 4px 4px 10px;
 }
 
 .actionButton,
 .folderChoice {
   width: 100%;
+
   border: 0;
+
   border-radius: 13px;
+
   min-height: 48px;
+
   padding: 12px 14px;
+
   margin: 5px 0;
+
   background: var(--soft);
   color: var(--text);
+
   text-align: left;
+
   font-weight: 700;
 }
 
@@ -412,7 +534,9 @@ h1 {
 
 .actionButton.cancel {
   text-align: center;
+
   margin-top: 10px;
+
   background: #222;
   color: white;
 }
@@ -421,23 +545,71 @@ h1 {
   background: #e8f7e3;
 }
 
+/* ---------- 編集欄 ---------- */
+
+.editBox {
+  width: 100%;
+
+  min-height: 180px;
+  max-height: 42dvh;
+
+  resize: vertical;
+
+  border: 1px solid #ddd;
+
+  border-radius: 14px;
+
+  padding: 12px;
+
+  font-size: 16px;
+  line-height: 1.5;
+
+  outline: none;
+
+  background: #fafafa;
+}
+
 /* ---------- トースト ---------- */
 
 #toast {
   position: fixed;
+
   left: 50%;
-  bottom: calc(86px + env(safe-area-inset-bottom));
-  transform: translateX(-50%);
+
+  bottom:
+    calc(
+      86px +
+      env(safe-area-inset-bottom)
+    );
+
+  transform:
+    translateX(-50%);
+
   z-index: 200;
-  max-width: calc(100% - 36px);
-  background: rgba(20,20,20,.9);
+
+  max-width:
+    calc(
+      100% -
+      36px
+    );
+
+  background:
+    rgba(20,20,20,.9);
+
   color: white;
+
   padding: 10px 14px;
+
   border-radius: 999px;
+
   font-size: 13px;
+
   opacity: 0;
+
   pointer-events: none;
-  transition: opacity .2s;
+
+  transition:
+    opacity .2s;
 }
 
 #toast.show {
@@ -447,91 +619,184 @@ h1 {
 </head>
 
 <body>
+
 <div id="app">
 
-  <!-- 一覧画面 -->
+  <!-- =========================
+       ログ一覧
+  ========================== -->
+
   <section id="homeView">
 
     <header class="topbar">
+
       <div class="topbarRow">
+
         <div class="titleBlock">
-          <h1>相槌！</h1>
-          <p class="subtitle">さあどうぞ、話せ！</p>
+
+          <h1>
+            相槌！
+          </h1>
+
+          <p class="subtitle">
+            さあどうぞ、話せ！
+          </p>
+
         </div>
+
       </div>
+
     </header>
 
+
     <div class="homeActions">
-      <button id="newLogButton" class="primaryButton">＋ 新しいログ</button>
-      <button id="newFolderButton" class="primaryButton secondaryButton">＋ フォルダ</button>
+
+      <button
+        id="newLogButton"
+        class="primaryButton"
+      >
+        ＋ 新しいログ
+      </button>
+
+
+      <button
+        id="newFolderButton"
+        class="primaryButton secondaryButton"
+      >
+        ＋ フォルダ
+      </button>
+
     </div>
+
 
     <div id="folderList"></div>
 
   </section>
 
 
-  <!-- チャット画面 -->
-  <section id="chatView" class="hidden">
+  <!-- =========================
+       チャット
+  ========================== -->
+
+  <section
+    id="chatView"
+    class="hidden"
+  >
 
     <header class="topbar">
+
       <div class="topbarRow">
 
-        <button id="backButton" class="iconButton" aria-label="戻る">‹</button>
+        <button
+          id="backButton"
+          class="iconButton"
+          aria-label="戻る"
+        >
+          ‹
+        </button>
+
 
         <div class="chatHeaderTitle">
-          <div id="currentFolderName" class="chatFolder"></div>
-          <div id="currentLogTitle" class="chatTitle"></div>
+
+          <div
+            id="currentFolderName"
+            class="chatFolder"
+          ></div>
+
+
+          <div
+            id="currentLogTitle"
+            class="chatTitle"
+          ></div>
+
         </div>
 
-        <button id="logMenuButton" class="iconButton" aria-label="メニュー">•••</button>
+
+        <button
+          id="logMenuButton"
+          class="iconButton"
+          aria-label="メニュー"
+        >
+          •••
+        </button>
 
       </div>
+
     </header>
+
 
     <div id="chat"></div>
 
+
     <div id="inputArea">
+
       <textarea
         id="input"
         rows="1"
         placeholder="なんでも投げる"
       ></textarea>
 
-      <button id="send">送信 ➤</button>
+
+      <button id="send">
+        送信 ➤
+      </button>
+
     </div>
 
   </section>
 
 </div>
 
-<div id="modalBackdrop" class="hidden">
-  <div id="modalSheet" class="modalSheet"></div>
+
+<div
+  id="modalBackdrop"
+  class="hidden"
+>
+
+  <div
+    id="modalSheet"
+    class="modalSheet"
+  ></div>
+
 </div>
 
+
 <div id="toast"></div>
+
 
 <script>
 
 /* =========================================================
-   相槌！ v2
+
+   相槌！ v2.1
 
    ・複数ログ
-   ・フォルダ分け
+   ・フォルダ
    ・ログ移動
-   ・localStorage保存
-   ・自分の発言だけTXT保存
-   ・スクロール
-   ・内容解析なし
+   ・自動保存
+   ・TXT書き出し
+   ・自分の発言編集
+   ・TXTから個別除外
+   ・個別削除
+   ・iPhoneキーボード時スクロール追従
+
 ========================================================= */
 
-const STORAGE_KEY = "aiduchi_v2_data";
-const UNCLASSIFIED_ID = "unclassified";
+
+const STORAGE_KEY =
+  "aiduchi_v2_data";
 
 
-/* ---------- 相槌素材 ---------- */
+const UNCLASSIFIED_ID =
+  "unclassified";
+
+
+/* =========================================================
+   相槌
+========================================================= */
 
 const hooks = [
+
   "おっ",
   "ほうほう",
   "おお！",
@@ -542,9 +807,12 @@ const hooks = [
   "おっと？",
   "なるほどなるほど",
   "うんうん"
+
 ];
 
+
 const positive = [
+
   "いいねぇ",
   "いいぞ",
   "それ気になる",
@@ -557,9 +825,12 @@ const positive = [
   "いい感じ",
   "おもしろいおもしろい",
   "その調子"
+
 ];
 
+
 const continuation = [
+
   "それから？",
   "続き聞かせて",
   "その先は？",
@@ -570,9 +841,12 @@ const continuation = [
   "そのままどうぞ",
   "まだ聞こう",
   "さてさて？"
+
 ];
 
+
 const push = [
+
   "そのまま行こう",
   "いいぞもっとやれ",
   "もう一段いこう",
@@ -581,9 +855,12 @@ const push = [
   "その調子",
   "好きに行こう",
   "どんどん行こう"
+
 ];
 
+
 const warmShort = [
+
   "うんうん",
   "ほうほう",
   "おっ",
@@ -597,91 +874,194 @@ const warmShort = [
   "それ気になる",
   "おもしろいおもしろい",
   "👀✨"
+
 ];
+
 
 const big = [
+
   "おお、来た来た！ いいぞもっとやれ",
+
   "おっ、なんか出てきたな。続けて続けて",
+
   "ほうほう、面白くなってきた。その先は？",
+
   "うんうん、いいねぇ。もっと聞かせて",
+
   "おお？ それ気になる。どうぞどうぞ",
+
   "来た来た、これは楽しみ。続き聞かせて",
+
   "おっと？ いい感じだぞ。そのまま行こう",
+
   "おお、アクセル踏んできたな！ いいぞいいぞ",
+
   "はいはいはい、面白くなってきた。聞こう！",
+
   "うわ、なんか出てきたぞ。いいぞもっとやれ"
+
 ];
 
 
-/* ---------- DOM ---------- */
+/* =========================================================
+   DOM
+========================================================= */
 
 const homeView =
-  document.getElementById("homeView");
+  document.getElementById(
+    "homeView"
+  );
+
 
 const chatView =
-  document.getElementById("chatView");
+  document.getElementById(
+    "chatView"
+  );
+
 
 const folderList =
-  document.getElementById("folderList");
+  document.getElementById(
+    "folderList"
+  );
+
 
 const newLogButton =
-  document.getElementById("newLogButton");
+  document.getElementById(
+    "newLogButton"
+  );
+
 
 const newFolderButton =
-  document.getElementById("newFolderButton");
+  document.getElementById(
+    "newFolderButton"
+  );
+
 
 const backButton =
-  document.getElementById("backButton");
+  document.getElementById(
+    "backButton"
+  );
+
 
 const logMenuButton =
-  document.getElementById("logMenuButton");
+  document.getElementById(
+    "logMenuButton"
+  );
+
 
 const currentFolderName =
-  document.getElementById("currentFolderName");
+  document.getElementById(
+    "currentFolderName"
+  );
+
 
 const currentLogTitle =
-  document.getElementById("currentLogTitle");
+  document.getElementById(
+    "currentLogTitle"
+  );
+
 
 const chat =
-  document.getElementById("chat");
+  document.getElementById(
+    "chat"
+  );
+
 
 const input =
-  document.getElementById("input");
+  document.getElementById(
+    "input"
+  );
+
 
 const send =
-  document.getElementById("send");
+  document.getElementById(
+    "send"
+  );
+
 
 const modalBackdrop =
-  document.getElementById("modalBackdrop");
+  document.getElementById(
+    "modalBackdrop"
+  );
+
 
 const modalSheet =
-  document.getElementById("modalSheet");
+  document.getElementById(
+    "modalSheet"
+  );
+
 
 const toast =
-  document.getElementById("toast");
+  document.getElementById(
+    "toast"
+  );
 
 
-/* ---------- 状態 ---------- */
+/* =========================================================
+   状態
+========================================================= */
 
-let data = loadData();
-
-let currentLogId = null;
-
-let recentReactions = [];
+let data =
+  loadData();
 
 
-/* ---------- データ ---------- */
+let currentLogId =
+  null;
+
+
+let recentReactions =
+  [];
+
+
+let toastTimer =
+  null;
+
+
+/* =========================================================
+   データ
+========================================================= */
+
+function makeId(prefix) {
+
+  return (
+
+    prefix +
+
+    "_" +
+
+    Date.now()
+      .toString(36) +
+
+    "_" +
+
+    Math.random()
+      .toString(36)
+      .slice(2, 8)
+
+  );
+
+}
+
 
 function defaultData() {
 
   return {
 
     folders: [
+
       {
-        id: UNCLASSIFIED_ID,
-        name: "未分類",
-        system: true
+
+        id:
+          UNCLASSIFIED_ID,
+
+        name:
+          "未分類",
+
+        system:
+          true
+
       }
+
     ],
 
     logs: []
@@ -691,51 +1071,130 @@ function defaultData() {
 }
 
 
+/* 旧v2データもそのまま使えるよう整える */
+
+function normalizeData(parsed) {
+
+  if (
+
+    !parsed ||
+
+    !Array.isArray(
+      parsed.folders
+    ) ||
+
+    !Array.isArray(
+      parsed.logs
+    )
+
+  ) {
+
+    return defaultData();
+
+  }
+
+
+  if (
+
+    !parsed.folders.some(
+      folder =>
+        folder.id ===
+        UNCLASSIFIED_ID
+    )
+
+  ) {
+
+    parsed.folders.unshift({
+
+      id:
+        UNCLASSIFIED_ID,
+
+      name:
+        "未分類",
+
+      system:
+        true
+
+    });
+
+  }
+
+
+  parsed.logs.forEach(
+    log => {
+
+      if (
+        !Array.isArray(
+          log.messages
+        )
+      ) {
+
+        log.messages = [];
+
+      }
+
+
+      log.messages.forEach(
+        message => {
+
+          if (
+            !message.id
+          ) {
+
+            message.id =
+              makeId(
+                "msg"
+              );
+
+          }
+
+
+          if (
+
+            message.role === "me" &&
+
+            typeof message.excluded
+              !== "boolean"
+
+          ) {
+
+            message.excluded =
+              false;
+
+          }
+
+        }
+      );
+
+    }
+  );
+
+
+  return parsed;
+
+}
+
+
 function loadData() {
 
   try {
 
     const raw =
-      localStorage.getItem(STORAGE_KEY);
+      localStorage.getItem(
+        STORAGE_KEY
+      );
 
 
     if (!raw) {
-      return defaultData();
-    }
-
-
-    const parsed =
-      JSON.parse(raw);
-
-
-    if (
-      !parsed ||
-      !Array.isArray(parsed.folders) ||
-      !Array.isArray(parsed.logs)
-    ) {
 
       return defaultData();
 
     }
 
 
-    if (
-      !parsed.folders.some(
-        folder =>
-          folder.id === UNCLASSIFIED_ID
-      )
-    ) {
-
-      parsed.folders.unshift({
-        id: UNCLASSIFIED_ID,
-        name: "未分類",
-        system: true
-      });
-
-    }
-
-
-    return parsed;
+    return normalizeData(
+      JSON.parse(raw)
+    );
 
   }
 
@@ -751,30 +1210,25 @@ function loadData() {
 function saveData() {
 
   localStorage.setItem(
+
     STORAGE_KEY,
-    JSON.stringify(data)
+
+    JSON.stringify(
+      data
+    )
+
   );
 
 }
 
 
-function makeId(prefix) {
-
-  return (
-    prefix +
-    "_" +
-    Date.now().toString(36) +
-    "_" +
-    Math.random().toString(36).slice(2, 8)
-  );
-
-}
-
-
-function getLog(id = currentLogId) {
+function getLog(
+  id = currentLogId
+) {
 
   return data.logs.find(
-    log => log.id === id
+    log =>
+      log.id === id
   );
 
 }
@@ -783,29 +1237,72 @@ function getLog(id = currentLogId) {
 function getFolder(id) {
 
   return data.folders.find(
-    folder => folder.id === id
+    folder =>
+      folder.id === id
   );
 
 }
 
 
-/* ---------- 日付 ---------- */
+function getMessage(
+  messageId
+) {
 
-function formatDateTime(timestamp) {
+  const log =
+    getLog();
 
-  const d =
-    new Date(timestamp);
 
+  if (!log) {
+
+    return null;
+
+  }
+
+
+  return log.messages.find(
+    message =>
+      message.id ===
+      messageId
+  );
+
+}
+
+
+/* =========================================================
+   日時
+========================================================= */
+
+function formatDateTime(
+  timestamp
+) {
 
   return new Intl.DateTimeFormat(
+
     "ja-JP",
+
     {
-      month: "numeric",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit"
+
+      month:
+        "numeric",
+
+      day:
+        "numeric",
+
+      hour:
+        "2-digit",
+
+      minute:
+        "2-digit"
+
     }
-  ).format(d);
+
+  ).format(
+
+    new Date(
+      timestamp
+    )
+
+  );
 
 }
 
@@ -815,63 +1312,162 @@ function defaultLogTitle() {
   const d =
     new Date();
 
-  const month =
-    d.getMonth() + 1;
-
-  const day =
-    d.getDate();
-
-  const hour =
-    String(
-      d.getHours()
-    ).padStart(2, "0");
-
-  const minute =
-    String(
-      d.getMinutes()
-    ).padStart(2, "0");
-
 
   return (
-    `${month}/${day} ${hour}:${minute}`
+
+    `${d.getMonth() + 1}` +
+
+    "/" +
+
+    `${d.getDate()}` +
+
+    " " +
+
+    String(
+      d.getHours()
+    ).padStart(
+      2,
+      "0"
+    ) +
+
+    ":" +
+
+    String(
+      d.getMinutes()
+    ).padStart(
+      2,
+      "0"
+    )
+
   );
 
 }
 
 
-/* ---------- トースト ---------- */
+/* =========================================================
+   HTML安全処理
+========================================================= */
 
-let toastTimer = null;
+function escapeHtml(text) {
 
+  return String(text)
 
-function showToast(text) {
+    .replace(
+      /&/g,
+      "&amp;"
+    )
 
-  toast.textContent = text;
+    .replace(
+      /</g,
+      "&lt;"
+    )
 
-  toast.classList.add("show");
+    .replace(
+      />/g,
+      "&gt;"
+    )
 
+    .replace(
+      /"/g,
+      "&quot;"
+    )
 
-  clearTimeout(toastTimer);
-
-
-  toastTimer =
-    setTimeout(
-      () => {
-
-        toast.classList.remove("show");
-
-      },
-      1800
+    .replace(
+      /'/g,
+      "&#039;"
     );
 
 }
 
 
-/* ---------- モーダル ---------- */
+function escapeAttr(text) {
+
+  return escapeHtml(
+    text
+  );
+
+}
+
+
+function sanitizeFileName(name) {
+
+  return (
+
+    name
+
+      .replace(
+        /[\\/:*?"<>|]/g,
+        "_"
+      )
+
+      .replace(
+        /\s+/g,
+        " "
+      )
+
+      .trim()
+
+      .slice(
+        0,
+        80
+      )
+
+    ||
+
+    "相槌ログ"
+
+  );
+
+}
+
+
+/* =========================================================
+   トースト
+========================================================= */
+
+function showToast(text) {
+
+  toast.textContent =
+    text;
+
+
+  toast.classList.add(
+    "show"
+  );
+
+
+  clearTimeout(
+    toastTimer
+  );
+
+
+  toastTimer =
+    setTimeout(
+
+      () => {
+
+        toast.classList.remove(
+          "show"
+        );
+
+      },
+
+      1800
+
+    );
+
+}
+
+
+/* =========================================================
+   モーダル
+========================================================= */
 
 function openModal(html) {
 
-  modalSheet.innerHTML = html;
+  modalSheet.innerHTML =
+    html;
+
 
   modalBackdrop.classList.remove(
     "hidden"
@@ -886,17 +1482,22 @@ function closeModal() {
     "hidden"
   );
 
-  modalSheet.innerHTML = "";
+
+  modalSheet.innerHTML =
+    "";
 
 }
 
 
 modalBackdrop.addEventListener(
+
   "click",
+
   event => {
 
     if (
-      event.target === modalBackdrop
+      event.target ===
+      modalBackdrop
     ) {
 
       closeModal();
@@ -904,29 +1505,158 @@ modalBackdrop.addEventListener(
     }
 
   }
+
 );
 
 
-/* ---------- 一覧描画 ---------- */
+/* =========================================================
+   iPhoneキーボード対策
+========================================================= */
+
+function syncViewport() {
+
+  const height =
+
+    window.visualViewport
+
+      ? window.visualViewport.height
+
+      : window.innerHeight;
+
+
+  document.documentElement
+    .style
+    .setProperty(
+
+      "--app-height",
+
+      `${Math.round(height)}px`
+
+    );
+
+
+  if (
+    document.activeElement ===
+    input
+  ) {
+
+    keepLatestVisible();
+
+  }
+
+}
+
+
+/* 最新メッセージを入力欄の上に戻す */
+
+function keepLatestVisible() {
+
+  requestAnimationFrame(
+    () => {
+
+      chat.scrollTop =
+        chat.scrollHeight;
+
+    }
+  );
+
+
+  /*
+    iPhoneはキーボード開閉中に
+    何段階か画面サイズが変わるので
+    少し時間をずらして再調整
+  */
+
+  setTimeout(
+    () => {
+
+      chat.scrollTop =
+        chat.scrollHeight;
+
+    },
+    80
+  );
+
+
+  setTimeout(
+    () => {
+
+      chat.scrollTop =
+        chat.scrollHeight;
+
+    },
+    220
+  );
+
+}
+
+
+if (
+  window.visualViewport
+) {
+
+  window.visualViewport
+    .addEventListener(
+      "resize",
+      syncViewport
+    );
+
+
+  window.visualViewport
+    .addEventListener(
+
+      "scroll",
+
+      () => {
+
+        if (
+          document.activeElement ===
+          input
+        ) {
+
+          keepLatestVisible();
+
+        }
+
+      }
+
+    );
+
+}
+
+
+window.addEventListener(
+  "resize",
+  syncViewport
+);
+
+
+syncViewport();
+
+
+/* =========================================================
+   一覧
+========================================================= */
 
 function renderHome() {
 
-  folderList.innerHTML = "";
+  folderList.innerHTML =
+    "";
 
 
-  const folders =
-    [...data.folders];
-
-
-  folders.forEach(
+  data.folders.forEach(
     folder => {
 
       const logs =
+
         data.logs
+
           .filter(
             log =>
-              log.folderId === folder.id
+              log.folderId ===
+              folder.id
           )
+
           .sort(
             (a, b) =>
               b.updatedAt -
@@ -939,6 +1669,7 @@ function renderHome() {
           "section"
         );
 
+
       card.className =
         "folderCard";
 
@@ -947,6 +1678,7 @@ function renderHome() {
         document.createElement(
           "div"
         );
+
 
       header.className =
         "folderHeader";
@@ -957,11 +1689,14 @@ function renderHome() {
           "div"
         );
 
+
       name.className =
         "folderName";
 
+
       name.textContent =
-        "📁 " + folder.name;
+        "📁 " +
+        folder.name;
 
 
       const count =
@@ -969,47 +1704,47 @@ function renderHome() {
           "div"
         );
 
+
       count.className =
         "folderCount";
+
 
       count.textContent =
         `${logs.length}件`;
 
 
-      header.appendChild(name);
+      header.append(
+        name,
+        count
+      );
 
-      header.appendChild(count);
 
-
-      if (!folder.system) {
+      if (
+        !folder.system
+      ) {
 
         const menu =
           document.createElement(
             "button"
           );
 
+
         menu.className =
           "folderMenuButton";
+
 
         menu.textContent =
           "•••";
 
-        menu.setAttribute(
-          "aria-label",
-          "フォルダメニュー"
-        );
 
-
-        menu.addEventListener(
-          "click",
+        menu.onclick =
           () => {
 
             openFolderMenu(
               folder.id
             );
 
-          }
-        );
+          };
 
 
         header.appendChild(
@@ -1029,12 +1764,13 @@ function renderHome() {
           "div"
         );
 
+
       list.className =
         "logList";
 
 
       if (
-        logs.length === 0
+        !logs.length
       ) {
 
         const empty =
@@ -1042,8 +1778,10 @@ function renderHome() {
             "div"
           );
 
+
         empty.className =
           "emptyFolder";
+
 
         empty.textContent =
           "まだログはありません";
@@ -1055,6 +1793,7 @@ function renderHome() {
 
       }
 
+
       else {
 
         logs.forEach(
@@ -1065,6 +1804,7 @@ function renderHome() {
                 "button"
               );
 
+
             row.className =
               "logRow";
 
@@ -1073,6 +1813,7 @@ function renderHome() {
               document.createElement(
                 "div"
               );
+
 
             main.className =
               "logMain";
@@ -1083,11 +1824,14 @@ function renderHome() {
                 "div"
               );
 
+
             title.className =
               "logTitle";
 
+
             title.textContent =
-              log.title || "無題";
+              log.title ||
+              "無題";
 
 
             const meta =
@@ -1095,28 +1839,27 @@ function renderHome() {
                 "div"
               );
 
+
             meta.className =
               "logMeta";
 
 
             const myCount =
+
               log.messages.filter(
                 message =>
-                  message.role === "me"
+                  message.role ===
+                  "me"
               ).length;
 
 
             meta.textContent =
-              `${formatDateTime(log.updatedAt)} ・ 自分 ${myCount}件`;
 
+              `${formatDateTime(log.updatedAt)}` +
 
-            main.appendChild(
-              title
-            );
+              " ・ " +
 
-            main.appendChild(
-              meta
-            );
+              `自分 ${myCount}件`;
 
 
             const chev =
@@ -1124,32 +1867,35 @@ function renderHome() {
                 "div"
               );
 
+
             chev.className =
               "chevron";
+
 
             chev.textContent =
               "›";
 
 
-            row.appendChild(
-              main
+            main.append(
+              title,
+              meta
             );
 
-            row.appendChild(
+
+            row.append(
+              main,
               chev
             );
 
 
-            row.addEventListener(
-              "click",
+            row.onclick =
               () => {
 
                 openLog(
                   log.id
                 );
 
-              }
-            );
+              };
 
 
             list.appendChild(
@@ -1166,6 +1912,7 @@ function renderHome() {
         list
       );
 
+
       folderList.appendChild(
         card
       );
@@ -1175,7 +1922,7 @@ function renderHome() {
 
 
   if (
-    data.logs.length === 0
+    !data.logs.length
   ) {
 
     const empty =
@@ -1183,8 +1930,10 @@ function renderHome() {
         "div"
       );
 
+
     empty.className =
       "emptyAll";
+
 
     empty.innerHTML =
       'まだ何もありません。<br>「＋ 新しいログ」から喋り始めよう。';
@@ -1199,7 +1948,9 @@ function renderHome() {
 }
 
 
-/* ---------- 新規ログ ---------- */
+/* =========================================================
+   新規ログ
+========================================================= */
 
 function createLog() {
 
@@ -1226,13 +1977,16 @@ function createLog() {
   const log = {
 
     id:
-      makeId("log"),
+      makeId(
+        "log"
+      ),
 
     folderId:
       UNCLASSIFIED_ID,
 
     title:
-      title.trim() ||
+      title.trim()
+      ||
       defaultLogTitle(),
 
     createdAt:
@@ -1242,11 +1996,25 @@ function createLog() {
       now,
 
     messages: [
+
       {
-        role: "wall",
-        text: "聞こう！",
-        at: now
+
+        id:
+          makeId(
+            "msg"
+          ),
+
+        role:
+          "wall",
+
+        text:
+          "聞こう！",
+
+        at:
+          now
+
       }
+
     ]
 
   };
@@ -1267,7 +2035,9 @@ function createLog() {
 }
 
 
-/* ---------- 新規フォルダ ---------- */
+/* =========================================================
+   フォルダ
+========================================================= */
 
 function createFolder() {
 
@@ -1305,7 +2075,9 @@ function createFolder() {
   data.folders.push({
 
     id:
-      makeId("folder"),
+      makeId(
+        "folder"
+      ),
 
     name:
       clean,
@@ -1323,12 +2095,14 @@ function createFolder() {
 }
 
 
-/* ---------- フォルダメニュー ---------- */
-
-function openFolderMenu(folderId) {
+function openFolderMenu(
+  folderId
+) {
 
   const folder =
-    getFolder(folderId);
+    getFolder(
+      folderId
+    );
 
 
   if (
@@ -1342,6 +2116,7 @@ function openFolderMenu(folderId) {
 
 
   openModal(`
+
     <div class="modalTitle">
       📁 ${escapeHtml(folder.name)}
     </div>
@@ -1366,6 +2141,7 @@ function openFolderMenu(folderId) {
     >
       閉じる
     </button>
+
   `);
 
 
@@ -1411,10 +2187,14 @@ function openFolderMenu(folderId) {
 }
 
 
-function renameFolder(folderId) {
+function renameFolder(
+  folderId
+) {
 
   const folder =
-    getFolder(folderId);
+    getFolder(
+      folderId
+    );
 
 
   if (
@@ -1435,7 +2215,8 @@ function renameFolder(folderId) {
 
 
   if (
-    name === null
+    name === null ||
+    !name.trim()
   ) {
 
     return;
@@ -1443,19 +2224,8 @@ function renameFolder(folderId) {
   }
 
 
-  const clean =
-    name.trim();
-
-
-  if (!clean) {
-
-    return;
-
-  }
-
-
   folder.name =
-    clean;
+    name.trim();
 
 
   saveData();
@@ -1465,10 +2235,14 @@ function renameFolder(folderId) {
 }
 
 
-function deleteFolder(folderId) {
+function deleteFolder(
+  folderId
+) {
 
   const folder =
-    getFolder(folderId);
+    getFolder(
+      folderId
+    );
 
 
   if (
@@ -1482,16 +2256,18 @@ function deleteFolder(folderId) {
 
 
   const count =
+
     data.logs.filter(
       log =>
-        log.folderId === folderId
+        log.folderId ===
+        folderId
     ).length;
 
 
   const ok =
     confirm(
 
-      count > 0
+      count
 
         ? `「${folder.name}」を削除します。\n中のログ ${count}件は「未分類」へ移動します。`
 
@@ -1511,11 +2287,13 @@ function deleteFolder(folderId) {
     log => {
 
       if (
-        log.folderId === folderId
+        log.folderId ===
+        folderId
       ) {
 
         log.folderId =
           UNCLASSIFIED_ID;
+
 
         log.updatedAt =
           Date.now();
@@ -1527,9 +2305,11 @@ function deleteFolder(folderId) {
 
 
   data.folders =
+
     data.folders.filter(
       folder =>
-        folder.id !== folderId
+        folder.id !==
+        folderId
     );
 
 
@@ -1540,12 +2320,18 @@ function deleteFolder(folderId) {
 }
 
 
-/* ---------- ログを開く ---------- */
+/* =========================================================
+   ログを開く
+========================================================= */
 
-function openLog(logId) {
+function openLog(
+  logId
+) {
 
   const log =
-    getLog(logId);
+    getLog(
+      logId
+    );
 
 
   if (!log) {
@@ -1563,6 +2349,7 @@ function openLog(logId) {
     "hidden"
   );
 
+
   chatView.classList.remove(
     "hidden"
   );
@@ -1571,16 +2358,14 @@ function openLog(logId) {
   renderChat();
 
 
-  requestAnimationFrame(
-    () => {
+  /*
+    ここでは入力欄を
+    自動フォーカスしない
+  */
 
-      scrollChatToBottom();
-
-      input.focus({
-        preventScroll: true
-      });
-
-    }
+  setTimeout(
+    keepLatestVisible,
+    50
   );
 
 }
@@ -1596,9 +2381,13 @@ function closeLog() {
     "hidden"
   );
 
+
   homeView.classList.remove(
     "hidden"
   );
+
+
+  input.blur();
 
 
   renderHome();
@@ -1606,7 +2395,9 @@ function closeLog() {
 }
 
 
-/* ---------- チャット描画 ---------- */
+/* =========================================================
+   チャット描画
+========================================================= */
 
 function renderChat() {
 
@@ -1630,13 +2421,16 @@ function renderChat() {
 
 
   currentFolderName.textContent =
+
     folder
       ? folder.name
       : "未分類";
 
 
   currentLogTitle.textContent =
-    log.title || "無題";
+
+    log.title ||
+    "無題";
 
 
   chat.innerHTML =
@@ -1647,8 +2441,7 @@ function renderChat() {
     message => {
 
       addMessageElement(
-        message.text,
-        message.role
+        message
       );
 
     }
@@ -1656,15 +2449,21 @@ function renderChat() {
 
 
   requestAnimationFrame(
-    scrollChatToBottom
+    () => {
+
+      chat.scrollTop =
+        chat.scrollHeight;
+
+    }
   );
 
 }
 
 
+/* メッセージ1件描画 */
+
 function addMessageElement(
-  text,
-  role
+  message
 ) {
 
   const row =
@@ -1672,8 +2471,10 @@ function addMessageElement(
       "div"
     );
 
+
   row.className =
-    "row " + role;
+    "row " +
+    message.role;
 
 
   const bubble =
@@ -1681,16 +2482,80 @@ function addMessageElement(
       "div"
     );
 
+
   bubble.className =
-    "bubble";
+    "bubble" +
+
+    (
+      message.role === "me" &&
+      message.excluded
+
+        ? " excluded"
+
+        : ""
+    );
+
 
   bubble.textContent =
-    text;
+    message.text;
+
+
+  /*
+    自分の吹き出しだけ
+    タップ可能
+  */
+
+  if (
+    message.role ===
+    "me"
+  ) {
+
+    if (
+      message.excluded
+    ) {
+
+      const badge =
+        document.createElement(
+          "span"
+        );
+
+
+      badge.className =
+        "excludeBadge";
+
+
+      badge.textContent =
+        "TXTから除外中";
+
+
+      bubble.appendChild(
+        badge
+      );
+
+    }
+
+
+    bubble.addEventListener(
+
+      "click",
+
+      () => {
+
+        openMessageMenu(
+          message.id
+        );
+
+      }
+
+    );
+
+  }
 
 
   row.appendChild(
     bubble
   );
+
 
   chat.appendChild(
     row
@@ -1699,15 +2564,9 @@ function addMessageElement(
 }
 
 
-function scrollChatToBottom() {
-
-  chat.scrollTop =
-    chat.scrollHeight;
-
-}
-
-
-/* ---------- 相槌生成 ---------- */
+/* =========================================================
+   相槌生成
+========================================================= */
 
 function pick(array) {
 
@@ -1732,22 +2591,25 @@ function generateReaction() {
 
 
   if (
-    roll < 0.35
+    roll < .35
   ) {
 
     result =
-      pick(warmShort);
+      pick(
+        warmShort
+      );
 
   }
 
 
   else if (
-    roll < 0.75
+    roll < .75
   ) {
 
     const type =
       Math.floor(
-        Math.random() * 5
+        Math.random() *
+        5
       );
 
 
@@ -1814,12 +2676,13 @@ function generateReaction() {
 
 
   else if (
-    roll < 0.95
+    roll < .95
   ) {
 
     const type =
       Math.floor(
-        Math.random() * 3
+        Math.random() *
+        3
       );
 
 
@@ -1870,15 +2733,19 @@ function generateReaction() {
   else {
 
     result =
-      pick(big);
+      pick(
+        big
+      );
 
   }
 
 
   if (
+
     recentReactions.includes(
       result
     )
+
   ) {
 
     return generateReaction();
@@ -1892,7 +2759,8 @@ function generateReaction() {
 
 
   if (
-    recentReactions.length > 6
+    recentReactions.length >
+    6
   ) {
 
     recentReactions.shift();
@@ -1905,7 +2773,9 @@ function generateReaction() {
 }
 
 
-/* ---------- 送信 ---------- */
+/* =========================================================
+   送信
+========================================================= */
 
 function submitMessage() {
 
@@ -1935,7 +2805,12 @@ function submitMessage() {
     Date.now();
 
 
-  log.messages.push({
+  const message = {
+
+    id:
+      makeId(
+        "msg"
+      ),
 
     role:
       "me",
@@ -1944,9 +2819,17 @@ function submitMessage() {
       text,
 
     at:
-      now
+      now,
 
-  });
+    excluded:
+      false
+
+  };
+
+
+  log.messages.push(
+    message
+  );
 
 
   log.updatedAt =
@@ -1957,21 +2840,19 @@ function submitMessage() {
 
 
   addMessageElement(
-    text,
-    "me"
+    message
   );
 
 
   input.value =
     "";
 
+
   input.style.height =
     "44px";
 
 
-  requestAnimationFrame(
-    scrollChatToBottom
-  );
+  keepLatestVisible();
 
 
   const targetLogId =
@@ -1979,11 +2860,15 @@ function submitMessage() {
 
 
   const delay =
+
     400 +
-    Math.random() * 800;
+
+    Math.random() *
+    800;
 
 
   setTimeout(
+
     () => {
 
       const targetLog =
@@ -1992,31 +2877,35 @@ function submitMessage() {
         );
 
 
-      if (
-        !targetLog
-      ) {
+      if (!targetLog) {
 
         return;
 
       }
 
 
-      const reaction =
-        generateReaction();
+      const reaction = {
 
-
-      targetLog.messages.push({
+        id:
+          makeId(
+            "msg"
+          ),
 
         role:
           "wall",
 
         text:
-          reaction,
+          generateReaction(),
 
         at:
           Date.now()
 
-      });
+      };
+
+
+      targetLog.messages.push(
+        reaction
+      );
 
 
       targetLog.updatedAt =
@@ -2027,34 +2916,452 @@ function submitMessage() {
 
 
       if (
-        currentLogId === targetLogId &&
-        !chatView.classList.contains(
-          "hidden"
-        )
+
+        currentLogId ===
+        targetLogId &&
+
+        !chatView
+          .classList
+          .contains(
+            "hidden"
+          )
+
       ) {
 
         addMessageElement(
-          reaction,
-          "wall"
+          reaction
         );
 
 
-        requestAnimationFrame(
-          scrollChatToBottom
-        );
+        keepLatestVisible();
 
       }
 
     },
+
     delay
+
   );
 
 }
 
 
-/* ---------- ログメニュー ---------- */
+/* =========================================================
+   自分の発言メニュー
+========================================================= */
+
+function openMessageMenu(
+  messageId
+) {
+
+  /*
+    メニューを見るときは
+    キーボードを一度閉じる
+  */
+
+  input.blur();
+
+
+  const message =
+    getMessage(
+      messageId
+    );
+
+
+  if (
+
+    !message ||
+
+    message.role !== "me"
+
+  ) {
+
+    return;
+
+  }
+
+
+  openModal(`
+
+    <div class="modalTitle">
+      この発言
+    </div>
+
+    <button
+      class="actionButton"
+      id="editMessageAction"
+    >
+      ✏️ 編集
+    </button>
+
+    <button
+      class="actionButton"
+      id="toggleExcludeAction"
+    >
+      ${
+        message.excluded
+
+          ? "✅ TXTに戻す"
+
+          : "🚫 TXTから除外"
+      }
+    </button>
+
+    <button
+      class="actionButton danger"
+      id="deleteMessageAction"
+    >
+      🗑 発言を削除
+    </button>
+
+    <button
+      class="actionButton cancel"
+      id="closeMessageMenu"
+    >
+      閉じる
+    </button>
+
+  `);
+
+
+  document
+    .getElementById(
+      "editMessageAction"
+    )
+    .onclick =
+      () => {
+
+        closeModal();
+
+        openEditMessageModal(
+          messageId
+        );
+
+      };
+
+
+  document
+    .getElementById(
+      "toggleExcludeAction"
+    )
+    .onclick =
+      () => {
+
+        closeModal();
+
+        toggleExcludeMessage(
+          messageId
+        );
+
+      };
+
+
+  document
+    .getElementById(
+      "deleteMessageAction"
+    )
+    .onclick =
+      () => {
+
+        closeModal();
+
+        deleteMessage(
+          messageId
+        );
+
+      };
+
+
+  document
+    .getElementById(
+      "closeMessageMenu"
+    )
+    .onclick =
+      closeModal;
+
+}
+
+
+/* =========================================================
+   発言編集
+========================================================= */
+
+function openEditMessageModal(
+  messageId
+) {
+
+  const message =
+    getMessage(
+      messageId
+    );
+
+
+  if (!message) {
+
+    return;
+
+  }
+
+
+  openModal(`
+
+    <div class="modalTitle">
+      発言を編集
+    </div>
+
+    <textarea
+      id="editMessageBox"
+      class="editBox"
+    >${escapeHtml(message.text)}</textarea>
+
+    <button
+      class="actionButton"
+      id="saveEditAction"
+    >
+      保存
+    </button>
+
+    <button
+      class="actionButton cancel"
+      id="cancelEditAction"
+    >
+      キャンセル
+    </button>
+
+  `);
+
+
+  const box =
+    document.getElementById(
+      "editMessageBox"
+    );
+
+
+  setTimeout(
+
+    () => {
+
+      box.focus();
+
+
+      box.selectionStart =
+        box.selectionEnd =
+        box.value.length;
+
+    },
+
+    50
+
+  );
+
+
+  document
+    .getElementById(
+      "saveEditAction"
+    )
+    .onclick =
+      () => {
+
+        const clean =
+          box.value.trim();
+
+
+        if (!clean) {
+
+          showToast(
+            "空にはできません"
+          );
+
+          return;
+
+        }
+
+
+        message.text =
+          clean;
+
+
+        message.editedAt =
+          Date.now();
+
+
+        const log =
+          getLog();
+
+
+        log.updatedAt =
+          Date.now();
+
+
+        saveData();
+
+
+        closeModal();
+
+
+        renderChat();
+
+
+        showToast(
+          "編集しました"
+        );
+
+      };
+
+
+  document
+    .getElementById(
+      "cancelEditAction"
+    )
+    .onclick =
+      closeModal;
+
+}
+
+
+/* =========================================================
+   TXT除外
+========================================================= */
+
+function toggleExcludeMessage(
+  messageId
+) {
+
+  const message =
+    getMessage(
+      messageId
+    );
+
+
+  if (!message) {
+
+    return;
+
+  }
+
+
+  message.excluded =
+    !message.excluded;
+
+
+  const log =
+    getLog();
+
+
+  log.updatedAt =
+    Date.now();
+
+
+  saveData();
+
+
+  renderChat();
+
+
+  showToast(
+
+    message.excluded
+
+      ? "TXTから除外しました"
+
+      : "TXTに戻しました"
+
+  );
+
+}
+
+
+/* =========================================================
+   発言削除
+========================================================= */
+
+function deleteMessage(
+  messageId
+) {
+
+  const log =
+    getLog();
+
+
+  const message =
+    getMessage(
+      messageId
+    );
+
+
+  if (
+    !log ||
+    !message
+  ) {
+
+    return;
+
+  }
+
+
+  const preview =
+
+    message.text.length > 30
+
+      ? message.text.slice(
+          0,
+          30
+        ) + "…"
+
+      : message.text;
+
+
+  const ok =
+    confirm(
+
+      "この発言を削除します。\n\n" +
+
+      preview
+
+    );
+
+
+  if (!ok) {
+
+    return;
+
+  }
+
+
+  log.messages =
+
+    log.messages.filter(
+      message =>
+        message.id !==
+        messageId
+    );
+
+
+  log.updatedAt =
+    Date.now();
+
+
+  saveData();
+
+
+  renderChat();
+
+
+  showToast(
+    "削除しました"
+  );
+
+}
+
+
+/* =========================================================
+   ログメニュー
+========================================================= */
 
 function openLogMenu() {
+
+  input.blur();
+
 
   const log =
     getLog();
@@ -2068,6 +3375,7 @@ function openLogMenu() {
 
 
   openModal(`
+
     <div class="modalTitle">
       ${escapeHtml(log.title)}
     </div>
@@ -2106,6 +3414,7 @@ function openLogMenu() {
     >
       閉じる
     </button>
+
   `);
 
 
@@ -2175,6 +3484,10 @@ function openLogMenu() {
 }
 
 
+/* =========================================================
+   ログ名変更
+========================================================= */
+
 function renameCurrentLog() {
 
   const log =
@@ -2196,7 +3509,11 @@ function renameCurrentLog() {
 
 
   if (
-    title === null
+
+    title === null ||
+
+    !title.trim()
+
   ) {
 
     return;
@@ -2204,19 +3521,8 @@ function renameCurrentLog() {
   }
 
 
-  const clean =
-    title.trim();
-
-
-  if (!clean) {
-
-    return;
-
-  }
-
-
   log.title =
-    clean;
+    title.trim();
 
 
   log.updatedAt =
@@ -2225,12 +3531,15 @@ function renameCurrentLog() {
 
   saveData();
 
+
   renderChat();
 
 }
 
 
-/* ---------- ログ移動 ---------- */
+/* =========================================================
+   ログ移動
+========================================================= */
 
 function openMoveMenu() {
 
@@ -2246,25 +3555,35 @@ function openMoveMenu() {
 
 
   let html =
-    `<div class="modalTitle">移動先を選ぶ</div>`;
+
+    '<div class="modalTitle">移動先を選ぶ</div>';
 
 
   data.folders.forEach(
     folder => {
 
-      const active =
-        folder.id === log.folderId
-          ? " active"
-          : "";
-
-
       html += `
+
         <button
-          class="folderChoice${active}"
-          data-folder-id="${escapeAttr(folder.id)}"
+
+          class="folderChoice${
+            folder.id === log.folderId
+              ? " active"
+              : ""
+          }"
+
+          data-folder-id="${
+            escapeAttr(
+              folder.id
+            )
+          }"
+
         >
+
           📁 ${escapeHtml(folder.name)}
+
         </button>
+
       `;
 
     }
@@ -2272,12 +3591,14 @@ function openMoveMenu() {
 
 
   html += `
+
     <button
       class="actionButton cancel"
       id="cancelMove"
     >
       キャンセル
     </button>
+
   `;
 
 
@@ -2296,12 +3617,8 @@ function openMoveMenu() {
         button.onclick =
           () => {
 
-            const folderId =
-              button.dataset.folderId;
-
-
             moveCurrentLog(
-              folderId
+              button.dataset.folderId
             );
 
 
@@ -2323,17 +3640,12 @@ function openMoveMenu() {
 }
 
 
-function moveCurrentLog(folderId) {
+function moveCurrentLog(
+  folderId
+) {
 
   const log =
     getLog();
-
-
-  if (!log) {
-
-    return;
-
-  }
 
 
   const folder =
@@ -2342,7 +3654,10 @@ function moveCurrentLog(folderId) {
     );
 
 
-  if (!folder) {
+  if (
+    !log ||
+    !folder
+  ) {
 
     return;
 
@@ -2359,17 +3674,22 @@ function moveCurrentLog(folderId) {
 
   saveData();
 
+
   renderChat();
 
 
   showToast(
+
     `「${folder.name}」へ移動しました`
+
   );
 
 }
 
 
-/* ---------- ログ削除 ---------- */
+/* =========================================================
+   ログ削除
+========================================================= */
 
 function deleteCurrentLog() {
 
@@ -2386,7 +3706,9 @@ function deleteCurrentLog() {
 
   const ok =
     confirm(
+
       `「${log.title}」を削除します。\nこの操作は元に戻せません。`
+
     );
 
 
@@ -2398,20 +3720,25 @@ function deleteCurrentLog() {
 
 
   data.logs =
+
     data.logs.filter(
       item =>
-        item.id !== log.id
+        item.id !==
+        log.id
     );
 
 
   saveData();
+
 
   closeLog();
 
 }
 
 
-/* ---------- TXT書き出し ---------- */
+/* =========================================================
+   TXT書き出し
+========================================================= */
 
 async function exportCurrentLogTxt() {
 
@@ -2426,12 +3753,27 @@ async function exportCurrentLogTxt() {
   }
 
 
+  /*
+    自分の発言だけ
+    ＋
+    excluded が false のものだけ
+  */
+
   const myMessages =
+
     log.messages
+
       .filter(
         message =>
-          message.role === "me"
+
+          message.role ===
+          "me"
+
+          &&
+
+          !message.excluded
       )
+
       .map(
         message =>
           message.text
@@ -2439,11 +3781,11 @@ async function exportCurrentLogTxt() {
 
 
   if (
-    myMessages.length === 0
+    !myMessages.length
   ) {
 
     showToast(
-      "自分の発言がまだありません"
+      "TXTに出す発言がありません"
     );
 
     return;
@@ -2458,32 +3800,58 @@ async function exportCurrentLogTxt() {
 
 
   const fileName =
+
     sanitizeFileName(
+
       log.title ||
       "相槌ログ"
-    ) +
+
+    )
+
+    +
+
     ".txt";
 
+
+  /*
+    iPhoneでは
+    共有シートを優先
+  */
 
   try {
 
     const file =
       new File(
-        [plainText],
+
+        [
+          plainText
+        ],
+
         fileName,
+
         {
+
           type:
             "text/plain;charset=utf-8"
+
         }
+
       );
 
 
     if (
+
       navigator.share &&
+
       navigator.canShare &&
+
       navigator.canShare({
-        files: [file]
+
+        files:
+          [file]
+
       })
+
     ) {
 
       await navigator.share({
@@ -2506,8 +3874,12 @@ async function exportCurrentLogTxt() {
   catch (error) {
 
     if (
+
       error &&
-      error.name === "AbortError"
+
+      error.name ===
+      "AbortError"
+
     ) {
 
       return;
@@ -2517,13 +3889,25 @@ async function exportCurrentLogTxt() {
   }
 
 
+  /*
+    共有できない環境は
+    普通にダウンロード
+  */
+
   const blob =
     new Blob(
-      [plainText],
+
+      [
+        plainText
+      ],
+
       {
+
         type:
           "text/plain;charset=utf-8"
+
       }
+
     );
 
 
@@ -2541,6 +3925,7 @@ async function exportCurrentLogTxt() {
 
   a.href =
     url;
+
 
   a.download =
     fileName;
@@ -2576,66 +3961,9 @@ async function exportCurrentLogTxt() {
 }
 
 
-function sanitizeFileName(name) {
-
-  return name
-    .replace(
-      /[\\/:*?"<>|]/g,
-      "_"
-    )
-    .replace(
-      /\s+/g,
-      " "
-    )
-    .trim()
-    .slice(
-      0,
-      80
-    ) ||
-    "相槌ログ";
-
-}
-
-
-/* ---------- HTMLエスケープ ---------- */
-
-function escapeHtml(text) {
-
-  return String(text)
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-    .replace(
-      /</g,
-      "&lt;"
-    )
-    .replace(
-      />/g,
-      "&gt;"
-    )
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-
-}
-
-
-function escapeAttr(text) {
-
-  return escapeHtml(
-    text
-  );
-
-}
-
-
-/* ---------- イベント ---------- */
+/* =========================================================
+   イベント
+========================================================= */
 
 newLogButton.addEventListener(
   "click",
@@ -2667,10 +3995,30 @@ send.addEventListener(
 );
 
 
-/* 入力欄を自動で伸ばす */
+/*
+  入力欄をタップしたら
+  最新発言を戻す
+*/
 
 input.addEventListener(
+
+  "focus",
+
+  keepLatestVisible
+
+);
+
+
+/*
+  入力欄の高さ変更
+  ＋
+  入力中も最新位置追従
+*/
+
+input.addEventListener(
+
   "input",
+
   () => {
 
     input.style.height =
@@ -2678,45 +4026,71 @@ input.addEventListener(
 
 
     input.style.height =
+
       Math.min(
+
         input.scrollHeight,
+
         140
-      ) +
+
+      )
+
+      +
+
       "px";
 
+
+    keepLatestVisible();
+
   }
+
 );
 
 
-/* 外付けキーボードなら
-   Cmd/Ctrl + Enterで送信 */
+/*
+  外付けキーボード
+  Cmd / Ctrl + Enter
+*/
 
 input.addEventListener(
+
   "keydown",
+
   event => {
 
     if (
+
       (
         event.metaKey ||
         event.ctrlKey
-      ) &&
-      event.key === "Enter"
+      )
+
+      &&
+
+      event.key ===
+      "Enter"
+
     ) {
 
       event.preventDefault();
+
 
       submitMessage();
 
     }
 
   }
+
 );
 
 
-/* ---------- 起動 ---------- */
+/* =========================================================
+   起動
+========================================================= */
 
 renderHome();
 
 </script>
+
 </body>
 </html>
