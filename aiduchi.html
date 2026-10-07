@@ -2,8 +2,11 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>相槌</title>
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+<title>相槌！</title>
 
 <style>
 * {
@@ -13,7 +16,11 @@
 html, body {
   margin: 0;
   height: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Helvetica Neue",
+    sans-serif;
   background: #f5f5f5;
 }
 
@@ -35,7 +42,7 @@ h1 {
 
 header p {
   margin: 4px 0 0;
-  font-size: 12px;
+  font-size: 13px;
   color: #777;
 }
 
@@ -81,38 +88,53 @@ header p {
   display: flex;
   align-items: flex-end;
   gap: 8px;
+
   background: white;
+
   padding: 10px;
-  padding-bottom: calc(10px + env(safe-area-inset-bottom));
+  padding-bottom:
+    calc(10px + env(safe-area-inset-bottom));
+
   border-top: 1px solid #ddd;
 }
 
 textarea {
   flex: 1;
+
   resize: none;
+
   min-height: 44px;
   max-height: 130px;
+
   border: none;
   outline: none;
+
   border-radius: 22px;
+
   background: #f0f0f0;
+
   padding: 11px 14px;
+
   font: inherit;
   font-size: 16px;
 }
 
 button {
   border: none;
+
   border-radius: 22px;
+
   padding: 12px 16px;
+
   background: #222;
   color: white;
+
   font-weight: bold;
   font-size: 15px;
 }
 
 button:active {
-  opacity: .6;
+  opacity: 0.6;
 }
 </style>
 </head>
@@ -120,197 +142,421 @@ button:active {
 <body>
 
 <header>
-  <h1>相槌</h1>
-  <p>内容は理解していません。聞いてはいます。</p>
+  <h1>相槌！</h1>
+  <p>さあどうぞ、話せ！</p>
 </header>
 
 <div id="chat"></div>
 
 <div id="inputArea">
+
   <textarea
     id="input"
     rows="1"
     placeholder="なんでも投げる"
   ></textarea>
-  <button id="send">送信 ➤</button>
+
+  <button id="send">
+    送信 ➤
+  </button>
+
 </div>
 
 <script>
 
+/* ========================================
+   相槌 v1.1
+
+   方針：
+   ・内容は解析しない
+   ・否定しない
+   ・アイデアを追加しない
+   ・楽しそうに聞く
+   ・続きを促すときは基本的に受容を添える
+======================================== */
+
+
+/* --- 軽い食いつき --- */
+
 const hooks = [
   "おっ",
-  "ほう",
+  "ほうほう",
+  "おお！",
   "おお？",
-  "おや？",
-  "へえ",
+  "へえ！",
   "ふむふむ",
-  "来た",
-  "おっと",
-  "なるほど",
-  "うわ"
+  "来た来た",
+  "おっと？",
+  "なるほどなるほど",
+  "うんうん"
 ];
 
+
+/* --- 肯定・興味 --- */
+
 const positive = [
-  "いいね",
+  "いいねぇ",
   "いいぞ",
   "それ気になる",
   "そこいい",
   "今のいい",
-  "来た来た",
   "なんか出てきたな",
   "面白くなってきた",
   "これは楽しみ",
-  "まだ化けそう"
+  "まだ化けそう",
+  "いい感じ",
+  "おもしろいおもしろい",
+  "よしよし"
 ];
+
+
+/* --- 続きを促す ---
+   ※原則として単独では出さない
+*/
 
 const continuation = [
   "それから？",
-  "続きは？",
+  "続き聞かせて",
   "その先は？",
-  "続けて",
-  "どうぞ",
+  "続けて続けて",
+  "聞かせて",
   "もうちょい",
-  "はい、次",
-  "まだある？",
-  "もう一個",
-  "で？"
+  "どうぞどうぞ",
+  "そのままどうぞ",
+  "まだ聞こう",
+  "さてさて？"
 ];
+
+
+/* --- 勢いづけ --- */
 
 const push = [
-  "もっとやれ",
   "そのまま行こう",
-  "ここからだ",
+  "いいぞもっとやれ",
   "もう一段いこう",
   "アクセル踏んでいいぞ",
-  "止まるな止まるな",
-  "行ける行ける"
+  "行ける行ける",
+  "その調子",
+  "好きに行こう",
+  "どんどん行こう"
 ];
+
+
+/* --- 単独で出しても冷たくない短文 --- */
+
+const warmShort = [
+  "うんうん",
+  "ほうほう",
+  "おっ",
+  "おお！",
+  "へえ！",
+  "ふむふむ",
+  "なるほどなるほど",
+  "いいねぇ",
+  "いいぞ",
+  "来た来た",
+  "それ気になる",
+  "おもしろいおもしろい",
+  "👀✨"
+];
+
+
+/* --- たまに出る大きめリアクション --- */
 
 const big = [
-  "待って待って、なんか出てきたぞ。いいぞもっとやれ",
-  "おお、来た来た。面白くなってきた。その先は？",
-  "急にアクセル踏んできたな！？ いいぞ、そのまま行こう",
-  "おっと？ なんか始まったぞ。続けて",
-  "うわ、そこ行く？ それ気になる。もうちょい",
-  "はいはいはい、来たな。続きどうぞ"
+  "おお、来た来た！ いいぞもっとやれ",
+  "おっ、なんか出てきたな。続けて続けて",
+  "ほうほう、面白くなってきた。その先は？",
+  "うんうん、いいねぇ。もっと聞かせて",
+  "おお？ それ気になる。どうぞどうぞ",
+  "来た来た、これは楽しみ。続き聞かせて",
+  "おっと？ いい感じだぞ。そのまま行こう",
+  "おお、アクセル踏んできたな！ いいぞいいぞ",
+  "はいはいはい、面白くなってきた。聞こう！",
+  "うわ、なんか出てきたぞ。いいぞもっとやれ"
 ];
 
-const chat = document.getElementById("chat");
-const input = document.getElementById("input");
-const send = document.getElementById("send");
+
+/* ========================================
+   基本処理
+======================================== */
+
+const chat =
+  document.getElementById("chat");
+
+const input =
+  document.getElementById("input");
+
+const send =
+  document.getElementById("send");
+
 
 let recent = [];
 
+
+/* 配列からランダム選択 */
+
 function pick(array) {
-  return array[Math.floor(Math.random() * array.length)];
+
+  return array[
+    Math.floor(
+      Math.random() * array.length
+    )
+  ];
+
 }
+
+
+/* ========================================
+   相槌生成
+======================================== */
 
 function generateReaction() {
 
   let result = "";
+
   const roll = Math.random();
 
-  // 40%：短い
-  if (roll < .40) {
 
-    const short = [
-      ...hooks,
-      ...continuation,
-      "うん",
-      "はい",
-      "どうぞどうぞ",
-      "👀"
-    ];
+  /*
+    35%
+    短い温かいリアクション
 
-    result = pick(short);
+    「で？」
+    「はい、次」
+    のような圧迫系は入れない
+  */
 
-  // 35%：二連
-  } else if (roll < .75) {
+  if (roll < 0.35) {
 
-    const type = Math.floor(Math.random() * 4);
+    result = pick(warmShort);
 
-    if (type === 0)
-      result = pick(hooks) + "。 " + pick(continuation);
+  }
 
-    if (type === 1)
-      result = pick(positive) + "。 " + pick(continuation);
 
-    if (type === 2)
-      result = pick(hooks) + "、" + pick(positive);
+  /*
+    40%
+    二連リアクション
 
-    if (type === 3)
-      result = pick(positive) + "。 " + pick(push);
+    ここが主力
+  */
 
-  // 20%：三連
-  } else if (roll < .95) {
+  else if (roll < 0.75) {
 
-    const type = Math.floor(Math.random() * 3);
+    const type =
+      Math.floor(Math.random() * 5);
 
-    if (type === 0)
+
+    if (type === 0) {
+
       result =
-        pick(hooks) + "。 " +
-        pick(positive) + "。 " +
+        pick(hooks) +
+        "、" +
         pick(continuation);
 
-    if (type === 1)
+    }
+
+
+    if (type === 1) {
+
       result =
-        pick(hooks) + "、" +
-        pick(positive) + "。 " +
+        pick(positive) +
+        "。 " +
+        pick(continuation);
+
+    }
+
+
+    if (type === 2) {
+
+      result =
+        pick(hooks) +
+        "、" +
+        pick(positive);
+
+    }
+
+
+    if (type === 3) {
+
+      result =
+        pick(positive) +
+        "。 " +
         pick(push);
 
-    if (type === 2)
+    }
+
+
+    if (type === 4) {
+
       result =
-        pick(positive) + "。 " +
-        pick(continuation) + " " +
+        pick(hooks) +
+        "。 " +
         pick(push);
 
-  // 5%：大きく反応
-  } else {
+    }
+
+  }
+
+
+  /*
+    20%
+    三連リアクション
+
+    少しテンション高め
+  */
+
+  else if (roll < 0.95) {
+
+    const type =
+      Math.floor(Math.random() * 3);
+
+
+    if (type === 0) {
+
+      result =
+        pick(hooks) +
+        "、" +
+        pick(positive) +
+        "。 " +
+        pick(continuation);
+
+    }
+
+
+    if (type === 1) {
+
+      result =
+        pick(hooks) +
+        "、" +
+        pick(positive) +
+        "。 " +
+        pick(push);
+
+    }
+
+
+    if (type === 2) {
+
+      result =
+        pick(positive) +
+        "。 " +
+        pick(continuation) +
+        " " +
+        pick(push);
+
+    }
+
+  }
+
+
+  /*
+    5%
+    大きく食いつく
+  */
+
+  else {
+
     result = pick(big);
+
   }
 
-  // 直近6個と同じなら再抽選
+
+  /*
+    直近6件と
+    完全に同じ文章だったら再抽選
+  */
+
   if (recent.includes(result)) {
+
     return generateReaction();
+
   }
+
 
   recent.push(result);
 
+
   if (recent.length > 6) {
+
     recent.shift();
+
   }
 
+
   return result;
+
 }
+
+
+/* ========================================
+   メッセージ表示
+======================================== */
 
 function addMessage(text, type) {
 
-  const row = document.createElement("div");
-  row.className = "row " + type;
+  const row =
+    document.createElement("div");
 
-  const bubble = document.createElement("div");
+  row.className =
+    "row " + type;
+
+
+  const bubble =
+    document.createElement("div");
+
   bubble.className = "bubble";
+
   bubble.textContent = text;
 
+
   row.appendChild(bubble);
+
   chat.appendChild(row);
 
-  chat.scrollTop = chat.scrollHeight;
+
+  chat.scrollTop =
+    chat.scrollHeight;
+
 }
+
+
+/* ========================================
+   送信
+======================================== */
 
 function submit() {
 
-  const text = input.value.trim();
+  const text =
+    input.value.trim();
+
 
   if (!text) return;
 
-  addMessage(text, "me");
+
+  addMessage(
+    text,
+    "me"
+  );
+
 
   input.value = "";
-  input.style.height = "44px";
 
-  // 0.35～1.15秒後に返事
-  const delay = 350 + Math.random() * 800;
+  input.style.height =
+    "44px";
+
+
+  /*
+    少しだけ間を置く
+
+    毎回同じ時間だと機械感が出るので
+    0.4〜1.2秒程度で揺らす
+  */
+
+  const delay =
+    400 +
+    Math.random() * 800;
+
 
   setTimeout(() => {
 
@@ -320,21 +566,50 @@ function submit() {
     );
 
   }, delay);
+
 }
 
-send.addEventListener("click", submit);
 
-// 入力欄を文章量に合わせて伸ばす
-input.addEventListener("input", () => {
+/* ========================================
+   イベント
+======================================== */
 
-  input.style.height = "44px";
+send.addEventListener(
+  "click",
+  submit
+);
 
-  input.style.height =
-    Math.min(input.scrollHeight, 130) + "px";
-});
 
-// 最初の一言
-addMessage("どうぞ", "wall");
+/*
+  入力に合わせて
+  テキスト欄を伸縮
+*/
+
+input.addEventListener(
+  "input",
+  () => {
+
+    input.style.height =
+      "44px";
+
+    input.style.height =
+      Math.min(
+        input.scrollHeight,
+        130
+      ) + "px";
+
+  }
+);
+
+
+/* ========================================
+   開幕
+======================================== */
+
+addMessage(
+  "聞こう！",
+  "wall"
+);
 
 </script>
 
