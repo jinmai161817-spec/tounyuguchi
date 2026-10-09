@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f8fafc">
+<title>短編お題スロット｜5000字チャレンジ</title>
+<style>
+:root{color-scheme:light;--ink:#18202e;--sub:#667085;--line:#dce1e8;--panel:#f3f5f8;--white:#fff;--blue:#192f50;--blue2:#29486f;--radius:15px}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}body{margin:0;padding:24px 12px 60px;background:#f8fafc;color:var(--ink);font:15px/1.55 -apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif}
+button,input,textarea,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}button:disabled{opacity:.4;cursor:not-allowed}
+.app{width:min(100%,620px);margin:0 auto;padding:16px;background:var(--white);border:1px solid var(--line);border-radius:19px;box-shadow:0 3px 24px rgba(22,32,48,.04)}
+.header{display:flex;align-items:start;justify-content:space-between;gap:8px;margin-bottom:14px}.header h1{font-size:18px;margin:0;font-weight:750;letter-spacing:-.025em}.subtitle,.hint{color:var(--sub);font-size:12px}.subtitle{margin-top:3px}.pill{font-size:11px;color:#555e6d;background:#eef0f3;border:1px solid #e1e5e9;padding:3px 10px;border-radius:100px;white-space:nowrap}
+.machine{background:var(--panel);border-radius:13px;padding:15px 13px 13px}.linehead{display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:700;gap:10px}.roll{font-size:11px;color:#7d8694;font-weight:500;letter-spacing:.06em}
+.slots{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;margin-top:13px;margin-bottom:14px}.slot{background:var(--white);min-width:0;min-height:132px;border-radius:8px;padding:11px 5px 10px;display:flex;flex-direction:column;align-items:center;text-align:center}.kanji{font-size:21px;line-height:1.4;font-weight:700}.slot hr{width:100%;border:0;border-top:1px solid #e6e8ed;margin:11px 0}.word{font-size:12px;line-height:1.55;overflow-wrap:anywhere;white-space:pre-wrap}
+.segment{display:inline-flex;background:#e4e7ed;padding:3px;border-radius:9px;gap:2px;margin-bottom:11px}.segment button{border:0;border-radius:7px;padding:7px 13px;color:#68717e;background:transparent;font-size:12px;font-weight:600}.segment button[aria-pressed=true]{background:white;color:var(--ink);box-shadow:0 1px 4px #00000015}
+.btn{border:1px solid transparent;border-radius:9px;min-height:40px;padding:9px 12px;font-size:13px;font-weight:650;background:var(--blue);color:#fff;display:inline-flex;align-items:center;justify-content:center;gap:7px}.btn:active{transform:translateY(1px)}.btn.primary{width:100%;background:var(--blue)}.btn.secondary{background:var(--white);border-color:#cbd3dd;color:var(--ink)}.btn.textual{border-color:#d7dde5;color:#414b5c;background:#fff}.btn.danger{color:#596373}.btn.wide{width:100%}.btn-row{display:flex;gap:8px;flex-wrap:wrap}.btn-row>.btn{flex:1 1 115px}.btn-row.single{margin-top:9px}.actions{margin-top:10px}
+.rule{height:1px;background:#e8ebef;margin:19px 0 15px}.section-title{margin:0 0 3px;font-size:15px;font-weight:700}.hint{margin:0 0 12px}.topic-row{display:flex;gap:8px;align-items:center;margin-bottom:14px}.topic-row select{flex:1;min-width:0}.form-field{margin:0 0 12px}.field-label{display:block;font-size:12px;font-weight:650;margin:0 0 5px;color:#333c4d}.field-input{width:100%;border:1px solid #d5dbe4;border-radius:8px;background:#fff;color:var(--ink);padding:10px 11px;outline:none;font-size:14px;line-height:1.45}.field-input:focus{border-color:#557db0;box-shadow:0 0 0 3px #b5cbe543}textarea.field-input{min-height:61px;resize:vertical}.footer-buttons{display:flex;justify-content:space-between;gap:10px;align-items:center}.footer-buttons .btn{flex:0 1 auto}.extra{background:#fbfcfe;border:1px solid #e8ebf0;border-radius:12px;padding:12px;margin-top:13px}.extra .section-title{font-size:14px}.extra .hint{margin-top:4px;margin-bottom:10px}.tiny{font-size:11px;color:#747e8c}.notice{min-height:1.5em;margin:10px 0 0;color:#315d4a;font-size:12px;font-weight:550}.note{font-size:11px;color:#778191;margin-top:15px}.io{display:none}
+@media(max-width:370px){.app{padding:12px}.machine{padding:12px 9px}.word{font-size:11px}.slot{padding:10px 4px;min-height:135px}.kanji{font-size:19px}.segment button{padding:7px 10px}.btn{font-size:12px;padding:8px 9px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn:active{transform:none}}
+</style>
+</head>
+<body>
+<main class="app">
+  <header class="header">
+    <div><h1>短編お題スロット</h1><div class="subtitle">起承転結 × 5000字チャレンジ</div></div>
+    <span class="pill">試作版</span>
+  </header>
+  <section class="machine" aria-label="スロット">
+    <div class="linehead"><span>スロット結果</span><span class="roll" id="rollCount">ROLL 0</span></div>
+    <div class="slots" id="slots" aria-live="polite">
+      <div class="slot"><div class="kanji">起</div><hr><div class="word">はじめに、私は実は〇〇なんです。</div></div>
+      <div class="slot"><div class="kanji">承</div><hr><div class="word">〇〇なので××します。</div></div>
+      <div class="slot"><div class="kanji">転</div><hr><div class="word">ところがこんなことが起こりました。</div></div>
+      <div class="slot"><div class="kanji">結</div><hr><div class="word">とうとうこうなりました。</div></div>
+    </div>
+    <div class="segment" role="group" aria-label="抽選方法">
+      <button id="modeSame" aria-pressed="false" type="button">同じお題</button>
+      <button id="modeMix" aria-pressed="true" type="button">混合</button>
+    </div>
+    <button class="btn primary" id="roll" type="button">⤨ スロットを回す</button>
+    <div class="actions btn-row">
+      <button class="btn secondary" id="copy" type="button">▣ 結果をコピー</button>
+      <button class="btn secondary" id="saveTxt" type="button">⇩ TXTで保存</button>
+    </div>
+  </section>
+  <div class="rule"></div>
+  <section aria-label="お題の編集">
+    <h2 class="section-title">お題の編集</h2>
+    <p class="hint">自分のお題を追加して、スロットの材料にできる。</p>
+    <div class="topic-row">
+      <select class="field-input" id="topicSelect" aria-label="編集するお題"></select>
+      <button class="btn secondary" id="add" type="button">＋ 追加</button>
+    </div>
+    <div class="form-field"><label class="field-label" for="topicName">お題名</label><input class="field-input" id="topicName" autocomplete="off"></div>
+    <div id="editParts">
+      <div class="form-field"><label class="field-label" for="part0">起</label><textarea class="field-input" id="part0" rows="2"></textarea></div>
+      <div class="form-field"><label class="field-label" for="part1">承</label><textarea class="field-input" id="part1" rows="2"></textarea></div>
+      <div class="form-field"><label class="field-label" for="part2">転</label><textarea class="field-input" id="part2" rows="2"></textarea></div>
+      <div class="form-field"><label class="field-label" for="part3">結</label><textarea class="field-input" id="part3" rows="2"></textarea></div>
+    </div>
+    <div class="footer-buttons">
+      <button class="btn textual danger" id="remove" type="button">♧ お題を削除</button>
+      <button class="btn" id="showSelected" type="button">このお題を表示</button>
+    </div>
+  </section>
+  <section class="extra" aria-label="テキストメモ">
+    <h2 class="section-title">短編メモ（任意）</h2>
+    <p class="hint">思いついたことを置いておく欄。TXT保存時に一緒に出力される。</p>
+    <textarea class="field-input" id="memo" rows="4" placeholder="オチ、タイトル案、書きたい一文など……"></textarea>
+  </section>
+  <section class="extra" aria-label="バックアップ">
+    <h2 class="section-title">お題の保存・復元</h2>
+    <p class="hint">お題・メモ・スロット結果はこのブラウザに自動保存。機種変更などに備えてJSONバックアップも可能。</p>
+    <div class="btn-row">
+      <button class="btn secondary" id="backup" type="button">⇩ JSON保存</button>
+      <button class="btn secondary" id="restore" type="button">⇧ JSON読込</button>
+      <button class="btn secondary" id="saveTopicsTxt" type="button">⇩ お題一覧TXT</button>
+    </div>
+    <input class="io" type="file" id="restoreFile" accept="application/json,.json">
+  </section>
+  <p id="status" class="notice" role="status" aria-live="polite"></p>
+  <p class="note">iPhoneで「TXTで保存」を押すと、対応環境では共有メニューが開きます。「ファイルに保存」を選んでください。共有できない場合はTXTがダウンロードされます（Safariのダウンロードから「ファイル」に保存できます）。</p>
+</main>
+<script>
+(()=>{'use strict';
+const KEY='short-story-slot-original-v1';
+const START=[
+ {id:1,title:'嘘の自己紹介',parts:['はじめに、私は実は〇〇なんです。','〇〇なので××します。','ところがこんなことが起こりました。','とうとうこうなりました。']},
+ {id:2,title:'婚約破棄',parts:['婚約破棄','真実の愛','身分逆転','ざまぁ']},
+ {id:3,title:'聖女追放',parts:['聖女追放','無能判定','結界崩壊','新天地']},
+ {id:4,title:'王宮のお仕事',parts:['王宮の事務官','退職届','王命','引き継ぎ']}
+];
+const LABEL=['起','承','転','結'];
+const $=(s)=>document.getElementById(s);
+const makeInitial=()=>({topics:JSON.parse(JSON.stringify(START)),selectedId:1,slots:[...START[0].parts],mode:'all',rollCount:0,memo:''});
+function validate(data){
+ if(!data || !Array.isArray(data.topics) || data.topics.length<1 || data.topics.length>5000)return null;
+ const topics=data.topics.filter(t=>t && typeof t.title==='string' && Array.isArray(t.parts) && t.parts.length===4 && t.parts.every(p=>typeof p==='string')).map((t,i)=>({id:Number.isSafeInteger(t.id)?t.id:i+1,title:t.title.slice(0,200),parts:t.parts.map(p=>p.slice(0,10000))}));
+ if(!topics.length)return null;
+ let selectedId=topics.some(t=>t.id===data.selectedId)?data.selectedId:topics[0].id;
+ let slots=Array.isArray(data.slots)&&data.slots.length===4&&data.slots.every(p=>typeof p==='string')?data.slots.map(p=>p.slice(0,10000)):[...topics[0].parts];
+ return {topics,selectedId,slots,mode:data.mode==='same'?'same':'all',rollCount:Number.isSafeInteger(data.rollCount)&&data.rollCount>=0?data.rollCount:0,memo:typeof data.memo==='string'?data.memo.slice(0,200000):''};
+}
+let state=makeInitial();
+try{const saved=localStorage.getItem(KEY);if(saved){state=validate(JSON.parse(saved))||makeInitial();}}catch(e){}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){status('自動保存できません。JSONバックアップを利用してください。');}}
+function status(msg){$('status').textContent=msg;}
+function selected(){return state.topics.find(t=>t.id===state.selectedId)||state.topics[0];}
+function drawSlots(){const wrap=$('slots');wrap.replaceChildren();LABEL.forEach((label,i)=>{const slot=document.createElement('div');slot.className='slot';const heading=document.createElement('div');heading.className='kanji';heading.textContent=label;const line=document.createElement('hr');const word=document.createElement('div');word.className='word';word.textContent=state.slots[i];slot.append(heading,line,word);wrap.appendChild(slot);});$('rollCount').textContent='ROLL '+state.rollCount;}
+function drawMode(){$('modeSame').setAttribute('aria-pressed',String(state.mode==='same'));$('modeMix').setAttribute('aria-pressed',String(state.mode==='all'));}
+function drawEditor(){const sel=$('topicSelect');sel.replaceChildren();state.topics.forEach(t=>{const o=document.createElement('option');o.value=String(t.id);o.textContent=t.title||'（無題）';sel.appendChild(o);});sel.value=String(state.selectedId);const topic=selected();$('topicName').value=topic.title;LABEL.forEach((_,i)=>{$('part'+i).value=topic.parts[i];});$('remove').disabled=state.topics.length===1;}
+function render() {drawSlots();drawMode();drawEditor();$('memo').value=state.memo;}
+$('modeSame').addEventListener('click',()=>{state.mode='same';drawMode();persist();});
+$('modeMix').addEventListener('click',()=>{state.mode='all';drawMode();persist();});
+$('roll').addEventListener('click',()=>{const next=LABEL.map((_,i)=>state.mode==='same'?selected().parts[i]:state.topics[Math.floor(Math.random()*state.topics.length)].parts[i]);state.slots=next;state.rollCount++;drawSlots();persist();status(state.mode==='same'?'選択中のお題を表示しました。':'4枠をランダム抽選しました。');});
+$('topicSelect').addEventListener('change',e=>{state.selectedId=Number(e.target.value);drawEditor();persist();});
+$('topicName').addEventListener('input',e=>{selected().title=e.target.value;const opt=$('topicSelect').selectedOptions[0];if(opt)opt.textContent=e.target.value||'（無題）';persist();});
+LABEL.forEach((_,i)=>$('part'+i).addEventListener('input',e=>{selected().parts[i]=e.target.value;persist();}));
+$('add').addEventListener('click',()=>{const id=Math.max(0,...state.topics.map(t=>t.id))+1;state.topics.push({id,title:'新しいお題',parts:['','','','']});state.selectedId=id;drawEditor();persist();status('新しいお題を追加しました。');});
+$('remove').addEventListener('click',()=>{if(state.topics.length===1)return;const t=selected();if(!confirm('「'+(t.title||'無題')+'」を削除しますか？'))return;state.topics=state.topics.filter(x=>x.id!==t.id);state.selectedId=state.topics[0].id;drawEditor();persist();status('お題を削除しました。');});
+$('showSelected').addEventListener('click',()=>{state.slots=[...selected().parts];drawSlots();persist();window.scrollTo({top:0,behavior:'smooth'});status('選んだお題をスロットに表示しました。');});
+$('memo').addEventListener('input',e=>{state.memo=e.target.value;persist();});
+function resultText(){return '短編お題スロット｜5000字チャレンジ\n\n'+LABEL.map((l,i)=>l+'：'+state.slots[i]).join('\n\n')+(state.memo.trim()?'\n\n【短編メモ】\n'+state.memo:'')+'\n';}
+function topicsText(){return '短編お題スロット｜登録お題一覧\n\n'+state.topics.map(t=>'【'+(t.title||'無題')+'】\n'+LABEL.map((l,i)=>l+'：'+t.parts[i]).join('\n')).join('\n\n')+'\n';}
+function dateStamp(){const d=new Date(),p=n=>String(n).padStart(2,'0');return d.getFullYear()+p(d.getMonth()+1)+p(d.getDate())+'-'+p(d.getHours())+p(d.getMinutes());}
+function downloadBlob(blob,filename){const url=URL.createObjectURL(blob);const anchor=document.createElement('a');anchor.href=url;anchor.download=filename;document.body.appendChild(anchor);anchor.click();anchor.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);}
+async function saveText(contents,filename){const file=new File([contents],filename,{type:'text/plain;charset=utf-8'});try{if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'短編お題スロット'});status('共有が完了しました。「ファイルに保存」を選ぶとiPhone内に残せます。');return;}}catch(err){if(err && err.name==='AbortError'){status('共有をキャンセルしました。');return;}}
+ downloadBlob(new Blob([contents],{type:'text/plain;charset=utf-8'}),filename);status('TXTをダウンロードしました。Safariのダウンロードから「ファイル」に保存できます。');}
+$('saveTxt').addEventListener('click',()=>saveText(resultText(),'短編お題-'+dateStamp()+'.txt'));
+$('saveTopicsTxt').addEventListener('click',()=>saveText(topicsText(),'短編お題一覧-'+dateStamp()+'.txt'));
+$('copy').addEventListener('click',async()=>{const contents=resultText();try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(contents);status('結果をコピーしました。');return;}}catch(e){}
+ const ta=document.createElement('textarea');ta.value=contents;ta.style.position='fixed';ta.style.top='-9999px';document.body.appendChild(ta);ta.focus();ta.select();const ok=document.execCommand('copy');ta.remove();status(ok?'結果をコピーしました。':'コピーできませんでした。TXT保存をお試しください。');});
+$('backup').addEventListener('click',()=>{downloadBlob(new Blob([JSON.stringify({format:'short-story-slot',version:1,...state},null,2)],{type:'application/json'}),'短編お題バックアップ-'+dateStamp()+'.json');status('JSONバックアップをダウンロードしました。');});
+$('restore').addEventListener('click',()=>$('restoreFile').click());
+$('restoreFile').addEventListener('change',async e=>{const file=e.target.files&&e.target.files[0];if(!file)return;try{const content=await file.text();const imported=validate(JSON.parse(content));if(!imported)throw new Error('形式が違います');if(!confirm('現在のお題とメモを、選択したバックアップで置き換えますか？'))return;state=imported;render();persist();status('バックアップを復元しました。');}catch(err){status('JSONを読み込めませんでした。スロットのバックアップか確認してください。');}finally{e.target.value='';}});
+render();
+})();
+</script>
+</body>
+</html>
